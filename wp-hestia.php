@@ -36,10 +36,10 @@ if ( file_exists( $plugin_root . '/vendor/autoload.php' ) ) {
  * @return void
  */
 function init() {
-	add_shortcode( 'ancestors',   [ __NAMESPACE__ . '\\Shortcodes', 'ancestors_handler' ] );
-	// add_shortcode( 'attachments', [ __NAMESPACE__ . '\\Shortcodes', 'attachments_handler' ] );
-	add_shortcode( 'children',    [ __NAMESPACE__ . '\\Shortcodes', 'children_handler' ] );
-	// add_shortcode( 'family',      [ __NAMESPACE__ . '\\Shortcodes', 'family_handler' ] );
-	add_shortcode( 'siblings',    [ __NAMESPACE__ . '\\Shortcodes', 'siblings_handler' ] );
+	add_shortcode( 'ancestors',   __NAMESPACE__ . '\\ancestors_handler' );
+	add_shortcode( 'attachments', __NAMESPACE__ . '\\attachments_handler' );
+	add_shortcode( 'children',    __NAMESPACE__ . '\\children_handler' );
+	// add_shortcode( 'family',      __NAMESPACE__ . '\\family_handler' );
+	add_shortcode( 'siblings',    __NAMESPACE__ . '\\siblings_handler' );
 }
 add_action( 'init', __NAMESPACE__ . '\\init' );
