@@ -4,6 +4,10 @@ namespace SSNepenthe\WPHestia;
 
 use \WP_Query;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	die;
+}
+
 /**
  * @todo  We should probably be checking is_post_type_hierarchical for all of
  *        these so we can return early if not, except maybe attachments.

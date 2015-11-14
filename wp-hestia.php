@@ -21,6 +21,10 @@
 
 namespace SSNepenthe\WPHestia;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	die;
+}
+
 $plugin_root = dirname( __FILE__ );
 
 /**
