@@ -9,10 +9,10 @@
 /**
  * Plugin Name: WP Hestia
  * Plugin URI: https://github.com/ssnepenthe/wp-hestia
- * Description:
- * Version:
- * Author:
- * Author URI:
+ * Description: This plugin introduces the following shortcodes for use within hierarchical post types: <code>[ancestors]</code>, <code>[attachments]</code>, <code>[children]</code>, <code>[siblings]</code>.
+ * Version: 0.1.0
+ * Author: SSNepenthe
+ * Author URI: https://github.com/ssnepenthe
  * License: GPL-2.0
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  * Text Domain:
