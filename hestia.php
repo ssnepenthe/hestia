@@ -3,12 +3,12 @@
  * A WordPress plugin that introduces a number of shortcodes for listing
  * related posts within a post hierarchy.
  *
- * @package wp-hestia
+ * @package hestia
  */
 
 /**
- * Plugin Name: WP Hestia
- * Plugin URI: https://github.com/ssnepenthe/wp-hestia
+ * Plugin Name: Hestia
+ * Plugin URI: https://github.com/ssnepenthe/hestia
  * Description: This plugin introduces the following shortcodes for use within hierarchical post types: <code>[ancestors]</code>, <code>[attachments]</code>, <code>[children]</code>, <code>[siblings]</code>.
  * Version: 0.1.0
  * Author: SSNepenthe
@@ -19,7 +19,7 @@
  * Domain Path:
  */
 
-namespace SSNepenthe\WPHestia;
+namespace SSNepenthe\Hestia;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	die;

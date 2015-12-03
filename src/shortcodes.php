@@ -1,6 +1,6 @@
 <?php
 
-namespace SSNepenthe\WPHestia;
+namespace SSNepenthe\Hestia;
 
 use \WP_Query;
 
@@ -26,8 +26,8 @@ function ancestors_handler( $atts, $content = null, $tag = '' ) {
 			$permalink = get_permalink( $ancestor ); // esc_attr?
 
 			$classes = [
-				'wp-hestia-wrap',
-				'wp-hestia-ancestor',
+				'hestia-wrap',
+				'hestia-ancestor',
 				'post-' . $ancestor
 			];
 
@@ -107,8 +107,8 @@ function attachments_handler( $atts, $content = null, $tag = '' ) {
 			$permalink = wp_get_attachment_url(); // use get_permalink() for attachment page
 
 			$classes = [
-				'wp-hestia-wrap',
-				'wp-hestia-attachment',
+				'hestia-wrap',
+				'hestia-attachment',
 				'post-' . get_the_ID()
 			];
 
@@ -153,8 +153,8 @@ function children_handler( $atts, $content = null, $tag = '' ) {
 			$permalink = get_permalink();
 
 			$classes = [
-				'wp-hestia-wrap',
-				'wp-hestia-child',
+				'hestia-wrap',
+				'hestia-child',
 				'post-' . get_the_ID()
 			];
 
@@ -216,8 +216,8 @@ function siblings_handler( $atts, $content = null, $tag = '' ) {
 			$permalink = get_permalink();
 
 			$classes = [
-				'wp-hestia-wrap',
-				'wp-hestia-sibling',
+				'hestia-wrap',
+				'hestia-sibling',
 				'post-' . get_the_ID()
 			];
 
