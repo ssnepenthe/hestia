@@ -1,4 +1,12 @@
 <?php
+/**
+ * Various shortcode handler functions pertaining to hierarchical posts.
+ *
+ * @package hestia
+ *
+ * @todo  We should probably be checking is_post_type_hierarchical for all of
+ *        these so we can return early if not, except maybe attachments.
+ */
 
 namespace SSNepenthe\Hestia;
 
@@ -9,10 +17,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * @todo  We should probably be checking is_post_type_hierarchical for all of
- *        these so we can return early if not, except maybe attachments.
+ * Handler function for the [ancestors] shortcode
+ *
+ * @param array       $atts Shortcode attributes.
+ * @param string/null $content Shortcode content.
+ * @param string      $tag The shortcode tag.
+ *
+ * @return string HTML formatted list of ancestor pages or empty string
  */
-
 function ancestors_handler( $atts, $content = null, $tag = '' ) {
 	$r = '';
 
@@ -23,12 +35,12 @@ function ancestors_handler( $atts, $content = null, $tag = '' ) {
 
 		foreach ( $ancestors as $ancestor ) :
 			$thumbnail = has_post_thumbnail( $ancestor );
-			$permalink = get_permalink( $ancestor ); // esc_attr?
+			$permalink = get_permalink( $ancestor ); // Esc_attr?
 
 			$classes = [
 				'hestia-wrap',
 				'hestia-ancestor',
-				'post-' . $ancestor
+				'post-' . $ancestor,
 			];
 
 			if ( $thumbnail ) {
@@ -37,7 +49,7 @@ function ancestors_handler( $atts, $content = null, $tag = '' ) {
 
 			$r .= sprintf( '<div class="%1$s">', implode( $classes, ' ' ) );
 
-			if ( $thumbnail ) : // placeholder if false?
+			if ( $thumbnail ) : // Placeholder if false?
 				$r .= sprintf( '<a href="%1$s">%2$s</a>',
 					$permalink,
 					get_the_post_thumbnail( $ancestor )
@@ -57,34 +69,24 @@ function ancestors_handler( $atts, $content = null, $tag = '' ) {
 }
 
 /**
- * @todo  check out attachment functions in wp-includes/post.php starting around line 4808
- *        wp_get_attachment_metadata
- *            width, height, file, sizes, image_meta
- *        wp_get_attachment_url
- *            original file URL
- *        wp_get_attachment_thumb_file
- *            false???
- *        wp_get_attachment_thumb_url
- *            URL to attachment thumbnail
- *        wp_attachment_is( {image, audio, video} ) (also wp_attachment_is_image)
- *            true/false
- *        wp_mime_type_icon
- *            URL to mime type icon, there is not an icon for images
+ * Handler function for the [attachments] shortcode
  *
- *        wp-includes/media.php at line 695
- *        wp_get_attachment_image_src
- *        wp_get_attachment_image
+ * @param array       $atts Shortcode attributes.
+ * @param string/null $content Shortcode content.
+ * @param string      $tag The shortcode tag.
  *
- *        if we are limiting to just images:
+ * @todo Look into related core functionality - see referenced links
  *
- *        I am thinking register a small, icon-sized image size and then use
- *        wp_get_attachment_image and list attachments with a finder-like styling
+ * @see https://developer.wordpress.org/reference/functions/wp_get_attachment_metadata/
+ * @see https://developer.wordpress.org/reference/functions/wp_get_attachment_url/
+ * @see https://developer.wordpress.org/reference/functions/wp_get_attachment_thumb_file/
+ * @see https://developer.wordpress.org/reference/functions/wp_get_attachment_thumb_url/
+ * @see https://developer.wordpress.org/reference/functions/wp_attachment_is/
+ * @see https://developer.wordpress.org/reference/functions/wp_mime_type_icon/
+ * @see https://developer.wordpress.org/reference/functions/wp_get_attachment_image_src/
+ * @see https://developer.wordpress.org/reference/functions/wp_get_attachment_image/
  *
- *        or maybe we can treat this as an alternative gallery?
- *        set it up for use with lightbox plugins? just a thought.
- *        could be user selected through shrotcode atts.
- *
- *        or maybe it is better to list all attachment types?
+ * @return string HTML formatted list of attachment pages or empty string
  */
 function attachments_handler( $atts, $content = null, $tag = '' ) {
 	$r = '';
@@ -93,8 +95,8 @@ function attachments_handler( $atts, $content = null, $tag = '' ) {
 		'order'				=> 'ASC',
 		'orderby'			=> 'menu_order',
 		'post_parent'		=> get_the_ID(),
-		'posts_per_page'	=> -1,
-		'post_status'       => 'inherit', // http://codex.wordpress.org/Class_Reference/WP_Query#Type_Parameters
+		'posts_per_page'	=> 20, // Should allow shortcode atts to override.
+		'post_status'       => 'inherit',
 		'post_type'			=> 'attachment',
 	];
 
@@ -104,12 +106,12 @@ function attachments_handler( $atts, $content = null, $tag = '' ) {
 		while ( $query->have_posts() ) :
 			$query->the_post();
 
-			$permalink = wp_get_attachment_url(); // use get_permalink() for attachment page
+			$permalink = wp_get_attachment_url(); // Use get_permalink() for attachment page.
 
 			$classes = [
 				'hestia-wrap',
 				'hestia-attachment',
-				'post-' . get_the_ID()
+				'post-' . get_the_ID(),
 			];
 
 			$r .= sprintf( '<div class="%1$s">', implode( $classes, ' ' ) );
@@ -129,18 +131,28 @@ function attachments_handler( $atts, $content = null, $tag = '' ) {
 }
 
 /**
- * @see  http://codex.wordpress.org/Function_Reference/get_page_children
+ * Handler function for the [children] shortcode
+ *
+ * @param  array       $atts Shortcode attributes.
+ * @param  string/null $content Shortcode content.
+ * @param  string      $tag The shortcode tag.
+ *
+ * @todo Look into similar core functionality - see referenced links
+ *
  * @see  http://codex.wordpress.org/Function_Reference/get_children
+ * @see  http://codex.wordpress.org/Function_Reference/get_page_children
+ *
+ * @return string HTML formatted list of children pages or empty string
  */
 function children_handler( $atts, $content = null, $tag = '' ) {
 	$r = '';
 
-	$args = array (
+	$args = array(
 		'order'				=> 'ASC',
 		'orderby'			=> 'menu_order',
 		'post_parent'		=> get_the_ID(),
-		'posts_per_page'	=> -1,
-		'post_type'			=> get_post_type() // returns nothing if we don't include post type
+		'posts_per_page'	=> 20, // Should allow shortcode atts to override.
+		'post_type'			=> get_post_type(),// Returns nothing if we don't include post type.
 	);
 
 	$query = new WP_Query( $args );
@@ -155,7 +167,7 @@ function children_handler( $atts, $content = null, $tag = '' ) {
 			$classes = [
 				'hestia-wrap',
 				'hestia-child',
-				'post-' . get_the_ID()
+				'post-' . get_the_ID(),
 			];
 
 			if ( $thumbnail ) {
@@ -185,13 +197,32 @@ function children_handler( $atts, $content = null, $tag = '' ) {
 	return $r;
 }
 
+/**
+ * Handler function for the [family] shortcode
+ *
+ * @param  array       $atts Shortcode attributes.
+ * @param  string/null $content Shortcode content.
+ * @param  string      $tag The shortcode tag.
+ *
+ * @return void
+ */
 function family_handler( $atts, $content = null, $tag = '' ) {
-	// Not sure what I want to do here...
-	// should get ancestors, siblings, children, attachments
-	// should display in a hierarchy
-	// maybe with finder-like styling
+	/**
+	 * Not sure what exactly I want to do here... It should definitely get all
+	 * ancestors, siblings, children and attachments. It should probably
+	 * display ina hierarchy, maybe with finder-like styling.
+	 */
 }
 
+/**
+ * Handler function for the [siblings] shortcode
+ *
+ * @param  array       $atts Shortcode attributes.
+ * @param  string/null $content Shortcode content.
+ * @param  string      $tag The shortcode tag.
+ *
+ * @return string HTML formatted list of sibling pages or empty string
+ */
 function siblings_handler( $atts, $content = null, $tag = '' ) {
 	$r = '';
 
@@ -202,7 +233,7 @@ function siblings_handler( $atts, $content = null, $tag = '' ) {
 		'order'				=> 'ASC',
 		'orderby'			=> 'menu_order',
 		'post_parent'		=> wp_get_post_parent_id( $id ),
-		'posts_per_page'	=> -1,
+		'posts_per_page'	=> 20, // TODO: allow this to be overridden in shortcode.
 		'post_type'			=> get_post_type(),
 	];
 
@@ -218,7 +249,7 @@ function siblings_handler( $atts, $content = null, $tag = '' ) {
 			$classes = [
 				'hestia-wrap',
 				'hestia-sibling',
-				'post-' . get_the_ID()
+				'post-' . get_the_ID(),
 			];
 
 			if ( $thumbnail ) {
