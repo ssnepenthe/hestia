@@ -27,12 +27,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $plugin_root = dirname( __FILE__ );
 
-/**
- * Require the Composer autoloader if it exists.
- */
-if ( file_exists( $plugin_root . '/vendor/autoload.php' ) ) {
-	require_once $plugin_root . '/vendor/autoload.php';
-}
+require_once $plugin_root . '/src/shortcodes.php';
 
 /**
  * Delay plugin initialization until the 'init' hook.
