@@ -1,7 +1,7 @@
 {
     "name": "ssnepenthe/hestia",
     "description": "A WordPress plugin that introduces a number of shortcodes for listing related posts within a post hierarchy.",
-    "type": "wordpress-plugin",
+    "type": "wordpress-muplugin",
     "homepage": "https://github.com/ssnepenthe/hestia",
     "license": "GPL-2.0",
     "require": {
