@@ -32,7 +32,7 @@ class Sitemap {
 				'post_type' => $post_type,
 				'posts_per_page' => -1,
 			);
-			$pt_query = new WP_Query( $pt_args );
+			$pt_query = new \WP_Query( $pt_args );
 
 			while ( $pt_query->have_posts() ) {
 				$pt_query->the_post();

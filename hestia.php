@@ -31,8 +31,6 @@ if ( file_exists( $plugin_root . '/vendor/autoload.php' ) ) {
 
 /**
  * Initialize plugin on the 'init' hook.
- *
- * @return void
  */
 function hestia_init() {
 	$name = 'hestia';
