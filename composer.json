@@ -1,7 +1,7 @@
 {
     "name": "ssnepenthe/hestia",
-    "type": "wordpress-muplugin",
     "description": "This plugin introduces the following shortcodes: [ancestors], [attachments], [children], [siblings], [sitemap].",
+    "type": "wordpress-plugin",
     "homepage": "https://github.com/ssnepenthe/hestia",
     "license": "GPL-2.0",
     "require": {
@@ -10,9 +10,6 @@
     },
     "require-dev": {
         "codegyre/robo": "^0.6.0"
-    },
-    "suggest": {
-        "ssnepenthe/horme": "Extends the WordPress mu-plugin system to autoload composer packages of type: wordpress-muplugin"
     },
     "autoload": {
     	"psr-4": { "SSNepenthe\\Hestia\\": "src/" }
