@@ -9,7 +9,7 @@
 /**
  * Plugin Name: Hestia
  * Plugin URI: https://github.com/ssnepenthe/hestia
- * Description: This plugin introduces the following shortcodes for use within hierarchical post types: <code>[ancestors]</code>, <code>[attachments]</code>, <code>[children]</code>, <code>[siblings]</code>.
+ * Description: This plugin introduces the following shortcodes: <code>[ancestors]</code>, <code>[attachments]</code>, <code>[children]</code>, <code>[siblings]</code>, <code>[sitemap]</code>.
  * Version: 0.1.0
  * Author: SSNepenthe
  * Author URI: https://github.com/ssnepenthe
