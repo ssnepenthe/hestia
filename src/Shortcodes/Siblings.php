@@ -34,7 +34,7 @@ class Siblings {
 				$classes = [
 					'hestia-sibling',
 					'hestia-wrap',
-					sprintf( 'post-%s', get_the_ID() ),
+					sprintf( 'post-%s', esc_attr( get_the_ID() ) ),
 				];
 				$has_thumbnail = has_post_thumbnail();
 				$permalink = get_permalink();

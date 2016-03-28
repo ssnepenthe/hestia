@@ -29,7 +29,7 @@ class Ancestors {
 			$classes = [
 				'hestia-ancestor',
 				'hestia-wrap',
-				sprintf( 'post-%s', $ancestor ),
+				sprintf( 'post-%s', esc_attr( $ancestor ) ),
 			];
 			$permalink = get_permalink( $ancestor );
 			$has_thumbnail = has_post_thumbnail( $ancestor );

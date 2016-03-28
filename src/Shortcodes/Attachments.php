@@ -38,7 +38,7 @@ class Attachments {
 				$classes = [
 					'hestia-attachment',
 					'hestia-wrap',
-					sprintf( 'post-%s', get_the_ID() ),
+					sprintf( 'post-%s', esc_attr( get_the_ID() ) ),
 				];
 
 				$r[] = sprintf( '<div class="%s">', implode( ' ', $classes ) );
