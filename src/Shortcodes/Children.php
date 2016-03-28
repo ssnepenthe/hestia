@@ -2,7 +2,7 @@
 
 namespace SSNepenthe\Hestia\Shortcodes;
 
-use \WP_Query;
+use WP_Query;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	die;
