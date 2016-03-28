@@ -21,8 +21,9 @@ class Hestia {
 		$children = new Shortcodes\Children;
 		$children->init();
 
-		$family = new Shortcodes\Family;
-		$family->init();
+		// Currently unused.
+		// $family = new Shortcodes\Family;
+		// $family->init();
 
 		$siblings = new Shortcodes\Siblings;
 		$siblings->init();
