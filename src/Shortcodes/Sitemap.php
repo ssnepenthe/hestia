@@ -2,45 +2,76 @@
 
 namespace SSNepenthe\Hestia\Shortcodes;
 
+use WP_Query;
+
+if ( ! defined( 'ABSPATH' ) ) {
+	die;
+}
+
 class Sitemap {
 	public function init() {
 		add_shortcode( 'sitemap', [ $this, 'shortcode_handler' ] );
 	}
 
-	public function shortcode_handler( $atts, $content = null, $tag ) {
-		$post_types = get_post_types( array(
+	/**
+	 * @todo Should probably be checking publicly_queryable instead of public.
+	 */
+	public function shortcode_handler( $atts, $content = null, $tag = '' ) {
+		$post_types = get_post_types( [
 			'public' => true,
-		));
+		] );
 
-		$r = '';
+		$r = [];
 
 		foreach( $post_types as $post_type ) {
-			if ( in_array( $post_type, array( 'attachment' ) ) ) {
+			// Skip attachments.
+			if ( in_array( $post_type, [ 'attachment' ] ) ) {
 				continue;
 			}
 
-			$pt_object = get_post_type_object( $post_type );
-			if ( $pt_object->labels->name == 'Posts' ) {
-				$r .= "<h2>Blog Posts</h2>\n<ul>\n<li><a href=\"" . esc_url( trailingslashit( home_url( '/blog' ) ) ) . "\">Blog Index</a></li>";
-			} elseif ( $pt_object->has_archive == 1 ) {
-				$r .= "<h2>" . $pt_object->labels->name . "</h2>\n<ul>\n<li><a href=\"" . esc_url( trailingslashit( home_url( '/' . $pt_object->rewrite['slug'] ) ) ) . "\">" . $pt_object->labels->name . " Index</a></li>";
-			} else {
-				$r .= "<h2>" . $pt_object->labels->name . "</h2>\n<ul>";
-			}
+			$object = get_post_type_object( $post_type );
 
-			$pt_args = array(
+			$args = [
+				'order' => 'ASC',
+				'orderby' => 'menu_order',
 				'post_type' => $post_type,
-				'posts_per_page' => -1,
-			);
-			$pt_query = new \WP_Query( $pt_args );
+				// Arbitrary limit... Need to revisit this.
+				'posts_per_page' => 20,
+			];
 
-			while ( $pt_query->have_posts() ) {
-				$pt_query->the_post();
-				$r .= "\n<li><a href=\"" . get_permalink() . "\">" . get_the_title() . "</a></li>";
+			$query = new WP_Query( $args );
+
+			if ( $query->have_posts() ) {
+				$type = str_replace( '_', '-', $post_type );
+				$classes = [
+					'hestia-wrap',
+					'hestia-sitemap',
+					sprintf( 'post-type-%s', sanitize_html_class( $type ) ),
+				];
+				$r[] = sprintf( '<div class="%s">', implode( ' ', $classes ) );
+				$r[] = sprintf(
+					'<h2>Recent %s</h2>',
+					$object->labels->name
+				);
+				$r[] = '<ul>';
+
+				while ( $query->have_posts() ) {
+					$query->the_post();
+
+					$r[] = sprintf(
+						'<li><a href="%s">%s</a></li>',
+						esc_url( get_permalink() ),
+						esc_html( get_the_title() )
+					);
+				}
+
+				$r[] = '</ul>';
+				$r[] = '</div>';
 			}
-			$r .= "\n</ul>\n";
+
+			wp_reset_postdata();
 		}
 
-		return $r;
+		return implode( "\n", $r );
 	}
 }
