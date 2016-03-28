@@ -19,9 +19,9 @@ class Attachments {
 			'orderby' => 'menu_order',
 			'post_parent' => get_the_ID(),
 			// Should allow user to override with shortcode atts.
-			'posts_per_page' => 20,
 			'post_status' => 'inherit',
 			'post_type' => 'attachment',
+			'posts_per_page' => 20,
 		];
 		$query = new WP_Query( $args );
 		$r = [];

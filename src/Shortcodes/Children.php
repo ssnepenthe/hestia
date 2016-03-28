@@ -22,10 +22,10 @@ class Children {
 			'order' => 'ASC',
 			'orderby' => 'menu_order',
 			'post_parent' => get_the_ID(),
-			// Should allow user to override with shortcode atts.
-			'posts_per_page' => 20,
 			// Query returns nothing if we don't include post type.
 			'post_type' => get_post_type(),
+			// Should allow user to override with shortcode atts.
+			'posts_per_page' => 20,
 		];
 		$query = new WP_Query( $args );
 		$r = [];

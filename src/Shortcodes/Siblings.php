@@ -16,13 +16,13 @@ class Siblings {
 	public function shortcode_handler( $atts, $content = null, $tag = '' ) {
 		$id = get_the_ID();
 		$args = [
-			'post__not_in' => [ $id ],
 			'order' => 'ASC',
 			'orderby' => 'menu_order',
+			'post__not_in' => [ $id ],
 			'post_parent' => wp_get_post_parent_id( $id ),
+			'post_type' => get_post_type(),
 			// Should allow user to override with shortcode atts.
 			'posts_per_page' => 20,
-			'post_type' => get_post_type(),
 		];
 		$query = new WP_Query( $args );
 		$r = [];
