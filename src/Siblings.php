@@ -1,6 +1,6 @@
 <?php
 
-namespace SSNepenthe\Hestia\Shortcodes;
+namespace SSNepenthe\Hestia;
 
 use WP_Query;
 
@@ -9,6 +9,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class Siblings {
+	/**
+	 * @hook
+	 */
 	public function init() {
 		add_shortcode( 'siblings', [ $this, 'shortcode_handler' ] );
 	}

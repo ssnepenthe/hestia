@@ -1,12 +1,15 @@
 <?php
 
-namespace SSNepenthe\Hestia\Shortcodes;
+namespace SSNepenthe\Hestia;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	die;
 }
 
 class Ancestors {
+	/**
+	 * @hook
+	 */
 	public function init() {
 		add_shortcode( 'ancestors', [ $this, 'shortcode_handler' ] );
 	}

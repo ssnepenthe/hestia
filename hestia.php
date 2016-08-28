@@ -23,20 +23,30 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die;
 }
 
-$plugin_root = plugin_dir_path( __FILE__ );
+$autoloader = plugin_dir_path( __FILE__ ) . 'vendor/autoload.php';
 
-if ( file_exists( $plugin_root . '/vendor/autoload.php' ) ) {
-	require_once $plugin_root . '/vendor/autoload.php';
+if ( file_exists( $autoloader ) ) {
+	require_once $autoloader;
 }
+
+unset( $autoloader );
 
 /**
- * Initialize plugin on the 'init' hook.
+ * Initialize plugin on the 'plugins_loaded' hook.
  */
-function hestia_init() {
-	$name = 'hestia';
-	$version = '0.1.0';
+function hestia_plugins_loaded() {
+	$classes = [
+		SSNepenthe\Hestia\Ancestors::class,
+		SSNepenthe\Hestia\Attachments::class,
+		SSNepenthe\Hestia\Children::class,
+		// SSNepenthe\Hestia\Descendants::class,
+		// SSNepenthe\Hestia\Family::class,
+		SSNepenthe\Hestia\Siblings::class,
+		SSNepenthe\Hestia\Sitemap::class,
+	];
 
-	$hestia = new \SSNepenthe\Hestia\Hestia( $name, $version );
-	$hestia->init();
+	foreach ( $classes as $class ) {
+		SSNepenthe\Metis\Loader::attach( new $class );
+	}
 }
-add_action( 'init', 'hestia_init' );
+add_action( 'plugins_loaded', 'hestia_plugins_loaded' );

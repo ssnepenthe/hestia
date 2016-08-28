@@ -1,12 +1,15 @@
 <?php
 
-namespace SSNepenthe\Hestia\Shortcodes;
+namespace SSNepenthe\Hestia;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	die;
 }
 
 class Family {
+	/**
+	 * @hook
+	 */
 	public function init() {
 		add_shortcode( 'family', [ $this, 'shortcode_handler' ] );
 	}
