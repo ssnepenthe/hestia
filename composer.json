@@ -1,17 +1,19 @@
 {
-    "name": "ssnepenthe/hestia",
-    "description": "This plugin introduces the following shortcodes: [ancestors], [attachments], [children], [siblings], [sitemap].",
-    "type": "wordpress-plugin",
-    "homepage": "https://github.com/ssnepenthe/hestia",
-    "license": "GPL-2.0",
-    "require": {
-        "php": ">=5.4",
-        "composer/installers": "^1.0.23"
-    },
-    "require-dev": {
-        "codegyre/robo": "^0.6.0"
-    },
-    "autoload": {
-    	"psr-4": { "SSNepenthe\\Hestia\\": "src/" }
-    }
+  "name": "ssnepenthe/hestia",
+  "description": "This plugin introduces the following shortcodes: [ancestors], [attachments], [children], [siblings], [sitemap].",
+  "type": "wordpress-plugin",
+  "homepage": "https://github.com/ssnepenthe/hestia",
+  "license": "GPL-2.0",
+  "require": {
+    "php": ">=5.4",
+    "composer/installers": "^1.0",
+    "league/plates": "^3.1",
+    "ssnepenthe/metis": "dev-master"
+  },
+  "require-dev": {
+    "psy/psysh": "^0.7"
+  },
+  "autoload": {
+    "psr-4": { "SSNepenthe\\Hestia\\": "src/" }
+  }
 }
