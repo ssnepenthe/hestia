@@ -26,8 +26,6 @@ class Plugin extends Container {
 			Ancestors::class,
 			Attachments::class,
 			Children::class,
-			// Descendants::class,
-			// Family::class,
 			Siblings::class,
 			Sitemap::class,
 		];

@@ -4,7 +4,9 @@ namespace SSNepenthe\Hestia\Shortcode;
 
 use WP_Query;
 use SSNepenthe\Hestia\Template\Template;
+use function SSNepenthe\Hestia\parse_atts;
 use SSNepenthe\Hestia\Cache\Cache_Interface;
+use function SSNepenthe\Hestia\generate_cache_key;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	die;
@@ -23,16 +25,20 @@ class Sitemap {
 		add_shortcode( 'sitemap', [ $this, 'shortcode_handler' ] );
 	}
 
-	public function shortcode_handler( $atts, $content = null, $tag = '' ) {
-		return $this->cache->remember( 'sitemap', 60, function() {
+	public function shortcode_handler( $atts, $_ = null, $tag = '' ) {
+		$atts = parse_atts( $atts, $tag );
+		$cache_key = generate_cache_key( $atts, $tag );
+
+		return $this->cache->remember( $cache_key, 60, function() use ( $atts ) {
 			return $this->template->render(
 				'hestia-sitemap',
-				$this->generate_data_array()
+				$this->generate_data_array( $atts )
 			);
 		} );
 	}
 
-	protected function generate_data_array() {
+	protected function generate_data_array( $atts ) {
+		// Atts assumed to have already been validated.
 		// Publicly_queryable excludes "page" post type.
 		$post_types = get_post_types( [
 			'public' => true,
@@ -48,11 +54,10 @@ class Sitemap {
 			$object = get_post_type_object( $post_type );
 
 			$args = [
-				'no_found_rows' => true,
-				'order'          => 'ASC',
-				'orderby'        => 'menu_order',
-				'post_type'      => $post_type,
-				'posts_per_page' => 20,
+				'no_found_rows'          => true,
+				'order'                  => $atts['order'],
+				'post_type'              => $post_type,
+				'posts_per_page'         => $atts['max'],
 				'update_post_meta_cache' => false,
 				'update_post_term_cache' => false,
 			];

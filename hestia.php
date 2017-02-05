@@ -39,10 +39,12 @@ $hestia_checker = new SSNepenthe\Hestia\Requirements_Checker(
 // For transient key length.
 $hestia_checker->set_min_wp( '4.4' );
 
-// For use of short array syntax.
-$hestia_checker->set_min_php( '5.4' );
+// For function imports.
+$hestia_checker->set_min_php( '5.6' );
 
 if ( $hestia_checker->requirements_met() ) {
+	require_once $hestia_dir . 'inc/functions.php';
+
 	$hestia_plugin = new SSNepenthe\Hestia\Plugin( __FILE__ );
 	$hestia_plugin->init();
 } else {
