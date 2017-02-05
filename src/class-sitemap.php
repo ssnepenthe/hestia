@@ -3,6 +3,7 @@
 namespace SSNepenthe\Hestia;
 
 use WP_Query;
+use SSNepenthe\Hestia\Template\Template;
 use SSNepenthe\Hestia\Cache\Cache_Interface;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -11,9 +12,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Sitemap {
 	protected $cache;
+	protected $template;
 
-	public function __construct( Cache_Interface $cache ) {
+	public function __construct( Cache_Interface $cache, Template $template ) {
 		$this->cache = $cache;
+		$this->template = $template;
 	}
 
 	public function init() {
@@ -24,63 +27,62 @@ class Sitemap {
 	 * @todo Should probably be checking publicly_queryable instead of public.
 	 */
 	public function shortcode_handler( $atts, $content = null, $tag = '' ) {
-		return $this->cache->remember( 'sitemap', 60, function() {
-			$post_types = get_post_types( [
-				'public' => true,
-			] );
+		return $this->cache->remember( 'sitemap', 10, function() {
+			return $this->template->render(
+				'hestia-sitemap',
+				$this->generate_data_array()
+			);
+		} );
+	}
 
-			$r = [];
+	protected function generate_data_array() {
+		$post_types = get_post_types( [
+			'public' => true,
+		] );
 
-			foreach( $post_types as $post_type ) {
-				// Skip attachments.
-				if ( in_array( $post_type, [ 'attachment' ] ) ) {
-					continue;
-				}
+		$sections = [];
 
-				$object = get_post_type_object( $post_type );
-
-				$args = [
-					'order' => 'ASC',
-					'orderby' => 'menu_order',
-					'post_type' => $post_type,
-					// Arbitrary limit... Need to revisit this.
-					'posts_per_page' => 20,
-				];
-
-				$query = new WP_Query( $args );
-
-				if ( $query->have_posts() ) {
-					$type = str_replace( '_', '-', $post_type );
-					$classes = [
-						'hestia-wrap',
-						'hestia-sitemap',
-						sprintf( 'post-type-%s', sanitize_html_class( $type ) ),
-					];
-					$r[] = sprintf( '<div class="%s">', implode( ' ', $classes ) );
-					$r[] = sprintf(
-						'<h2>Recent %s</h2>',
-						$object->labels->name
-					);
-					$r[] = '<ul>';
-
-					while ( $query->have_posts() ) {
-						$query->the_post();
-
-						$r[] = sprintf(
-							'<li><a href="%s">%s</a></li>',
-							esc_url( get_permalink() ),
-							esc_html( get_the_title() )
-						);
-					}
-
-					$r[] = '</ul>';
-					$r[] = '</div>';
-				}
-
-				wp_reset_postdata();
+		foreach( $post_types as $post_type ) {
+			if ( 'attachment' === $post_type ) {
+				continue;
 			}
 
-			return implode( '', $r );
-		} );
+			$object = get_post_type_object( $post_type );
+
+			$args = [
+				'order'          => 'ASC',
+				'orderby'        => 'menu_order',
+				'post_type'      => $post_type,
+				// Arbitrary limit... Need to revisit this.
+				'posts_per_page' => 20,
+			];
+
+			$query = new WP_Query( $args );
+
+			if ( $query->have_posts() ) {
+				$name = $object->labels->name;
+				$posts = [];
+				$type = str_replace(
+					'_',
+					'-',
+					sanitize_html_class( $post_type )
+				);
+
+				while ( $query->have_posts() ) {
+					$query->the_post();
+
+					$posts[] = [
+						'permalink' => get_permalink(),
+						'title'     => get_the_title(),
+					];
+				}
+
+				$sections[] = compact( 'type', 'name', 'posts' );
+			}
+
+			wp_reset_postdata();
+		}
+
+		return compact( 'sections' );
 	}
 }
