@@ -60,9 +60,9 @@ class Children {
 
 				$children[] = compact( 'id', 'permalink', 'thumbnail', 'title' );
 			}
-		}
 
-		wp_reset_postdata();
+			wp_reset_postdata();
+		}
 
 		return compact( 'children' );
 	}

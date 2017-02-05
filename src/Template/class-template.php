@@ -82,6 +82,7 @@ class Template {
 		}
 
 		// Explicitly passed data may overwrite global data...
+		// Could be dangerous... Try passing through a variable names $posts and see.
 		extract( $data );
 
 		include $template;

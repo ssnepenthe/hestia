@@ -23,9 +23,6 @@ class Sitemap {
 		add_shortcode( 'sitemap', [ $this, 'shortcode_handler' ] );
 	}
 
-	/**
-	 * @todo Should probably be checking publicly_queryable instead of public.
-	 */
 	public function shortcode_handler( $atts, $content = null, $tag = '' ) {
 		return $this->cache->remember( 'sitemap', 10, function() {
 			return $this->template->render(
@@ -36,6 +33,7 @@ class Sitemap {
 	}
 
 	protected function generate_data_array() {
+		// Publicly_queryable excludes "page" post type.
 		$post_types = get_post_types( [
 			'public' => true,
 		] );
@@ -78,9 +76,9 @@ class Sitemap {
 				}
 
 				$sections[] = compact( 'type', 'name', 'links' );
-			}
 
-			wp_reset_postdata();
+				wp_reset_postdata();
+			}
 		}
 
 		return compact( 'sections' );

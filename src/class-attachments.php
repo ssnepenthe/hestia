@@ -59,9 +59,9 @@ class Attachments {
 
 				$attachments[] = compact( 'id', 'permalink', 'title' );
 			}
-		}
 
-		wp_reset_postdata();
+			wp_reset_postdata();
+		}
 
 		return compact( 'attachments' );
 	}
