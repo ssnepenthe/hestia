@@ -81,9 +81,8 @@ class Template {
 			$s = esc_attr( $s );
 		}
 
-		// Explicitly passed data may overwrite global data...
-		// Could be dangerous... Try passing through a variable names $posts and see.
-		extract( $data );
+		// So we don't overwrite any WordPress globals accidentally.
+		extract( $data, EXTR_SKIP );
 
 		include $template;
 	}
