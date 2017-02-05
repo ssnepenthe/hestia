@@ -4,6 +4,10 @@ namespace SSNepenthe\Hestia\Task;
 
 use SSNepenthe\Hestia\Cache\Wp_Transient_Cache;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	die;
+}
+
 class Garbage_Collect_Transients {
 	protected $cache;
 

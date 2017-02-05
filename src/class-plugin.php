@@ -15,6 +15,10 @@ use SSNepenthe\Hestia\Template\Core_Template_Locator;
 use SSNepenthe\Hestia\Task\Garbage_Collect_Transients;
 use SSNepenthe\Hestia\Template\Template_Locator_Stack;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	die;
+}
+
 class Plugin extends Container {
 	public function __construct( $file ) {
 		parent::__construct( [ 'file' => $file ] );
