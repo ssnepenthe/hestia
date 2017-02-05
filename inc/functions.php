@@ -34,3 +34,7 @@ function generate_cache_key( $atts, $tag = '' ) {
 
 	return $key;
 }
+
+function get_cache_lifetime( $tag ) {
+	return absint( apply_filters( "hestia_{$tag}_cache_lifetime", 600 ) );
+}

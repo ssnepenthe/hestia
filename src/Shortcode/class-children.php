@@ -7,6 +7,7 @@ use SSNepenthe\Hestia\Template\Template;
 use function SSNepenthe\Hestia\parse_atts;
 use SSNepenthe\Hestia\Cache\Cache_Interface;
 use function SSNepenthe\Hestia\generate_cache_key;
+use function SSNepenthe\Hestia\get_cache_lifetime;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	die;
@@ -33,9 +34,10 @@ class Children {
 		}
 
 		$atts = parse_atts( $atts, $tag );
-		$cache_key = generate_cache_key( $atts, $tag );
+		$key = generate_cache_key( $atts, $tag );
+		$lifetime = get_cache_lifetime( $tag );
 
-		return $this->cache->remember( $cache_key, 60, function() use ( $atts ) {
+		return $this->cache->remember( $key, $lifetime, function() use ( $atts ) {
 			return $this->template->render(
 				'hestia-children',
 				$this->generate_data_array( $atts )
