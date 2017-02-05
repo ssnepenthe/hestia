@@ -28,7 +28,9 @@ class Children {
 			return '';
 		}
 
-		return $this->cache->remember( 'children_' . get_the_ID(), 60, function() {
+		$cache_key = 'children_' . get_the_ID();
+
+		return $this->cache->remember( $cache_key, 60, function() {
 			return $this->template->render(
 				'hestia-children',
 				$this->generate_data_array()
@@ -38,13 +40,13 @@ class Children {
 
 	protected function generate_data_array() {
 		$args = [
-			'order'          => 'ASC',
-			'orderby'        => 'menu_order',
-			'post_parent'    => get_the_ID(),
-			// Query returns nothing if we don't include post type.
-			'post_type'      => get_post_type(),
-			// Should allow user to override with shortcode atts.
-			'posts_per_page' => 20,
+			'no_found_rows'             => true,
+			'order'                     => 'ASC',
+			'orderby'                   => 'menu_order',
+			'post_parent'               => get_the_ID(),
+			'post_type'                 => get_post_type(),
+			'posts_per_page'            => 20,
+			'update_post_term_cache'    => false,
 		];
 		$query = new WP_Query( $args );
 		$children = [];

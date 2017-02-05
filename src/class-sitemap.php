@@ -24,7 +24,7 @@ class Sitemap {
 	}
 
 	public function shortcode_handler( $atts, $content = null, $tag = '' ) {
-		return $this->cache->remember( 'sitemap', 10, function() {
+		return $this->cache->remember( 'sitemap', 60, function() {
 			return $this->template->render(
 				'hestia-sitemap',
 				$this->generate_data_array()
@@ -48,11 +48,13 @@ class Sitemap {
 			$object = get_post_type_object( $post_type );
 
 			$args = [
+				'no_found_rows' => true,
 				'order'          => 'ASC',
 				'orderby'        => 'menu_order',
 				'post_type'      => $post_type,
-				// Arbitrary limit... Need to revisit this.
 				'posts_per_page' => 20,
+				'update_post_meta_cache' => false,
+				'update_post_term_cache' => false,
 			];
 
 			$query = new WP_Query( $args );

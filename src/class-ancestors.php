@@ -38,9 +38,7 @@ class Ancestors {
 	}
 
 	protected function build_data_array() {
-		$ancestor_ids = get_post_ancestors( get_the_ID() );
-
-		$ancestor_ids = array_reverse( $ancestor_ids );
+		$ancestor_ids = array_reverse( get_post_ancestors( get_the_ID() ) );
 		$ancestors = [];
 
 		foreach ( $ancestor_ids as $id ) {

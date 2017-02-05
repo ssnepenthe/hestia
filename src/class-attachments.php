@@ -24,7 +24,9 @@ class Attachments {
 	}
 
 	public function shortcode_handler( $atts, $content = null, $tag = '' ) {
-		return $this->cache->remember( 'attachments_' . get_the_ID(), 60, function() {
+		$cache_key = 'attachments_' . get_the_ID();
+
+		return $this->cache->remember( $cache_key, 60, function() {
 			return $this->template->render(
 				'hestia-attachments',
 				$this->build_data_array()
@@ -34,13 +36,14 @@ class Attachments {
 
 	protected function build_data_array() {
 		$args = [
-			'order'          => 'ASC',
-			'orderby'        => 'menu_order',
-			'post_parent'    => get_the_ID(),
-			// Should allow user to override with shortcode atts.
-			'post_status'    => 'inherit',
-			'post_type'      => 'attachment',
-			'posts_per_page' => 20,
+			'no_found_rows'          => true,
+			'order'                  => 'ASC',
+			'orderby'                => 'menu_order',
+			'post_parent'            => get_the_ID(),
+			'post_status'            => 'inherit',
+			'post_type'              => 'attachment',
+			'posts_per_page'         => 20,
+			'update_post_term_cache' => false,
 		];
 		$query = new WP_Query( $args );
 		$attachments = [];
@@ -50,9 +53,8 @@ class Attachments {
 				$query->the_post();
 
 				$id = get_the_ID();
-				/**
-				 * Should allow user to override with shortcode atts.
-				 * Use get_permalink() for the attachment page instead.
+				/*
+				 * get_permalink() to link to attachment page.
 				 */
 				$permalink = wp_get_attachment_url();
 				$title = get_the_title();

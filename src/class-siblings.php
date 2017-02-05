@@ -24,7 +24,9 @@ class Siblings {
 	}
 
 	public function shortcode_handler( $atts, $content = null, $tag = '' ) {
-		return $this->cache->remember( 'siblings_' . get_the_ID(), 60, function() {
+		$cache_key = 'siblings_' . get_the_ID();
+
+		return $this->cache->remember( $cache_key, 60, function() {
 			return $this->template->render(
 				'hestia-siblings',
 				$this->generate_data_array()
@@ -35,13 +37,13 @@ class Siblings {
 	protected function generate_data_array() {
 		$post_id = get_the_ID();
 		$args = [
-			'order'          => 'ASC',
-			'orderby'        => 'menu_order',
-			'post__not_in'   => [ $post_id ],
-			'post_parent'    => wp_get_post_parent_id( $post_id ),
-			'post_type'      => get_post_type(),
-			// Should allow user to override with shortcode atts.
-			'posts_per_page' => 20,
+			'no_found_rows'          => true,
+			'order'                  => 'ASC',
+			'orderby'                => 'menu_order',
+			'post_parent'            => wp_get_post_parent_id( $post_id ),
+			'post_type'              => get_post_type(),
+			'posts_per_page'         => 20,
+			'update_post_term_cache' => false,
 		];
 		$query = new WP_Query( $args );
 		$siblings = [];
@@ -51,6 +53,12 @@ class Siblings {
 				$query->the_post();
 
 				$id = get_the_ID();
+
+				if ( $post_id === $id ) {
+					// Rather than use 'post__not_in' arg.
+					continue;
+				}
+
 				$permalink = get_permalink();
 				$thumbnail = get_the_post_thumbnail();
 				$title = get_the_title();
