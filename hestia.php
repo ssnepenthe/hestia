@@ -29,22 +29,6 @@ if ( file_exists( $hestia_autoloader ) ) {
 	require_once $hestia_autoloader;
 }
 
-function hestia_init() {
-	$classes = [
-		SSNepenthe\Hestia\Ancestors::class,
-		SSNepenthe\Hestia\Attachments::class,
-		SSNepenthe\Hestia\Children::class,
-		// SSNepenthe\Hestia\Descendants::class,
-		// SSNepenthe\Hestia\Family::class,
-		SSNepenthe\Hestia\Siblings::class,
-		SSNepenthe\Hestia\Sitemap::class,
-	];
-
-	foreach ( $classes as $class ) {
-		( new $class )->init();
-	}
-}
-
 // The checker class itself requires PHP 5.3 for namespace support. Since Composer
 // requires 5.3.2 I plan on leaving this as-is.
 $hestia_checker = new SSNepenthe\Soter\Requirements_Checker(
@@ -56,7 +40,8 @@ $hestia_checker = new SSNepenthe\Soter\Requirements_Checker(
 $hestia_checker->set_min_php( '5.4' );
 
 if ( $hestia_checker->requirements_met() ) {
-	add_action( 'init', 'hestia_init' );
+	$hestia_plugin = new SSNepenthe\Hestia\Plugin( __FILE__ );
+	$hestia_plugin->init();
 } else {
 	add_action( 'admin_init', [ $hestia_checker, 'deactivate' ] );
 	add_action( 'admin_notices', [ $hestia_checker, 'notify' ] );
