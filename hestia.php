@@ -32,9 +32,9 @@ if ( file_exists( $autoloader ) ) {
 unset( $autoloader );
 
 /**
- * Initialize plugin on the 'plugins_loaded' hook.
+ * Initialize plugin on the 'init' hook.
  */
-function hestia_plugins_loaded() {
+function hestia_init() {
 	$classes = [
 		SSNepenthe\Hestia\Ancestors::class,
 		SSNepenthe\Hestia\Attachments::class,
@@ -46,7 +46,7 @@ function hestia_plugins_loaded() {
 	];
 
 	foreach ( $classes as $class ) {
-		SSNepenthe\Metis\Loader::attach( new $class );
+		( new $class )->init();
 	}
 }
-add_action( 'plugins_loaded', 'hestia_plugins_loaded' );
+add_action( 'init', 'hestia_init' );
