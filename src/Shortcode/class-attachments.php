@@ -41,6 +41,7 @@ class Attachments {
 	protected function build_data_array( $atts ) {
 		// Atts assumed to have already been validated.
 		$args = [
+			'ignore_sticky_posts'    => true,
 			'no_found_rows'          => true,
 			'order'                  => $atts['order'],
 			'post_parent'            => get_the_ID(),

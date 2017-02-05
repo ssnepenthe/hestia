@@ -41,6 +41,7 @@ class Siblings {
 		// Atts assumed to have already been validated.
 		$post_id = get_the_ID();
 		$args = [
+			'ignore_sticky_posts'    => true,
 			'no_found_rows'          => true,
 			'order'                  => $atts['order'],
 			'post_parent'            => wp_get_post_parent_id( $post_id ),

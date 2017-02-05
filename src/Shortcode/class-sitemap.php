@@ -54,6 +54,7 @@ class Sitemap {
 			$object = get_post_type_object( $post_type );
 
 			$args = [
+				'ignore_sticky_posts'    => true,
 				'no_found_rows'          => true,
 				'order'                  => $atts['order'],
 				'post_type'              => $post_type,

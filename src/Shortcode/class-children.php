@@ -44,12 +44,13 @@ class Children {
 	protected function generate_data_array( $atts ) {
 		// Atts assumed to have already been validated.
 		$args = [
-			'no_found_rows'             => true,
-			'order'                     => $atts['order'],
-			'post_parent'               => get_the_ID(),
-			'post_type'                 => get_post_type(),
-			'posts_per_page'            => $atts['max'],
-			'update_post_term_cache'    => false,
+			'ignore_sticky_posts'    => true,
+			'no_found_rows'          => true,
+			'order'                  => $atts['order'],
+			'post_parent'            => get_the_ID(),
+			'post_type'              => get_post_type(),
+			'posts_per_page'         => $atts['max'],
+			'update_post_term_cache' => false,
 		];
 
 		if ( ! $atts['thumbnails'] ) {
