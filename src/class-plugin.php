@@ -3,21 +3,16 @@
 namespace SSNepenthe\Hestia;
 
 use Pimple\Container;
+use SSNepenthe\Hestia\Cache\Wp_Transient_Cache;
 
 class Plugin extends Container {
 	public function __construct( $file ) {
-		$this->share( 'file', (string) $file );
-	}
-
-	public function add( $id, $value ) {
-		$this->offsetSet( $id, $this->factory( $value ) );
-	}
-
-	public function get( $id ) {
-		return $this->offsetGet( $id );
+		parent::__construct( [ 'file' => $file ] );
 	}
 
 	public function init() {
+		$this->register_services();
+
 		$classes = [
 			Ancestors::class,
 			Attachments::class,
@@ -29,13 +24,15 @@ class Plugin extends Container {
 		];
 
 		foreach ( $classes as $class ) {
-			$instance = new $class;
+			$instance = new $class( $this['cache'] );;
 
 			add_action( 'init', [ $instance, 'init' ] );
 		}
 	}
 
-	public function share( $id, $value ) {
-		$this->offsetSet( $id, $value );
+	public function register_services() {
+		$this['cache'] = function( $c ) {
+			return new Wp_Transient_Cache( 'hestia' );
+		};
 	}
 }

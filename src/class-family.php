@@ -7,9 +7,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class Family {
-	/**
-	 * @hook
-	 */
 	public function init() {
 		add_shortcode( 'family', [ $this, 'shortcode_handler' ] );
 	}

@@ -31,10 +31,13 @@ if ( file_exists( $hestia_autoloader ) ) {
 
 // The checker class itself requires PHP 5.3 for namespace support. Since Composer
 // requires 5.3.2 I plan on leaving this as-is.
-$hestia_checker = new SSNepenthe\Soter\Requirements_Checker(
-	'Soter',
+$hestia_checker = new SSNepenthe\Hestia\Requirements_Checker(
+	'Hestia',
 	$hestia_basename
 );
+
+// For transient key length.
+$hestia_checker->set_min_wp( '4.4' );
 
 // For use of short array syntax.
 $hestia_checker->set_min_php( '5.4' );

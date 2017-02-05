@@ -7,9 +7,6 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class Descendants {
-	/**
-	 * @hook
-	 */
 	public function init() {
 		add_shortcode( 'descendants', [ $this, 'shortcode_handler' ] );
 	}
