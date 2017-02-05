@@ -3,10 +3,10 @@
 		<h2>Recent <?php echo esc_html( $section['name'] ) ?></h2>
 
 		<ul>
-			<?php foreach ( $section['posts'] as $post ) : ?>
+			<?php foreach ( $section['links'] as $link ) : ?>
 				<li>
-					<a href="<?php echo esc_url( $post['permalink'] ) ?>">
-						<?php echo esc_html( $post['title'] ) ?>
+					<a href="<?php echo esc_url( $link['permalink'] ) ?>">
+						<?php echo esc_html( $link['title'] ) ?>
 					</a>
 				</li>
 			<?php endforeach; ?>

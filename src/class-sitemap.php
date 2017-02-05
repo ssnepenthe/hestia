@@ -61,7 +61,7 @@ class Sitemap {
 
 			if ( $query->have_posts() ) {
 				$name = $object->labels->name;
-				$posts = [];
+				$links = [];
 				$type = str_replace(
 					'_',
 					'-',
@@ -71,13 +71,13 @@ class Sitemap {
 				while ( $query->have_posts() ) {
 					$query->the_post();
 
-					$posts[] = [
+					$links[] = [
 						'permalink' => get_permalink(),
 						'title'     => get_the_title(),
 					];
 				}
 
-				$sections[] = compact( 'type', 'name', 'posts' );
+				$sections[] = compact( 'type', 'name', 'links' );
 			}
 
 			wp_reset_postdata();
