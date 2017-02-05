@@ -22,7 +22,9 @@ class Siblings {
 	}
 
 	public function init() {
-		add_shortcode( 'siblings', [ $this, 'shortcode_handler' ] );
+		add_action( 'plugins_loaded', function() {
+			add_shortcode( 'siblings', [ $this, 'shortcode_handler' ] );
+		} );
 	}
 
 	public function shortcode_handler( $atts, $_ = null, $tag = '' ) {

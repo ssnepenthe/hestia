@@ -22,7 +22,9 @@ class Children {
 	}
 
 	public function init() {
-		add_shortcode( 'children', [ $this, 'shortcode_handler' ] );
+		add_action( 'plugins_loaded', function() {
+			add_shortcode( 'children', [ $this, 'shortcode_handler' ] );
+		} );
 	}
 
 	public function shortcode_handler( $atts, $_ = null, $tag = '' ) {

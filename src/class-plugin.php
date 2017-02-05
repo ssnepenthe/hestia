@@ -12,6 +12,7 @@ use SSNepenthe\Hestia\Shortcode\Attachments;
 use SSNepenthe\Hestia\Cache\Wp_Transient_Cache;
 use SSNepenthe\Hestia\Template\Dir_Template_Locator;
 use SSNepenthe\Hestia\Template\Core_Template_Locator;
+use SSNepenthe\Hestia\Task\Garbage_Collect_Transients;
 use SSNepenthe\Hestia\Template\Template_Locator_Stack;
 
 class Plugin extends Container {
@@ -22,7 +23,30 @@ class Plugin extends Container {
 	public function init() {
 		$this->register_services();
 
-		$classes = [
+		$this->cron_init();
+		$this->plugin_init();
+	}
+
+	protected function cron_init() {
+		if ( ! $this->is_cron_request() ) {
+			return;
+		}
+
+		$tasks = [
+			Garbage_Collect_Transients::class,
+		];
+
+		foreach ( $tasks as $task ) {
+			( new $task( $this['cache'] ) )->init();
+		}
+	}
+
+	protected function is_cron_request() {
+		return defined( 'DOING_CRON' ) && DOING_CRON;
+	}
+
+	protected function plugin_init() {
+		$shortcodes = [
 			Ancestors::class,
 			Attachments::class,
 			Children::class,
@@ -30,14 +54,12 @@ class Plugin extends Container {
 			Sitemap::class,
 		];
 
-		foreach ( $classes as $class ) {
-			$instance = new $class( $this['cache'], $this['template'] );
-
-			add_action( 'init', [ $instance, 'init' ] );
+		foreach ( $shortcodes as $shortcode ) {
+			( new $shortcode( $this['cache'], $this['template'] ) )->init();
 		}
 	}
 
-	public function register_services() {
+	protected function register_services() {
 		$this['cache'] = function( $c ) {
 			return new Wp_Transient_Cache( 'hestia' );
 		};
