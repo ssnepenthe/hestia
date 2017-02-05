@@ -3,7 +3,12 @@
 namespace SSNepenthe\Hestia;
 
 use Pimple\Container;
+use SSNepenthe\Hestia\Shortcode\Sitemap;
 use SSNepenthe\Hestia\Template\Template;
+use SSNepenthe\Hestia\Shortcode\Children;
+use SSNepenthe\Hestia\Shortcode\Siblings;
+use SSNepenthe\Hestia\Shortcode\Ancestors;
+use SSNepenthe\Hestia\Shortcode\Attachments;
 use SSNepenthe\Hestia\Cache\Wp_Transient_Cache;
 use SSNepenthe\Hestia\Template\Dir_Template_Locator;
 use SSNepenthe\Hestia\Template\Core_Template_Locator;

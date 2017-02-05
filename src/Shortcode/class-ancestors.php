@@ -1,6 +1,6 @@
 <?php
 
-namespace SSNepenthe\Hestia;
+namespace SSNepenthe\Hestia\Shortcode;
 
 use SSNepenthe\Hestia\Template\Template;
 use SSNepenthe\Hestia\Cache\Cache_Interface;

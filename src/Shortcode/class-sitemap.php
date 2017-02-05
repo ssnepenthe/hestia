@@ -1,6 +1,6 @@
 <?php
 
-namespace SSNepenthe\Hestia;
+namespace SSNepenthe\Hestia\Shortcode;
 
 use WP_Query;
 use SSNepenthe\Hestia\Template\Template;

@@ -1,6 +1,6 @@
 <?php
 
-namespace SSNepenthe\Hestia;
+namespace SSNepenthe\Hestia\Shortcode;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	die;
