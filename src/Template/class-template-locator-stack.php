@@ -19,14 +19,14 @@ class Template_Locator_Stack implements Template_Locator_Interface {
 	/**
 	 * List of template locators.
 	 *
-	 * @var Template_Locator_Interface[]
+	 * @var array
 	 */
 	protected $stack = [];
 
 	/**
 	 * Class constructor.
 	 *
-	 * @param Template_Locator_Interface[] $locators List of template locators.
+	 * @param array $locators List of template locators.
 	 */
 	public function __construct( array $locators = [] ) {
 		foreach ( $locators as $locator ) {
@@ -37,7 +37,7 @@ class Template_Locator_Stack implements Template_Locator_Interface {
 	/**
 	 * Loops through template locators returning the first found template.
 	 *
-	 * @param  string[] $templates List of template files.
+	 * @param  array $templates List of template files.
 	 *
 	 * @return string
 	 */

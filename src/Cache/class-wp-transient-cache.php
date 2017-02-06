@@ -1,4 +1,9 @@
 <?php
+/**
+ * A WP Transient cache implementation.
+ *
+ * @package hestia
+ */
 
 namespace SSNepenthe\Hestia\Cache;
 
@@ -8,9 +13,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die;
 }
 
+/**
+ * A cache interface implementation using core transient caching.
+ */
 class Wp_Transient_Cache implements Cache_Interface {
+	/**
+	 * The prefix used to generate cache IDs.
+	 *
+	 * @var string
+	 */
 	protected $prefix;
 
+	/**
+	 * Class constructor.
+	 *
+	 * @param string $prefix The cache prefix.
+	 */
 	public function __construct( $prefix ) {
 		$prefix = (string) $prefix;
 
@@ -58,10 +76,24 @@ class Wp_Transient_Cache implements Cache_Interface {
 		) );
 	}
 
+	/**
+	 * Remove an entry from the cache.
+	 *
+	 * @param  string $key The cache key.
+	 *
+	 * @return bool
+	 */
 	public function forget( $key ) {
 		return delete_transient( $this->generate_id( $key ) );
 	}
 
+	/**
+	 * Get an entry from the cache if it exists.
+	 *
+	 * @param  string $key The cache key.
+	 *
+	 * @return mixed
+	 */
 	public function get( $key ) {
 		$value = get_transient( $this->generate_id( $key ) );
 
@@ -72,14 +104,40 @@ class Wp_Transient_Cache implements Cache_Interface {
 		return $value;
 	}
 
+	/**
+	 * Check whether an entry exists in the cache.
+	 *
+	 * @param  string $key The cache key.
+	 *
+	 * @return bool
+	 */
 	public function has( $key ) {
 		return false !== get_transient( $this->generate_id( $key ) );
 	}
 
+	/**
+	 * Put a value into the cache.
+	 *
+	 * @param  string $key     The cache key.
+	 * @param  mixed  $value   The value to put in the cache.
+	 * @param  int    $seconds Number of seconds the entry is valid for.
+	 *
+	 * @return bool
+	 */
 	public function put( $key, $value, $seconds = 0 ) {
 		return set_transient( $this->generate_id( $key ), $value, $seconds );
 	}
 
+	/**
+	 * Retrieves a value from the cache if it exists, otherwise calls a callback and
+	 * puts its return value into the cache.
+	 *
+	 * @param  string  $key      The cache key.
+	 * @param  int     $seconds  Number of seconds the entry is valid for.
+	 * @param  Closure $callback Callback to generate the cache value.
+	 *
+	 * @return mixed
+	 */
 	public function remember( $key, $seconds, Closure $callback ) {
 		if ( ! is_null( $value = $this->get( $key ) ) ) {
 			return $value;
@@ -90,6 +148,13 @@ class Wp_Transient_Cache implements Cache_Interface {
 		return $value;
 	}
 
+	/**
+	 * Generate a cache ID using the defined key and prefix.
+	 *
+	 * @param  string $key The cache key.
+	 *
+	 * @return string
+	 */
 	protected function generate_id( $key ) {
 		return $this->prefix . hash( 'md5', (string) $key );
 	}

@@ -53,8 +53,8 @@ class Requirements_Checker {
 	 * @param string $file        Main plugin file basename.
 	 */
 	public function __construct( $plugin_name, $file ) {
-		$this->name = $plugin_name;
-		$this->file = $file;
+		$this->name = (string) $plugin_name;
+		$this->file = (string) $file;
 	}
 
 	/**

@@ -111,7 +111,7 @@ class Template {
 	 *
 	 * @param  string $template Template name.
 	 *
-	 * @return string[]
+	 * @return array
 	 */
 	protected function candidates( $template ) {
 		if ( '.php' !== substr( $template, -4 ) ) {

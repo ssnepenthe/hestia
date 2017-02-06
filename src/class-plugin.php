@@ -1,4 +1,9 @@
 <?php
+/**
+ * The plugin bootstrap.
+ *
+ * @package hestia
+ */
 
 namespace SSNepenthe\Hestia;
 
@@ -19,11 +24,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die;
 }
 
+/**
+ * This class initializes the entire plugin.
+ */
 class Plugin extends Container {
+	/**
+	 * Class constructor.
+	 *
+	 * @param string $file The path to th emain plugin file.
+	 */
 	public function __construct( $file ) {
-		parent::__construct( [ 'file' => $file ] );
+		parent::__construct( [ 'file' => (string) $file ] );
 	}
 
+	/**
+	 * Initializes the plugin.
+	 */
 	public function init() {
 		$this->register_services();
 
@@ -31,6 +47,9 @@ class Plugin extends Container {
 		$this->plugin_init();
 	}
 
+	/**
+	 * Initializes the cron-specific functionality.
+	 */
 	protected function cron_init() {
 		if ( ! $this->is_cron_request() ) {
 			return;
@@ -45,10 +64,18 @@ class Plugin extends Container {
 		}
 	}
 
+	/**
+	 * Determines if the current request is a cron request.
+	 *
+	 * @return bool
+	 */
 	protected function is_cron_request() {
 		return defined( 'DOING_CRON' ) && DOING_CRON;
 	}
 
+	/**
+	 * Initializes the sitewide plugin functionality.
+	 */
 	protected function plugin_init() {
 		$shortcodes = [
 			Ancestors::class,
@@ -63,10 +90,15 @@ class Plugin extends Container {
 		}
 	}
 
+	/**
+	 * Registers plugin services.
+	 */
 	protected function register_services() {
 		$this['cache'] = function( $c ) {
-			return new Wp_Transient_Cache( 'hestia' );
+			return new Wp_Transient_Cache( $c['prefix'] );
 		};
+
+		$this['prefix'] = 'hestia';
 
 		$this['template'] = function( $c ) {
 			return new Template( $c['template.locator_stack'] );

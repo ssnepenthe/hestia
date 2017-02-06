@@ -18,7 +18,7 @@ class Core_Template_Locator implements Template_Locator_Interface {
 	/**
 	 * Return the highest priority template available from a list of template files.
 	 *
-	 * @param  string[] $templates List of template files.
+	 * @param  array $templates List of template files.
 	 *
 	 * @return string
 	 */

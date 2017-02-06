@@ -1,4 +1,9 @@
 <?php
+/**
+ * The children shortcode.
+ *
+ * @package hestia
+ */
 
 namespace SSNepenthe\Hestia\Shortcode;
 
@@ -13,21 +18,53 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die;
 }
 
+/**
+ * The class defines the children shortcode.
+ */
 class Children {
+	/**
+	 * Cache provider.
+	 *
+	 * @var Cache_Interface
+	 */
 	protected $cache;
+
+	/**
+	 * Template instance.
+	 *
+	 * @var Template
+	 */
 	protected $template;
 
+	/**
+	 * Class constructor.
+	 *
+	 * @param Cache_Interface $cache    Cache provider.
+	 * @param Template        $template Template instance.
+	 */
 	public function __construct( Cache_Interface $cache, Template $template ) {
 		$this->cache = $cache;
 		$this->template = $template;
 	}
 
+	/**
+	 * Registers the shortcode on the init hook.
+	 */
 	public function init() {
 		add_action( 'plugins_loaded', function() {
 			add_shortcode( 'children', [ $this, 'shortcode_handler' ] );
 		} );
 	}
 
+	/**
+	 * Delegates to the template instance to render the shortcode output.
+	 *
+	 * @param  mixed  $atts Shortcode attributes.
+	 * @param  mixed  $_    The shortcode content.
+	 * @param  string $tag  The shortcode tag.
+	 *
+	 * @return string
+	 */
 	public function shortcode_handler( $atts, $_ = null, $tag = '' ) {
 		if ( ! is_post_type_hierarchical( get_post_type() ) ) {
 			return '';
@@ -45,6 +82,13 @@ class Children {
 		} );
 	}
 
+	/**
+	 * Generates the data array for the template.
+	 *
+	 * @param  array $atts Shortcode attributes.
+	 *
+	 * @return array
+	 */
 	protected function generate_data_array( $atts ) {
 		// Atts assumed to have already been validated.
 		$args = [

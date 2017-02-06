@@ -34,7 +34,7 @@ class Dir_Template_Locator implements Template_Locator_Interface {
 	/**
 	 * Return the highest priority template available with the given directory.
 	 *
-	 * @param  string[] $templates List of template files.
+	 * @param  array $templates List of template files.
 	 *
 	 * @return string
 	 */

@@ -10,7 +10,8 @@
         "pimple/pimple": "^3.0"
     },
     "require-dev": {
-        "psy/psysh": "^0.8"
+        "psy/psysh": "^0.8",
+        "wp-coding-standards/wpcs": "^0.10"
     },
     "autoload": {
         "classmap": ["src/"]
