@@ -21,41 +21,25 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die;
 }
 
-$hestia_dir = plugin_dir_path( __FILE__ );
-$hestia_basename = plugin_basename( __FILE__ );
-$hestia_autoloader = $hestia_dir . 'vendor/autoload.php';
-
-if ( file_exists( $hestia_autoloader ) ) {
-	require_once $hestia_autoloader;
+function _hestia_require_if_exists( $file ) {
+	if ( file_exists( $file ) ) {
+		require_once $file;
+	}
 }
 
-// The checker class itself requires PHP 5.3 for namespace support. Since Composer
-// requires 5.3.2 I plan on leaving this as-is.
-$hestia_checker = new SSNepenthe\Hestia\Requirements_Checker(
-	'Hestia',
-	$hestia_basename
-);
+_hestia_require_if_exists( __DIR__ . '/vendor/autoload.php' );
 
-// For transient key length.
-$hestia_checker->set_min_wp( '4.4' );
-
-// For function imports.
-$hestia_checker->set_min_php( '5.6' );
+$hestia_checker = WP_Requirements\Plugin_Checker::make( 'Hestia', __FILE__ )
+	// For transient key length.
+	->wp_at_least( '4.4' )
+	// For function imports.
+	->php_at_least( '5.6' );
 
 if ( $hestia_checker->requirements_met() ) {
-	require_once $hestia_dir . 'inc/functions.php';
-
 	$hestia_plugin = new SSNepenthe\Hestia\Plugin( __FILE__ );
 	$hestia_plugin->init();
 } else {
-	add_action( 'admin_init', [ $hestia_checker, 'deactivate' ] );
-	add_action( 'admin_notices', [ $hestia_checker, 'notify' ] );
+	$hestia_checker->deactivate_and_notify();
 }
 
-unset(
-	$hestia_autoloader,
-	$hestia_basename,
-	$hestia_checker,
-	$hestia_dir,
-	$hestia_plugin
-);
+unset( $hestia_checker, $hestia_plugin );
