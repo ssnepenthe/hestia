@@ -21,6 +21,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die;
 }
 
+/**
+ * Include a file if it exists via "require_once".
+ *
+ * @param  string $file Path to file for inclusion.
+ */
 function _hestia_require_if_exists( $file ) {
 	if ( file_exists( $file ) ) {
 		require_once $file;

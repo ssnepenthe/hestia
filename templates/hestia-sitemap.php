@@ -1,4 +1,11 @@
-<?php foreach ( $sections as $section ) : ?>
+<?php
+/**
+ * The sitemap shortcode template.
+ *
+ * @package hestia
+ */
+
+foreach ( $sections as $section ) : ?>
 	<div class="hestia-sitemap hestia-wrap post-type-<?php echo esc_attr( $section['type'] ) ?>">
 		<h2>Recent <?php echo esc_html( $section['name'] ) ?></h2>
 

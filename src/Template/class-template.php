@@ -57,7 +57,9 @@ class Template {
 	 * @param  array  $data Data to make available to the template.
 	 */
 	public function output( $name, $data = [] ) {
-		if ( ! $template = $this->locator->locate( $this->candidates( $name ) ) ) {
+		$template = $this->locator->locate( $this->candidates( $name ) );
+
+		if ( ! $template ) {
 			return;
 		}
 

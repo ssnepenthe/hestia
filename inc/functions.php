@@ -41,7 +41,7 @@ function get_cache_lifetime( $tag ) {
  * Apply defaults and validate an array of shortcode attributes.
  *
  * @param  mixed  $atts Shortcode attributes.
- * @param  string $tag  The shortcode tag
+ * @param  string $tag  The shortcode tag.
  *
  * @return array
  */

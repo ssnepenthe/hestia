@@ -135,7 +135,7 @@ class Sitemap {
 
 				wp_reset_postdata();
 			}
-		}
+		} // End foreach().
 
 		return compact( 'sections' );
 	}

@@ -34,7 +34,9 @@ class Plugin extends Container {
 	 * @param string $file The path to th emain plugin file.
 	 */
 	public function __construct( $file ) {
-		parent::__construct( [ 'file' => (string) $file ] );
+		parent::__construct( [
+			'file' => (string) $file,
+		] );
 	}
 
 	/**

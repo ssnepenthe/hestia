@@ -60,14 +60,12 @@ class Wp_Transient_Cache implements Cache_Interface {
 		$timeout_prefix = '_transient_timeout_' . $this->prefix;
 		$length = strlen( $transient_prefix ) + 1;
 
-		$sql = "DELETE a, b FROM $wpdb->options a, $wpdb->options b
+		$wpdb->query( $wpdb->prepare(
+			"DELETE a, b FROM $wpdb->options a, $wpdb->options b
 			WHERE a.option_name LIKE %s
 			AND a.option_name NOT LIKE %s
 			AND b.option_name = CONCAT( %s, SUBSTRING( a.option_name, %d ) )
-			AND b.option_value < %d";
-
-		$wpdb->query( $wpdb->prepare(
-			$sql,
+			AND b.option_value < %d",
 			$wpdb->esc_like( $transient_prefix ) . '%',
 			$wpdb->esc_like( $timeout_prefix ) . '%',
 			$timeout_prefix,
@@ -139,11 +137,15 @@ class Wp_Transient_Cache implements Cache_Interface {
 	 * @return mixed
 	 */
 	public function remember( $key, $seconds, Closure $callback ) {
-		if ( ! is_null( $value = $this->get( $key ) ) ) {
+		$value = $this->get( $key );
+
+		if ( ! is_null( $value ) ) {
 			return $value;
 		}
 
-		$this->put( $key, $value = $callback(), $seconds );
+		$value = $callback();
+
+		$this->put( $key, $value, $seconds );
 
 		return $value;
 	}

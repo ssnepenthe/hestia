@@ -43,7 +43,9 @@ class Template_Locator_Stack implements Template_Locator_Interface {
 	 */
 	public function locate( array $templates ) {
 		foreach ( $this->stack as $locator ) {
-			if ( $template = $locator->locate( $templates ) ) {
+			$template = $locator->locate( $templates );
+
+			if ( $template ) {
 				return $template;
 			}
 		}
