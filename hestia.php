@@ -38,7 +38,7 @@ $hestia_checker = WP_Requirements\Plugin_Checker::make( 'Hestia', __FILE__ )
 	// For transient key length.
 	->wp_at_least( '4.4' )
 	// For function imports.
-	->php_at_least( '5.6' );
+	->php_at_least( '7.0' );
 
 if ( $hestia_checker->requirements_met() ) {
 	$hestia_plugin = new Metis\Package( [

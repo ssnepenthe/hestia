@@ -5,9 +5,8 @@
     "homepage": "https://github.com/ssnepenthe/hestia",
     "license": "GPL-2.0",
     "require": {
-        "php": ">=5.6",
+        "php": ">=7.0",
         "composer/installers": "^1.0",
-        "pimple/pimple": "^3.0",
         "ssnepenthe/metis": "dev-master",
         "ssnepenthe/wp-requirements": "dev-master"
     },
