@@ -7,9 +7,9 @@
 
 namespace SSNepenthe\Hestia\Shortcode;
 
-use SSNepenthe\Hestia\Template\Template;
+use Metis\View\Template;
+use Metis\Cache\Repository;
 use function SSNepenthe\Hestia\parse_atts;
-use SSNepenthe\Hestia\Cache\Cache_Interface;
 use function SSNepenthe\Hestia\generate_cache_key;
 use function SSNepenthe\Hestia\get_cache_lifetime;
 
@@ -22,11 +22,11 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class Ancestors {
 	/**
-	 * Cache provider.
+	 * Cache repository.
 	 *
-	 * @var Cache_Interface
+	 * @var Repository
 	 */
-	protected $cache;
+	protected $repository;
 
 	/**
 	 * Template instance.
@@ -38,21 +38,12 @@ class Ancestors {
 	/**
 	 * Class constructor.
 	 *
-	 * @param Cache_Interface $cache    Cache provider.
-	 * @param Template        $template Templatee instance.
+	 * @param Repository $repository Cache repository.
+	 * @param Template   $template   Templatee instance.
 	 */
-	public function __construct( Cache_Interface $cache, Template $template ) {
-		$this->cache = $cache;
+	public function __construct( Repository $repository, Template $template ) {
+		$this->repository = $repository;
 		$this->template = $template;
-	}
-
-	/**
-	 * Registers the shortcode on the init hook.
-	 */
-	public function init() {
-		add_action( 'plugins_loaded', function() {
-			add_shortcode( 'ancestors', [ $this, 'shortcode_handler' ] );
-		} );
 	}
 
 	/**
@@ -73,12 +64,16 @@ class Ancestors {
 		$key = generate_cache_key( $atts, $tag );
 		$lifetime = get_cache_lifetime( $tag );
 
-		return $this->cache->remember( $key, $lifetime, function() use ( $atts ) {
-			return $this->template->render(
-				'hestia-ancestors',
-				$this->build_data_array( $atts )
-			);
-		} );
+		return $this->repository->remember(
+			$key,
+			$lifetime,
+			function() use ( $atts ) {
+				return $this->template->render(
+					'hestia-ancestors',
+					$this->build_data_array( $atts )
+				);
+			}
+		);
 	}
 
 	/**

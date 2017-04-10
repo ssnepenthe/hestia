@@ -41,7 +41,13 @@ $hestia_checker = WP_Requirements\Plugin_Checker::make( 'Hestia', __FILE__ )
 	->php_at_least( '5.6' );
 
 if ( $hestia_checker->requirements_met() ) {
-	$hestia_plugin = new SSNepenthe\Hestia\Plugin( __FILE__ );
+	$hestia_plugin = new Metis\Package( [
+		Metis\Cache\Cache_Provider::class,
+		Metis\View\View_Provider::class,
+		SSNepenthe\Hestia\Hestia_Provider::class,
+		SSNepenthe\Hestia\Shortcode\Shortcode_Provider::class,
+		SSNepenthe\Hestia\Task\Task_Provider::class,
+	] );
 	$hestia_plugin->init();
 } else {
 	$hestia_checker->deactivate_and_notify();
