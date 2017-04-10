@@ -40,17 +40,19 @@ class Ancestors_Test extends WP_UnitTestCase {
 		$GLOBALS['post'] = $this->hestia_posts['third'];
 
 		$rendered = sprintf(
-			'<div class="hestia-ancestor hestia-wrap post-%1$s">
-		<a href="http://example.org/?page_id=%1$s">
-						%2$s		</a>
+			'<div class="hestia-ancestor hestia-wrap post-%s">
+		<a href="%s">
+						%s		</a>
 	</div>
-	<div class="hestia-ancestor hestia-wrap post-%3$s">
-		<a href="http://example.org/?page_id=%3$s">
-						%4$s		</a>
+	<div class="hestia-ancestor hestia-wrap post-%s">
+		<a href="%s">
+						%s		</a>
 	</div>',
 			$this->hestia_posts['first']->ID,
+			get_permalink( $this->hestia_posts['first']->ID ),
 			$this->hestia_posts['first']->post_title,
 			$this->hestia_posts['second']->ID,
+			get_permalink( $this->hestia_posts['second']->ID ),
 			$this->hestia_posts['second']->post_title
 		);
 
@@ -66,17 +68,19 @@ class Ancestors_Test extends WP_UnitTestCase {
 		$GLOBALS['post'] = $this->hestia_posts['third'];
 
 		$rendered = sprintf(
-			'<div class="hestia-ancestor hestia-wrap post-%1$s">
-		<a href="http://example.org/?page_id=%1$s">
-						%2$s		</a>
+			'<div class="hestia-ancestor hestia-wrap post-%s">
+		<a href="%s">
+						%s		</a>
 	</div>
-	<div class="hestia-ancestor hestia-wrap post-%3$s">
-		<a href="http://example.org/?page_id=%3$s">
-						%4$s		</a>
+	<div class="hestia-ancestor hestia-wrap post-%s">
+		<a href="%s">
+						%s		</a>
 	</div>',
 			$this->hestia_posts['second']->ID,
+			get_permalink( $this->hestia_posts['second']->ID ),
 			$this->hestia_posts['second']->post_title,
 			$this->hestia_posts['first']->ID,
+			get_permalink( $this->hestia_posts['first']->ID ),
 			$this->hestia_posts['first']->post_title
 		);
 
@@ -100,17 +104,19 @@ class Ancestors_Test extends WP_UnitTestCase {
 		$GLOBALS['post'] = $this->hestia_posts['third'];
 
 		$rendered = sprintf(
-			'<div class="hestia-ancestor hestia-wrap post-%1$s">
-		<a href="http://example.org/?page_id=%1$s">
-						%2$s		</a>
+			'<div class="hestia-ancestor hestia-wrap post-%s">
+		<a href="%s">
+						%s		</a>
 	</div>
-	<div class="has-post-thumbnail hestia-ancestor hestia-wrap post-%3$s">
-		<a href="http://example.org/?page_id=%3$s">
-			%4$s			%5$s		</a>
+	<div class="has-post-thumbnail hestia-ancestor hestia-wrap post-%s">
+		<a href="%s">
+			%s			%s		</a>
 	</div>',
 			$this->hestia_posts['first']->ID,
+			get_permalink( $this->hestia_posts['first']->ID ),
 			$this->hestia_posts['first']->post_title,
 			$this->hestia_posts['second']->ID,
+			get_permalink( $this->hestia_posts['second']->ID ),
 			get_the_post_thumbnail( $this->hestia_posts['second']->ID ),
 			$this->hestia_posts['second']->post_title
 		);
@@ -135,18 +141,20 @@ class Ancestors_Test extends WP_UnitTestCase {
 		$GLOBALS['post'] = $this->hestia_posts['third'];
 
 		$rendered = sprintf(
-			'<div class="has-post-thumbnail hestia-ancestor hestia-wrap post-%1$s">
-		<a href="http://example.org/?page_id=%1$s">
-			%2$s			%3$s		</a>
+			'<div class="has-post-thumbnail hestia-ancestor hestia-wrap post-%s">
+		<a href="%s">
+			%s			%s		</a>
 	</div>
-	<div class="hestia-ancestor hestia-wrap post-%4$s">
-		<a href="http://example.org/?page_id=%4$s">
-						%5$s		</a>
+	<div class="hestia-ancestor hestia-wrap post-%s">
+		<a href="%s">
+						%s		</a>
 	</div>',
 			$this->hestia_posts['second']->ID,
+			get_permalink( $this->hestia_posts['second']->ID ),
 			get_the_post_thumbnail( $this->hestia_posts['second']->ID ),
 			$this->hestia_posts['second']->post_title,
 			$this->hestia_posts['first']->ID,
+			get_permalink( $this->hestia_posts['first']->ID ),
 			$this->hestia_posts['first']->post_title
 		);
 
@@ -160,13 +168,9 @@ class Ancestors_Test extends WP_UnitTestCase {
 
 	/** @test */
 	function it_fails_gracefully() {
-		$first = $this->factory()->post->create_and_get( [
-			'post_type' => 'page',
-		] );
-
 		add_filter( 'hestia_ancestors_cache_lifetime', '__return_zero' );
 
-		$GLOBALS['post'] = $first;
+		$GLOBALS['post'] = $this->hestia_posts['first'];
 
 		$this->assertEquals( '', trim( do_shortcode( '[ancestors]' ) ) );
 

@@ -11,6 +11,7 @@ class Siblings_Test extends WP_UnitTestCase {
 			'post_type' => 'page',
 		] );
 		$this->hestia_posts['second'] = $this->factory()->post->create_and_get( [
+			'post_date' => date( 'Y-m-d H:i:s', time() - 60 ),
 			'post_type' => 'page',
 		] );
 		$this->hestia_posts['third'] = $this->factory()->post->create_and_get( [
@@ -85,24 +86,9 @@ class Siblings_Test extends WP_UnitTestCase {
 
 	/** @test */
 	function descending_order() {
-		// Put these posts as children so we aren't fighting with top level posts.
-		$first = $this->factory()->post->create_and_get( [
-			'post_parent' => $this->hestia_posts['first']->ID,
-			'post_type' => 'page',
-		] );
-		$second = $this->factory()->post->create_and_get( [
-			'post_parent' => $this->hestia_posts['first']->ID,
-			'post_type' => 'page',
-		] );
-		sleep( 1 );
-		$third = $this->factory()->post->create_and_get( [
-			'post_parent' => $this->hestia_posts['first']->ID,
-			'post_type' => 'page',
-		] );
-
 		add_filter( 'hestia_siblings_cache_lifetime', '__return_zero' );
 
-		$GLOBALS['post'] = $first;
+		$GLOBALS['post'] = $this->hestia_posts['first'];
 
 		$rendered = sprintf(
 			'<div class="hestia-sibling hestia-wrap post-%s">
@@ -113,12 +99,12 @@ class Siblings_Test extends WP_UnitTestCase {
 		<a href="%s">
 						%s		</a>
 	</div>',
-			$third->ID,
-			get_permalink( $third->ID ),
-			$third->post_title,
-			$second->ID,
-			get_permalink( $second->ID ),
-			$second->post_title
+			$this->hestia_posts['third']->ID,
+			get_permalink( $this->hestia_posts['third']->ID ),
+			$this->hestia_posts['third']->post_title,
+			$this->hestia_posts['second']->ID,
+			get_permalink( $this->hestia_posts['second']->ID ),
+			$this->hestia_posts['second']->post_title
 		);
 
 		$this->assertEquals(
@@ -200,7 +186,7 @@ class Siblings_Test extends WP_UnitTestCase {
 	function it_fails_gracefully() {
 		$post = $this->factory()->post->create_and_get( [
 			'post_type' => 'page',
-			// There will be three posts at root level so lets down a level.
+			// There will be three posts at root level so lets go down a level.
 			'post_parent' => $this->hestia_posts['first']->ID,
 		] );
 

@@ -13,6 +13,7 @@ class Attachments_Test extends WP_UnitTestCase {
 
 		$this->hestia_attachments['first'] = $this->factory()->attachment->create_object( [
 			'file' => 'first.jpg',
+			'post_date' => date( 'Y-m-d H:i:s', time() - 60 ),
 			'post_mime_type' => 'image/jpeg',
 			'post_parent' => $this->hestia_posts['first']->ID,
 			'post_title' => 'First Attachment',
@@ -39,13 +40,13 @@ class Attachments_Test extends WP_UnitTestCase {
 		$GLOBALS['post'] = $this->hestia_posts['first'];
 
 		$rendered = sprintf(
-			'<div class="hestia-attachment hestia-wrap post-%1$s">
-		<a href="%2$s">
-			%3$s		</a>
+			'<div class="hestia-attachment hestia-wrap post-%s">
+		<a href="%s">
+			%s		</a>
 	</div>
-	<div class="hestia-attachment hestia-wrap post-%4$s">
-		<a href="%5$s">
-			%6$s		</a>
+	<div class="hestia-attachment hestia-wrap post-%s">
+		<a href="%s">
+			%s		</a>
 	</div>',
 			$this->hestia_attachments['first'],
 			get_permalink( $this->hestia_attachments['first'] ),
@@ -67,13 +68,13 @@ class Attachments_Test extends WP_UnitTestCase {
 		$GLOBALS['post'] = $this->hestia_posts['first'];
 
 		$rendered = sprintf(
-			'<div class="hestia-attachment hestia-wrap post-%1$s">
-		<a href="%2$s">
-			%3$s		</a>
+			'<div class="hestia-attachment hestia-wrap post-%s">
+		<a href="%s">
+			%s		</a>
 	</div>
-	<div class="hestia-attachment hestia-wrap post-%4$s">
-		<a href="%5$s">
-			%6$s		</a>
+	<div class="hestia-attachment hestia-wrap post-%s">
+		<a href="%s">
+			%s		</a>
 	</div>',
 			$this->hestia_attachments['first'],
 			wp_get_attachment_url( $this->hestia_attachments['first'] ),
@@ -98,9 +99,9 @@ class Attachments_Test extends WP_UnitTestCase {
 		$GLOBALS['post'] = $this->hestia_posts['first'];
 
 		$rendered = sprintf(
-			'<div class="hestia-attachment hestia-wrap post-%1$s">
-		<a href="%2$s">
-			%3$s		</a>
+			'<div class="hestia-attachment hestia-wrap post-%s">
+		<a href="%s">
+			%s		</a>
 	</div>',
 			$this->hestia_attachments['first'],
 			get_permalink( $this->hestia_attachments['first'] ),
@@ -117,44 +118,25 @@ class Attachments_Test extends WP_UnitTestCase {
 
 	/** @test */
 	function descending_order() {
-		$post = $this->factory()->post->create_and_get( [
-			'post_type' => 'page',
-		] );
-
-		$first = $this->factory()->attachment->create_object( [
-			'file' => 'first.jpg',
-			'post_mime_type' => 'image/jpeg',
-			'post_parent' => $post->ID,
-			'post_title' => 'First Attachment',
-		] );
-		// Wait a second so we have sufficiently different created at timestamps.
-		sleep( 1 );
-		$second = $this->factory()->attachment->create_object( [
-			'file' => 'second.jpg',
-			'post_mime_type' => 'image/jpeg',
-			'post_parent' => $post->ID,
-			'post_title' => 'Second Attachment',
-		] );
-
 		add_filter( 'hestia_attachments_cache_lifetime', '__return_zero' );
 
-		$GLOBALS['post'] = $post;
+		$GLOBALS['post'] = $this->hestia_posts['first'];
 
 		$rendered = sprintf(
-			'<div class="hestia-attachment hestia-wrap post-%1$s">
-		<a href="%2$s">
-			%3$s		</a>
+			'<div class="hestia-attachment hestia-wrap post-%s">
+		<a href="%s">
+			%s		</a>
 	</div>
-	<div class="hestia-attachment hestia-wrap post-%4$s">
-		<a href="%5$s">
-			%6$s		</a>
+	<div class="hestia-attachment hestia-wrap post-%s">
+		<a href="%s">
+			%s		</a>
 	</div>',
-			$second,
-			get_permalink( $second ),
-			get_the_title( $second ),
-			$first,
-			get_permalink( $first ),
-			get_the_title( $first )
+			$this->hestia_attachments['second'],
+			get_permalink( $this->hestia_attachments['second'] ),
+			get_the_title( $this->hestia_attachments['second'] ),
+			$this->hestia_attachments['first'],
+			get_permalink( $this->hestia_attachments['first'] ),
+			get_the_title( $this->hestia_attachments['first'] )
 		);
 
 		$this->assertEquals(
@@ -167,37 +149,18 @@ class Attachments_Test extends WP_UnitTestCase {
 
 	/** @test */
 	function link_to_file_with_custom_max_in_descending_order() {
-		$post = $this->factory()->post->create_and_get( [
-			'post_type' => 'page',
-		] );
-
-		$first = $this->factory()->attachment->create_object( [
-			'file' => 'first.jpg',
-			'post_mime_type' => 'image/jpeg',
-			'post_parent' => $post->ID,
-			'post_title' => 'First Attachment',
-		] );
-		// Wait a second so we have sufficiently different created at timestamps.
-		sleep( 1 );
-		$second = $this->factory()->attachment->create_object( [
-			'file' => 'second.jpg',
-			'post_mime_type' => 'image/jpeg',
-			'post_parent' => $post->ID,
-			'post_title' => 'Second Attachment',
-		] );
-
 		add_filter( 'hestia_attachments_cache_lifetime', '__return_zero' );
 
-		$GLOBALS['post'] = $post;
+		$GLOBALS['post'] = $this->hestia_posts['first'];
 
 		$rendered = sprintf(
-			'<div class="hestia-attachment hestia-wrap post-%1$s">
-		<a href="%2$s">
-			%3$s		</a>
+			'<div class="hestia-attachment hestia-wrap post-%s">
+		<a href="%s">
+			%s		</a>
 	</div>',
-			$second,
-			wp_get_attachment_url( $second ),
-			get_the_title( $second )
+			$this->hestia_attachments['second'],
+			wp_get_attachment_url( $this->hestia_attachments['second'] ),
+			get_the_title( $this->hestia_attachments['second'] )
 		);
 
 		$this->assertEquals(
