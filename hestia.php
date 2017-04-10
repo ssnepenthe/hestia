@@ -37,7 +37,7 @@ _hestia_require_if_exists( __DIR__ . '/vendor/autoload.php' );
 $hestia_checker = WP_Requirements\Plugin_Checker::make( 'Hestia', __FILE__ )
 	// For transient key length.
 	->wp_at_least( '4.4' )
-	// For function imports.
+	// Depends on ssnepenthe/metis.
 	->php_at_least( '7.0' );
 
 if ( $hestia_checker->requirements_met() ) {
