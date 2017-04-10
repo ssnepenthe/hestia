@@ -60,7 +60,7 @@ class Task_Provider implements Bootable_Service_Provider_Interface {
 	 *
 	 * @return boolean
 	 */
-	protected function is_cron() {
+	protected function is_cron() : bool {
 		return defined( 'DOING_CRON' ) && DOING_CRON;
 	}
 }

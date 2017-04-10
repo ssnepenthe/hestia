@@ -56,7 +56,11 @@ class Children {
 	 *
 	 * @return string
 	 */
-	public function shortcode_handler( $atts, $_ = null, $tag = '' ) {
+	public function shortcode_handler(
+		$atts,
+		$_ = null,
+		string $tag = ''
+	) : string {
 		if ( ! is_post_type_hierarchical( get_post_type() ) ) {
 			return '';
 		}
@@ -84,7 +88,7 @@ class Children {
 	 *
 	 * @return array
 	 */
-	protected function generate_data_array( $atts ) {
+	protected function generate_data_array( array $atts ) : array {
 		// Atts assumed to have already been validated.
 		$args = [
 			'ignore_sticky_posts'    => true,

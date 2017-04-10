@@ -55,7 +55,11 @@ class Ancestors {
 	 *
 	 * @return string
 	 */
-	public function shortcode_handler( $atts, $_ = null, $tag = '' ) {
+	public function shortcode_handler(
+		$atts,
+		$_ = null,
+		string $tag = ''
+	) : string {
 		if ( ! is_post_type_hierarchical( get_post_type() ) ) {
 			return '';
 		}
@@ -83,7 +87,7 @@ class Ancestors {
 	 *
 	 * @return array
 	 */
-	protected function build_data_array( $atts ) {
+	protected function build_data_array( array $atts ) : array {
 		// Atts assumed to have already been validated.
 		$ancestor_ids = get_post_ancestors( get_the_ID() );
 
