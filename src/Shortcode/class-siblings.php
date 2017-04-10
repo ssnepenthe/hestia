@@ -94,7 +94,8 @@ class Siblings {
 			'order'                  => $atts['order'],
 			'post_parent'            => wp_get_post_parent_id( $post_id ),
 			'post_type'              => get_post_type(),
-			'posts_per_page'         => $atts['max'],
+			// Load an extra post b/c list may include current post.
+			'posts_per_page'         => $atts['max'] + 1,
 			'update_post_term_cache' => false,
 		];
 
@@ -121,6 +122,13 @@ class Siblings {
 				$title = get_the_title();
 
 				$siblings[] = compact( 'id', 'permalink', 'thumbnail', 'title' );
+
+				if ( $atts['max'] <= count( $siblings ) ) {
+					// We queried for one more post than desired to be able to filter
+					// out the current post - if siblings count has hit our desired
+					// max we need to break out early.
+					break;
+				}
 			}
 
 			wp_reset_postdata();
