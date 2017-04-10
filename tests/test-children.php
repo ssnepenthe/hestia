@@ -35,7 +35,7 @@ class Children_Test extends WP_UnitTestCase {
 
 	/** @test */
 	function basic_output() {
-		add_filter( 'hestia_ancestors_cache_lifetime', '__return_zero' );
+		add_filter( 'hestia_children_cache_lifetime', '__return_zero' );
 
 		$GLOBALS['post'] = $this->hestia_posts['first'];
 
@@ -58,12 +58,12 @@ class Children_Test extends WP_UnitTestCase {
 
 		$this->assertEquals( $rendered, trim( do_shortcode( '[children]' ) ) );
 
-		remove_filter( 'hestia_ancestors_cache_lifetime', '__return_zero' );
+		remove_filter( 'hestia_children_cache_lifetime', '__return_zero' );
 	}
 
 	/** @test */
 	function override_max() {
-		add_filter( 'hestia_ancestors_cache_lifetime', '__return_zero' );
+		add_filter( 'hestia_children_cache_lifetime', '__return_zero' );
 
 		$GLOBALS['post'] = $this->hestia_posts['first'];
 
@@ -82,7 +82,7 @@ class Children_Test extends WP_UnitTestCase {
 			trim( do_shortcode( '[children max="1"]' ) )
 		);
 
-		remove_filter( 'hestia_ancestors_cache_lifetime', '__return_zero' );
+		remove_filter( 'hestia_children_cache_lifetime', '__return_zero' );
 	}
 
 	/** @test */
@@ -101,7 +101,7 @@ class Children_Test extends WP_UnitTestCase {
 			'post_type' => 'page',
 		] );
 
-		add_filter( 'hestia_ancestors_cache_lifetime', '__return_zero' );
+		add_filter( 'hestia_children_cache_lifetime', '__return_zero' );
 
 		$GLOBALS['post'] = $first;
 
@@ -127,12 +127,12 @@ class Children_Test extends WP_UnitTestCase {
 			trim( do_shortcode( '[children order="DESC"]' ) )
 		);
 
-		remove_filter( 'hestia_ancestors_cache_lifetime', '__return_zero' );
+		remove_filter( 'hestia_children_cache_lifetime', '__return_zero' );
 	}
 
 	/** @test */
 	function with_thumbnails() {
-		add_filter( 'hestia_ancestors_cache_lifetime', '__return_zero' );
+		add_filter( 'hestia_children_cache_lifetime', '__return_zero' );
 
 		set_post_thumbnail(
 			$this->hestia_posts['second'],
@@ -164,7 +164,7 @@ class Children_Test extends WP_UnitTestCase {
 			trim( do_shortcode( '[children thumbnails="true"]' ) )
 		);
 
-		remove_filter( 'hestia_ancestors_cache_lifetime', '__return_zero' );
+		remove_filter( 'hestia_children_cache_lifetime', '__return_zero' );
 	}
 
 	/** @test */
@@ -184,7 +184,7 @@ class Children_Test extends WP_UnitTestCase {
 		] );
 		set_post_thumbnail( $third, $this->hestia_attachments['first'] );
 
-		add_filter( 'hestia_ancestors_cache_lifetime', '__return_zero' );
+		add_filter( 'hestia_children_cache_lifetime', '__return_zero' );
 
 		$GLOBALS['post'] = $first;
 
@@ -204,7 +204,7 @@ class Children_Test extends WP_UnitTestCase {
 			trim( do_shortcode( '[children max="1" order="DESC" thumbnails="true"]' ) )
 		);
 
-		remove_filter( 'hestia_ancestors_cache_lifetime', '__return_zero' );
+		remove_filter( 'hestia_children_cache_lifetime', '__return_zero' );
 	}
 
 	/** @test */
@@ -214,12 +214,12 @@ class Children_Test extends WP_UnitTestCase {
 			'post_type' => 'page',
 		] );
 
-		add_filter( 'hestia_ancestors_cache_lifetime', '__return_zero' );
+		add_filter( 'hestia_children_cache_lifetime', '__return_zero' );
 
 		$GLOBALS['post'] = $first;
 
 		$this->assertEquals( '', trim( do_shortcode( '[children]' ) ) );
 
-		remove_filter( 'hestia_ancestors_cache_lifetime', '__return_zero' );
+		remove_filter( 'hestia_children_cache_lifetime', '__return_zero' );
 	}
 }
