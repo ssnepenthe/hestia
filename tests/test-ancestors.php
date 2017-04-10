@@ -27,6 +27,8 @@ class Ancestors_Test extends WP_UnitTestCase {
 	}
 
 	function tearDown() {
+		parent::tearDown();
+
 		$this->hestia_attachments = [];
 		$this->hestia_posts = [];
 	}
