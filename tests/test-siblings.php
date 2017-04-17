@@ -1,6 +1,6 @@
 <?php
 
-class Siblings_Test extends WP_UnitTestCase {
+class Siblings_Test extends Hestia_Shortcode_Test_Case {
 	protected $hestia_attachments = [];
 	protected $hestia_posts = [];
 
@@ -66,19 +66,9 @@ class Siblings_Test extends WP_UnitTestCase {
 
 		$GLOBALS['post'] = $this->hestia_posts['first'];
 
-		$rendered = sprintf(
-			'<div class="hestia-sibling hestia-wrap post-%s">
-		<a href="%s">
-						%s		</a>
-	</div>',
-			$this->hestia_posts['second']->ID,
-			get_permalink( $this->hestia_posts['second']->ID ),
-			$this->hestia_posts['second']->post_title
-		);
-
-		$this->assertEquals(
-			$rendered,
-			trim( do_shortcode( '[siblings max="1"]' ) )
+		$this->assertShortcodeContent(
+			$this->hestia_posts['second']->post_title,
+			do_shortcode( '[siblings max="1"]' )
 		);
 
 		remove_filter( 'hestia_siblings_cache_lifetime', '__return_zero' );
@@ -90,26 +80,13 @@ class Siblings_Test extends WP_UnitTestCase {
 
 		$GLOBALS['post'] = $this->hestia_posts['first'];
 
-		$rendered = sprintf(
-			'<div class="hestia-sibling hestia-wrap post-%s">
-		<a href="%s">
-						%s		</a>
-	</div>
-	<div class="hestia-sibling hestia-wrap post-%s">
-		<a href="%s">
-						%s		</a>
-	</div>',
-			$this->hestia_posts['third']->ID,
-			get_permalink( $this->hestia_posts['third']->ID ),
-			$this->hestia_posts['third']->post_title,
-			$this->hestia_posts['second']->ID,
-			get_permalink( $this->hestia_posts['second']->ID ),
-			$this->hestia_posts['second']->post_title
-		);
-
-		$this->assertEquals(
-			$rendered,
-			trim( do_shortcode( '[siblings order="DESC"]' ) )
+		$this->assertShortcodeContent(
+			sprintf(
+				'%s %s',
+				$this->hestia_posts['third']->post_title,
+				$this->hestia_posts['second']->post_title
+			),
+			do_shortcode( '[siblings order="DESC"]' )
 		);
 
 		remove_filter( 'hestia_siblings_cache_lifetime', '__return_zero' );
@@ -125,28 +102,19 @@ class Siblings_Test extends WP_UnitTestCase {
 		);
 
 		$GLOBALS['post'] = $this->hestia_posts['first'];
+		$shortcode = do_shortcode( '[siblings thumbnails="true"]' );
 
-		$rendered = sprintf(
-			'<div class="has-post-thumbnail hestia-sibling hestia-wrap post-%s">
-		<a href="%s">
-			%s			%s		</a>
-	</div>
-	<div class="hestia-sibling hestia-wrap post-%s">
-		<a href="%s">
-						%s		</a>
-	</div>',
-			$this->hestia_posts['second']->ID,
-			get_permalink( $this->hestia_posts['second']->ID ),
+		$this->assertContains(
 			get_the_post_thumbnail( $this->hestia_posts['second']->ID ),
-			$this->hestia_posts['second']->post_title,
-			$this->hestia_posts['third']->ID,
-			get_permalink( $this->hestia_posts['third']->ID ),
-			$this->hestia_posts['third']->post_title
+			$shortcode
 		);
-
-		$this->assertEquals(
-			$rendered,
-			trim( do_shortcode( '[siblings thumbnails="true"]' ) )
+		$this->assertShortcodeContent(
+			sprintf(
+				'%s %s',
+				$this->hestia_posts['second']->post_title,
+				$this->hestia_posts['third']->post_title
+			),
+			$shortcode
 		);
 
 		remove_filter( 'hestia_siblings_cache_lifetime', '__return_zero' );
@@ -162,21 +130,17 @@ class Siblings_Test extends WP_UnitTestCase {
 		);
 
 		$GLOBALS['post'] = $this->hestia_posts['first'];
-
-		$rendered = sprintf(
-			'<div class="has-post-thumbnail hestia-sibling hestia-wrap post-%s">
-		<a href="%s">
-			%s			%s		</a>
-	</div>',
-			$this->hestia_posts['third']->ID,
-			get_permalink( $this->hestia_posts['third']->ID ),
-			get_the_post_thumbnail( $this->hestia_posts['third']->ID ),
-			$this->hestia_posts['third']->post_title
+		$shortcode = do_shortcode(
+			'[siblings max="1" order="DESC" thumbnails="true"]'
 		);
 
-		$this->assertEquals(
-			$rendered,
-			trim( do_shortcode( '[siblings max="1" order="DESC" thumbnails="true"]' ) )
+		$this->assertContains(
+			get_the_post_thumbnail( $this->hestia_posts['third']->ID ),
+			$shortcode
+		);
+		$this->assertShortcodeContent(
+			$this->hestia_posts['third']->post_title,
+			$shortcode
 		);
 
 		remove_filter( 'hestia_siblings_cache_lifetime', '__return_zero' );
@@ -194,7 +158,7 @@ class Siblings_Test extends WP_UnitTestCase {
 
 		$GLOBALS['post'] = $post;
 
-		$this->assertEquals( '', trim( do_shortcode( '[siblings]' ) ) );
+		$this->assertShortcodeContent( '', do_shortcode( '[siblings]' ) );
 
 		remove_filter( 'hestia_siblings_cache_lifetime', '__return_zero' );
 	}

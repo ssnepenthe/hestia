@@ -1,6 +1,6 @@
 <?php
 
-class Ancestors_Test extends WP_UnitTestCase {
+class Ancestors_Test extends Hestia_Shortcode_Test_Case {
 	protected $hestia_attachments = [];
 	protected $hestia_posts = [];
 
@@ -67,26 +67,13 @@ class Ancestors_Test extends WP_UnitTestCase {
 
 		$GLOBALS['post'] = $this->hestia_posts['third'];
 
-		$rendered = sprintf(
-			'<div class="hestia-ancestor hestia-wrap post-%s">
-		<a href="%s">
-						%s		</a>
-	</div>
-	<div class="hestia-ancestor hestia-wrap post-%s">
-		<a href="%s">
-						%s		</a>
-	</div>',
-			$this->hestia_posts['second']->ID,
-			get_permalink( $this->hestia_posts['second']->ID ),
-			$this->hestia_posts['second']->post_title,
-			$this->hestia_posts['first']->ID,
-			get_permalink( $this->hestia_posts['first']->ID ),
-			$this->hestia_posts['first']->post_title
-		);
-
-		$this->assertEquals(
-			$rendered,
-			trim( do_shortcode( '[ancestors order="DESC"]' ) )
+		$this->assertShortcodeContent(
+			sprintf(
+				'%s %s',
+				$this->hestia_posts['second']->post_title,
+				$this->hestia_posts['first']->post_title
+			),
+			do_shortcode( '[ancestors order="DESC"]' )
 		);
 
 		remove_filter( 'hestia_ancestors_cache_lifetime', '__return_zero' );
@@ -103,27 +90,19 @@ class Ancestors_Test extends WP_UnitTestCase {
 
 		$GLOBALS['post'] = $this->hestia_posts['third'];
 
-		$rendered = sprintf(
-			'<div class="hestia-ancestor hestia-wrap post-%s">
-		<a href="%s">
-						%s		</a>
-	</div>
-	<div class="has-post-thumbnail hestia-ancestor hestia-wrap post-%s">
-		<a href="%s">
-			%s			%s		</a>
-	</div>',
-			$this->hestia_posts['first']->ID,
-			get_permalink( $this->hestia_posts['first']->ID ),
-			$this->hestia_posts['first']->post_title,
-			$this->hestia_posts['second']->ID,
-			get_permalink( $this->hestia_posts['second']->ID ),
-			get_the_post_thumbnail( $this->hestia_posts['second']->ID ),
-			$this->hestia_posts['second']->post_title
-		);
+		$shortcode = do_shortcode( '[ancestors thumbnails="true"]' );
 
-		$this->assertEquals(
-			$rendered,
-			trim( do_shortcode( '[ancestors thumbnails="true"]' ) )
+		$this->assertContains(
+			get_the_post_thumbnail( $this->hestia_posts['second']->ID ),
+			$shortcode
+		);
+		$this->assertShortcodeContent(
+			sprintf(
+				'%s %s',
+				$this->hestia_posts['first']->post_title,
+				$this->hestia_posts['second']->post_title
+			),
+			$shortcode
 		);
 
 		remove_filter( 'hestia_ancestors_cache_lifetime', '__return_zero' );
@@ -140,27 +119,19 @@ class Ancestors_Test extends WP_UnitTestCase {
 
 		$GLOBALS['post'] = $this->hestia_posts['third'];
 
-		$rendered = sprintf(
-			'<div class="has-post-thumbnail hestia-ancestor hestia-wrap post-%s">
-		<a href="%s">
-			%s			%s		</a>
-	</div>
-	<div class="hestia-ancestor hestia-wrap post-%s">
-		<a href="%s">
-						%s		</a>
-	</div>',
-			$this->hestia_posts['second']->ID,
-			get_permalink( $this->hestia_posts['second']->ID ),
-			get_the_post_thumbnail( $this->hestia_posts['second']->ID ),
-			$this->hestia_posts['second']->post_title,
-			$this->hestia_posts['first']->ID,
-			get_permalink( $this->hestia_posts['first']->ID ),
-			$this->hestia_posts['first']->post_title
-		);
+		$shortcode = do_shortcode( '[ancestors order="DESC" thumbnails="true"]' );
 
-		$this->assertEquals(
-			$rendered,
-			trim( do_shortcode( '[ancestors order="DESC" thumbnails="true"]' ) )
+		$this->assertContains(
+			get_the_post_thumbnail( $this->hestia_posts['second']->ID ),
+			$shortcode
+		);
+		$this->assertShortcodeContent(
+			sprintf(
+				'%s %s',
+				$this->hestia_posts['second']->post_title,
+				$this->hestia_posts['first']->post_title
+			),
+			$shortcode
 		);
 
 		remove_filter( 'hestia_ancestors_cache_lifetime', '__return_zero' );
@@ -172,7 +143,7 @@ class Ancestors_Test extends WP_UnitTestCase {
 
 		$GLOBALS['post'] = $this->hestia_posts['first'];
 
-		$this->assertEquals( '', trim( do_shortcode( '[ancestors]' ) ) );
+		$this->assertShortcodeContent( '', do_shortcode( '[ancestors]' ) );
 
 		remove_filter( 'hestia_ancestors_cache_lifetime', '__return_zero' );
 	}

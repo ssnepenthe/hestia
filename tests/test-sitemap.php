@@ -1,6 +1,6 @@
 <?php
 
-class Sitemap_Test extends WP_UnitTestCase {
+class Sitemap_Test extends Hestia_Shortcode_Test_Case {
 	protected $hestia_pages = [];
 	protected $hestia_posts = [];
 
@@ -91,48 +91,15 @@ class Sitemap_Test extends WP_UnitTestCase {
 	function override_max() {
 		add_filter( 'hestia_sitemap_cache_lifetime', '__return_zero' );
 
-		$rendered = sprintf(
-			'<div class="hestia-sitemap hestia-wrap post-type-post">
-		<h2>Recent Posts</h2>
-
-		<ul>
-							%s
-							%s
-					</ul>
-	</div>
-	<div class="hestia-sitemap hestia-wrap post-type-page">
-		<h2>Recent Pages</h2>
-
-		<ul>
-							%s
-							%s
-					</ul>
-	</div>',
+		$this->assertShortcodeContent(
 			sprintf(
-				$this->list_item(),
-				get_permalink( $this->hestia_posts['first']->ID ),
-				$this->hestia_posts['first']->post_title
-			),
-			sprintf(
-				$this->list_item(),
-				get_permalink( $this->hestia_posts['second']->ID ),
-				$this->hestia_posts['second']->post_title
-			),
-			sprintf(
-				$this->list_item(),
-				get_permalink( $this->hestia_pages['first']->ID ),
-				$this->hestia_pages['first']->post_title
-			),
-			sprintf(
-				$this->list_item(),
-				get_permalink( $this->hestia_pages['second']->ID ),
+				'Recent Posts %s %s Recent Pages %s %s',
+				$this->hestia_posts['first']->post_title,
+				$this->hestia_posts['second']->post_title,
+				$this->hestia_pages['first']->post_title,
 				$this->hestia_pages['second']->post_title
-			)
-		);
-
-		$this->assertEquals(
-			$rendered,
-			trim( do_shortcode( '[sitemap max="2"]' ) )
+			),
+			do_shortcode( '[sitemap max="2"]' )
 		);
 
 		remove_filter( 'hestia_sitemap_cache_lifetime', '__return_zero' );
@@ -142,60 +109,17 @@ class Sitemap_Test extends WP_UnitTestCase {
 	function descending_order() {
 		add_filter( 'hestia_sitemap_cache_lifetime', '__return_zero' );
 
-		$rendered = sprintf(
-			'<div class="hestia-sitemap hestia-wrap post-type-post">
-		<h2>Recent Posts</h2>
-
-		<ul>
-							%s
-							%s
-							%s
-					</ul>
-	</div>
-	<div class="hestia-sitemap hestia-wrap post-type-page">
-		<h2>Recent Pages</h2>
-
-		<ul>
-							%s
-							%s
-							%s
-					</ul>
-	</div>',
+		$this->assertShortcodeContent(
 			sprintf(
-				$this->list_item(),
-				get_permalink( $this->hestia_posts['third']->ID ),
-				$this->hestia_posts['third']->post_title
-			),
-			sprintf(
-				$this->list_item(),
-				get_permalink( $this->hestia_posts['second']->ID ),
-				$this->hestia_posts['second']->post_title
-			),
-			sprintf(
-				$this->list_item(),
-				get_permalink( $this->hestia_posts['first']->ID ),
-				$this->hestia_posts['first']->post_title
-			),
-			sprintf(
-				$this->list_item(),
-				get_permalink( $this->hestia_pages['third']->ID ),
-				$this->hestia_pages['third']->post_title
-			),
-			sprintf(
-				$this->list_item(),
-				get_permalink( $this->hestia_pages['second']->ID ),
-				$this->hestia_pages['second']->post_title
-			),
-			sprintf(
-				$this->list_item(),
-				get_permalink( $this->hestia_pages['first']->ID ),
+				'Recent Posts %s %s %s Recent Pages %s %s %s',
+				$this->hestia_posts['third']->post_title,
+				$this->hestia_posts['second']->post_title,
+				$this->hestia_posts['first']->post_title,
+				$this->hestia_pages['third']->post_title,
+				$this->hestia_pages['second']->post_title,
 				$this->hestia_pages['first']->post_title
-			)
-		);
-
-		$this->assertEquals(
-			$rendered,
-			trim( do_shortcode( '[sitemap order="DESC"]' ) )
+			),
+			do_shortcode( '[sitemap order="DESC"]' )
 		);
 
 		remove_filter( 'hestia_sitemap_cache_lifetime', '__return_zero' );
@@ -205,36 +129,13 @@ class Sitemap_Test extends WP_UnitTestCase {
 	function custom_max_in_descending_order() {
 		add_filter( 'hestia_sitemap_cache_lifetime', '__return_zero' );
 
-		$rendered = sprintf(
-			'<div class="hestia-sitemap hestia-wrap post-type-post">
-		<h2>Recent Posts</h2>
-
-		<ul>
-							%s
-					</ul>
-	</div>
-	<div class="hestia-sitemap hestia-wrap post-type-page">
-		<h2>Recent Pages</h2>
-
-		<ul>
-							%s
-					</ul>
-	</div>',
+		$this->assertShortcodeContent(
 			sprintf(
-				$this->list_item(),
-				get_permalink( $this->hestia_posts['third']->ID ),
-				$this->hestia_posts['third']->post_title
-			),
-			sprintf(
-				$this->list_item(),
-				get_permalink( $this->hestia_pages['third']->ID ),
+				'Recent Posts %s Recent Pages %s',
+				$this->hestia_posts['third']->post_title,
 				$this->hestia_pages['third']->post_title
-			)
-		);
-
-		$this->assertEquals(
-			$rendered,
-			trim( do_shortcode( '[sitemap max="1" order="DESC"]' ) )
+			),
+			do_shortcode( '[sitemap max="1" order="DESC"]' )
 		);
 
 		remove_filter( 'hestia_sitemap_cache_lifetime', '__return_zero' );
@@ -253,70 +154,19 @@ class Sitemap_Test extends WP_UnitTestCase {
 			'post_type' => 'testing',
 		] );
 
-		$rendered = sprintf(
-			'<div class="hestia-sitemap hestia-wrap post-type-post">
-		<h2>Recent Posts</h2>
-
-		<ul>
-							%s
-							%s
-							%s
-					</ul>
-	</div>
-	<div class="hestia-sitemap hestia-wrap post-type-page">
-		<h2>Recent Pages</h2>
-
-		<ul>
-							%s
-							%s
-							%s
-					</ul>
-	</div>
-	<div class="hestia-sitemap hestia-wrap post-type-testing">
-		<h2>Recent Just Testing</h2>
-
-		<ul>
-							%s
-					</ul>
-	</div>',
+		$this->assertShortcodeContent(
 			sprintf(
-				$this->list_item(),
-				get_permalink( $this->hestia_posts['first']->ID ),
-				$this->hestia_posts['first']->post_title
-			),
-			sprintf(
-				$this->list_item(),
-				get_permalink( $this->hestia_posts['second']->ID ),
-				$this->hestia_posts['second']->post_title
-			),
-			sprintf(
-				$this->list_item(),
-				get_permalink( $this->hestia_posts['third']->ID ),
-				$this->hestia_posts['third']->post_title
-			),
-			sprintf(
-				$this->list_item(),
-				get_permalink( $this->hestia_pages['first']->ID ),
-				$this->hestia_pages['first']->post_title
-			),
-			sprintf(
-				$this->list_item(),
-				get_permalink( $this->hestia_pages['second']->ID ),
-				$this->hestia_pages['second']->post_title
-			),
-			sprintf(
-				$this->list_item(),
-				get_permalink( $this->hestia_pages['third']->ID ),
-				$this->hestia_pages['third']->post_title
-			),
-			sprintf(
-				$this->list_item(),
-				get_permalink( $custom->ID ),
+				'Recent Posts %s %s %s Recent Pages %s %s %s Recent Just Testing %s',
+				$this->hestia_posts['first']->post_title,
+				$this->hestia_posts['second']->post_title,
+				$this->hestia_posts['third']->post_title,
+				$this->hestia_pages['first']->post_title,
+				$this->hestia_pages['second']->post_title,
+				$this->hestia_pages['third']->post_title,
 				$custom->post_title
-			)
+			),
+			do_shortcode( '[sitemap]' )
 		);
-
-		$this->assertEquals( $rendered, trim( do_shortcode( '[sitemap]' ) ) );
 
 		unregister_post_type( 'testing' );
 	}

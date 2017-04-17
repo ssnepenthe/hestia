@@ -1,6 +1,6 @@
 <?php
 
-class Attachments_Test extends WP_UnitTestCase {
+class Attachments_Test extends Hestia_Shortcode_Test_Case {
 	protected $hestia_attachments = [];
 	protected $hestia_posts = [];
 
@@ -67,50 +67,29 @@ class Attachments_Test extends WP_UnitTestCase {
 
 		$GLOBALS['post'] = $this->hestia_posts['first'];
 
-		$rendered = sprintf(
-			'<div class="hestia-attachment hestia-wrap post-%s">
-		<a href="%s">
-			%s		</a>
-	</div>
-	<div class="hestia-attachment hestia-wrap post-%s">
-		<a href="%s">
-			%s		</a>
-	</div>',
-			$this->hestia_attachments['first'],
-			wp_get_attachment_url( $this->hestia_attachments['first'] ),
-			get_the_title( $this->hestia_attachments['first'] ),
-			$this->hestia_attachments['second'],
-			wp_get_attachment_url( $this->hestia_attachments['second'] ),
-			get_the_title( $this->hestia_attachments['second'] )
-		);
+		$shortcode = do_shortcode( '[attachments link="FILE"]' );
 
-		$this->assertEquals(
-			$rendered,
-			trim( do_shortcode( '[attachments link="FILE"]' ) )
+		$this->assertContains(
+			wp_get_attachment_url( $this->hestia_attachments['first'] ),
+			$shortcode
+		);
+		$this->assertContains(
+			wp_get_attachment_url( $this->hestia_attachments['second'] ),
+			$shortcode
 		);
 
 		remove_filter( 'hestia_attachments_cache_lifetime', '__return_zero' );
 	}
 
 	/** @test */
-	function override_max() {
+	function override_max_attachments() {
 		add_filter( 'hestia_attachments_cache_lifetime', '__return_zero' );
 
 		$GLOBALS['post'] = $this->hestia_posts['first'];
 
-		$rendered = sprintf(
-			'<div class="hestia-attachment hestia-wrap post-%s">
-		<a href="%s">
-			%s		</a>
-	</div>',
-			$this->hestia_attachments['first'],
-			get_permalink( $this->hestia_attachments['first'] ),
-			get_the_title( $this->hestia_attachments['first'] )
-		);
-
-		$this->assertEquals(
-			$rendered,
-			trim( do_shortcode( '[attachments max="1"]' ) )
+		$this->assertShortcodeContent(
+			get_the_title( $this->hestia_attachments['first'] ),
+			do_shortcode( '[attachments max="1"]' )
 		);
 
 		remove_filter( 'hestia_attachments_cache_lifetime', '__return_zero' );
@@ -122,26 +101,13 @@ class Attachments_Test extends WP_UnitTestCase {
 
 		$GLOBALS['post'] = $this->hestia_posts['first'];
 
-		$rendered = sprintf(
-			'<div class="hestia-attachment hestia-wrap post-%s">
-		<a href="%s">
-			%s		</a>
-	</div>
-	<div class="hestia-attachment hestia-wrap post-%s">
-		<a href="%s">
-			%s		</a>
-	</div>',
-			$this->hestia_attachments['second'],
-			get_permalink( $this->hestia_attachments['second'] ),
-			get_the_title( $this->hestia_attachments['second'] ),
-			$this->hestia_attachments['first'],
-			get_permalink( $this->hestia_attachments['first'] ),
-			get_the_title( $this->hestia_attachments['first'] )
-		);
-
-		$this->assertEquals(
-			$rendered,
-			trim( do_shortcode( '[attachments order="DESC"]' ) )
+		$this->assertShortcodeContent(
+			sprintf(
+				'%s %s',
+				get_the_title( $this->hestia_attachments['second'] ),
+				get_the_title( $this->hestia_attachments['first'] )
+			),
+			do_shortcode( '[attachments order="DESC"]' )
 		);
 
 		remove_filter( 'hestia_attachments_cache_lifetime', '__return_zero' );
@@ -153,19 +119,17 @@ class Attachments_Test extends WP_UnitTestCase {
 
 		$GLOBALS['post'] = $this->hestia_posts['first'];
 
-		$rendered = sprintf(
-			'<div class="hestia-attachment hestia-wrap post-%s">
-		<a href="%s">
-			%s		</a>
-	</div>',
-			$this->hestia_attachments['second'],
-			wp_get_attachment_url( $this->hestia_attachments['second'] ),
-			get_the_title( $this->hestia_attachments['second'] )
+		$shortcode = do_shortcode(
+			'[attachments link="FILE" max="1" order="DESC"]'
 		);
 
-		$this->assertEquals(
-			$rendered,
-			trim( do_shortcode( '[attachments link="FILE" max="1" order="DESC"]' ) )
+		$this->assertContains(
+			wp_get_attachment_url( $this->hestia_attachments['second'] ),
+			$shortcode
+		);
+		$this->assertShortcodeContent(
+			get_the_title( $this->hestia_attachments['second'] ),
+			$shortcode
 		);
 
 		remove_filter( 'hestia_attachments_cache_lifetime', '__return_zero' );
@@ -182,7 +146,7 @@ class Attachments_Test extends WP_UnitTestCase {
 
 		$GLOBALS['post'] = $post;
 
-		$this->assertEquals( '', trim( do_shortcode( '[attachments]' ) ) );
+		$this->assertShortcodeContent( '', do_shortcode( '[attachments]' ) );
 
 		remove_filter( 'hestia_attachments_cache_lifetime', '__return_zero' );
 	}

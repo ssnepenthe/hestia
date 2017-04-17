@@ -1,6 +1,6 @@
 <?php
 
-class Children_Test extends WP_UnitTestCase {
+class Children_Test extends Hestia_Shortcode_Test_Case {
 	protected $hestia_attachments = [];
 	protected $hestia_posts = [];
 
@@ -69,19 +69,9 @@ class Children_Test extends WP_UnitTestCase {
 
 		$GLOBALS['post'] = $this->hestia_posts['first'];
 
-		$rendered = sprintf(
-			'<div class="hestia-child hestia-wrap post-%s">
-		<a href="%s">
-						%s		</a>
-	</div>',
-			$this->hestia_posts['second']->ID,
-			get_permalink( $this->hestia_posts['second']->ID ),
-			$this->hestia_posts['second']->post_title
-		);
-
-		$this->assertEquals(
-			$rendered,
-			trim( do_shortcode( '[children max="1"]' ) )
+		$this->assertShortcodeContent(
+			$this->hestia_posts['second']->post_title,
+			do_shortcode( '[children max="1"]' )
 		);
 
 		remove_filter( 'hestia_children_cache_lifetime', '__return_zero' );
@@ -93,26 +83,13 @@ class Children_Test extends WP_UnitTestCase {
 
 		$GLOBALS['post'] = $this->hestia_posts['first'];
 
-		$rendered = sprintf(
-			'<div class="hestia-child hestia-wrap post-%s">
-		<a href="%s">
-						%s		</a>
-	</div>
-	<div class="hestia-child hestia-wrap post-%s">
-		<a href="%s">
-						%s		</a>
-	</div>',
-			$this->hestia_posts['third']->ID,
-			get_permalink( $this->hestia_posts['third']->ID ),
-			$this->hestia_posts['third']->post_title,
-			$this->hestia_posts['second']->ID,
-			get_permalink( $this->hestia_posts['second']->ID ),
-			$this->hestia_posts['second']->post_title
-		);
-
-		$this->assertEquals(
-			$rendered,
-			trim( do_shortcode( '[children order="DESC"]' ) )
+		$this->assertShortcodeContent(
+			sprintf(
+				'%s %s',
+				$this->hestia_posts['third']->post_title,
+				$this->hestia_posts['second']->post_title
+			),
+			do_shortcode( '[children order="DESC"]' )
 		);
 
 		remove_filter( 'hestia_children_cache_lifetime', '__return_zero' );
@@ -128,28 +105,19 @@ class Children_Test extends WP_UnitTestCase {
 		add_filter( 'hestia_children_cache_lifetime', '__return_zero' );
 
 		$GLOBALS['post'] = $this->hestia_posts['first'];
+		$shortcode = do_shortcode( '[children thumbnails="true"]' );
 
-		$rendered = sprintf(
-			'<div class="has-post-thumbnail hestia-child hestia-wrap post-%s">
-		<a href="%s">
-			%s			%s		</a>
-	</div>
-	<div class="hestia-child hestia-wrap post-%s">
-		<a href="%s">
-						%s		</a>
-	</div>',
-			$this->hestia_posts['second']->ID,
-			get_permalink( $this->hestia_posts['second']->ID ),
+		$this->assertContains(
 			get_the_post_thumbnail( $this->hestia_posts['second']->ID ),
-			$this->hestia_posts['second']->post_title,
-			$this->hestia_posts['third']->ID,
-			get_permalink( $this->hestia_posts['third']->ID ),
-			$this->hestia_posts['third']->post_title
+			$shortcode
 		);
-
-		$this->assertEquals(
-			$rendered,
-			trim( do_shortcode( '[children thumbnails="true"]' ) )
+		$this->assertShortcodeContent(
+			sprintf(
+				'%s %s',
+				$this->hestia_posts['second']->post_title,
+				$this->hestia_posts['third']->post_title
+			),
+			$shortcode
 		);
 
 		remove_filter( 'hestia_children_cache_lifetime', '__return_zero' );
@@ -165,21 +133,17 @@ class Children_Test extends WP_UnitTestCase {
 		add_filter( 'hestia_children_cache_lifetime', '__return_zero' );
 
 		$GLOBALS['post'] = $this->hestia_posts['first'];
-
-		$rendered = sprintf(
-			'<div class="has-post-thumbnail hestia-child hestia-wrap post-%s">
-		<a href="%s">
-			%s			%s		</a>
-	</div>',
-			$this->hestia_posts['third']->ID,
-			get_permalink( $this->hestia_posts['third']->ID ),
-			get_the_post_thumbnail( $this->hestia_posts['third']->ID ),
-			$this->hestia_posts['third']->post_title
+		$shortcode = do_shortcode(
+			'[children max="1" order="DESC" thumbnails="true"]'
 		);
 
-		$this->assertEquals(
-			$rendered,
-			trim( do_shortcode( '[children max="1" order="DESC" thumbnails="true"]' ) )
+		$this->assertContains(
+			get_the_post_thumbnail( $this->hestia_posts['third']->ID ),
+			$shortcode
+		);
+		$this->assertShortcodeContent(
+			$this->hestia_posts['third']->post_title,
+			$shortcode
 		);
 
 		remove_filter( 'hestia_children_cache_lifetime', '__return_zero' );
@@ -191,7 +155,7 @@ class Children_Test extends WP_UnitTestCase {
 
 		$GLOBALS['post'] = $this->hestia_posts['second'];
 
-		$this->assertEquals( '', trim( do_shortcode( '[children]' ) ) );
+		$this->assertShortcodeContent( '', do_shortcode( '[children]' ) );
 
 		remove_filter( 'hestia_children_cache_lifetime', '__return_zero' );
 	}
