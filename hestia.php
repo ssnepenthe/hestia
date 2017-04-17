@@ -10,7 +10,7 @@
  * Plugin Name: Hestia
  * Plugin URI: https://github.com/ssnepenthe/hestia
  * Description: This plugin introduces the following shortcodes: <code>[ancestors]</code>, <code>[attachments]</code>, <code>[children]</code>, <code>[siblings]</code>, <code>[sitemap]</code>.
- * Version: 0.2.0
+ * Version: 0.3.0
  * Author: Ryan McLaughlin
  * Author URI: https://github.com/ssnepenthe
  * License: GPL-2.0
