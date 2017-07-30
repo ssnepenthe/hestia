@@ -7,16 +7,13 @@
 
 namespace SSNepenthe\Hestia\Shortcode;
 
-use Metis\Container\Container;
-use Metis\Container\Container_Aware_Trait;
-use Metis\Container\Bootable_Service_Provider_Interface;
+use Pimple\Container;
+use Pimple\ServiceProviderInterface;
 
 /**
  * Defines the shortcode provider class.
  */
-class Shortcode_Provider implements Bootable_Service_Provider_Interface {
-	use Container_Aware_Trait;
-
+class Shortcode_Provider implements ServiceProviderInterface {
 	/**
 	 * List of shortcodes registered by this provider.
 	 *
@@ -31,51 +28,37 @@ class Shortcode_Provider implements Bootable_Service_Provider_Interface {
 	];
 
 	/**
-	 * Class constructor.
+	 * Provider-specific boot logic.
 	 *
-	 * @param Container $container Container instance.
+	 * @param  Container $container Container instance.
+	 *
+	 * @return void
 	 */
-	public function __construct( Container $container ) {
-		$this->set_container( $container );
+	public function boot( Container $container ) {
+		add_action( 'init', function() use ( $container ) {
+			foreach ( $this->shortcodes as $shortcode ) {
+				add_shortcode(
+					$shortcode,
+					[ $container[ "shortcode.{$shortcode}" ], 'shortcode_handler' ]
+				);
+			}
+		} );
 	}
 
 	/**
-	 * Provider specific boot logic.
+	 * Provider-specific registration logic.
+	 *
+	 * @param  Container $container Container instance.
+	 *
+	 * @return void
 	 */
-	public function boot() {
-		add_action( 'init', [ $this, 'register_shortcodes' ] );
-	}
-
-	/**
-	 * Provider specific registration logic.
-	 */
-	public function register() {
+	public function register( Container $container ) {
 		foreach ( $this->shortcodes as $shortcode ) {
-			$this->container->bind(
-				'hestia.shortcode.' . $shortcode,
-				function( Container $container ) use ( $shortcode ) {
-					$class = __NAMESPACE__ . '\\' . ucfirst( $shortcode );
+			$container[ "shortcode.{$shortcode}" ] = function( Container $c ) use ( $shortcode ) {
+				$class = __NAMESPACE__ . '\\' . ucfirst( $shortcode );
 
-					return new $class(
-						$container->make( 'metis.cache' )->transient( 'hestia' ),
-						$container->make( 'metis.view' )->overridable(
-							$container->make( 'hestia.dir' )
-						)
-					);
-				}
-			);
-		}
-	}
-
-	/**
-	 * Register all shortcodes with WordPress.
-	 */
-	public function register_shortcodes() {
-		foreach ( $this->shortcodes as $shortcode ) {
-			add_shortcode( $shortcode, [
-				$this->container->make( 'hestia.shortcode.' . $shortcode ),
-				'shortcode_handler',
-			] );
+				return new $class( $c['cache'], $c['plates'] );
+			};
 		}
 	}
 }

@@ -7,7 +7,7 @@
 
 namespace SSNepenthe\Hestia\Task;
 
-use Metis\Cache\Repository;
+use Hestia\Cache\Repository;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	die;

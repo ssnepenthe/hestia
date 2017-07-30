@@ -8,8 +8,8 @@
 namespace SSNepenthe\Hestia\Shortcode;
 
 use WP_Query;
-use Metis\View\Template;
-use Metis\Cache\Repository;
+use SSNepenthe\Hestia\Cache\Repository;
+use SSNepenthe\Hestia\View\Plates_Manager;
 use function SSNepenthe\Hestia\parse_atts;
 use function SSNepenthe\Hestia\generate_cache_key;
 use function SSNepenthe\Hestia\get_cache_lifetime;
@@ -32,17 +32,17 @@ class Siblings {
 	/**
 	 * Template instance.
 	 *
-	 * @var Template
+	 * @var Plates_Manager
 	 */
 	protected $template;
 
 	/**
 	 * Class constructor.
 	 *
-	 * @param Repository $repository Cache repository.
-	 * @param Template   $template   Template instance.
+	 * @param Repository     $repository Cache repository.
+	 * @param Plates_Manager $template   Template instance.
 	 */
-	public function __construct( Repository $repository, Template $template ) {
+	public function __construct( Repository $repository, Plates_Manager $template ) {
 		$this->repository = $repository;
 		$this->template = $template;
 	}

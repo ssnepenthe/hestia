@@ -28,32 +28,40 @@ function _hestia_init() {
 	$checker = WP_Requirements\Plugin_Checker::make( 'Hestia', __FILE__ )
 		// For transient key length.
 		->wp_at_least( '4.4' )
-		// Depends on ssnepenthe/metis.
+		// Scalar type hints.
 		->php_at_least( '7.0' );
 
 	if ( ! $checker->requirements_met() ) {
-		return $checker->deactivate_and_notify();
+		$checker->deactivate_and_notify();
+
+		return;
 	}
 
-	_hestia_instance()->init();
+	add_action( 'plugins_loaded', [ _hestia_instance(), 'boot' ] );
 }
 
 /**
  * Static plugin instance getter.
  *
- * @return Metis\Package
+ * @return Metis\Container
  */
 function _hestia_instance() {
 	static $instance = null;
 
 	if ( is_null( $instance ) ) {
-		$instance = new Metis\Package( [
-			Metis\Cache\Cache_Provider::class,
-			Metis\View\View_Provider::class,
-			SSNepenthe\Hestia\Hestia_Provider::class,
-			SSNepenthe\Hestia\Shortcode\Shortcode_Provider::class,
-			SSNepenthe\Hestia\Task\Task_Provider::class,
+		$instance = new Metis\Container( [
+			'dir' => __DIR__,
+			'file' => __FILE__,
+			'name' => 'Hestia',
+			'prefix' => 'hestia',
+			'version' => '0.3.0',
 		] );
+
+		$instance->register( new Metis\WordPress_Provider() );
+		$instance->register( new SSNepenthe\Hestia\Cache\Cache_Provider() );
+		$instance->register( new SSNepenthe\Hestia\View\Plates_Provider() );
+		$instance->register( new SSNepenthe\Hestia\Shortcode\Shortcode_Provider() );
+		$instance->register( new SSNepenthe\Hestia\Task\Task_Provider() );
 	}
 
 	return $instance;
