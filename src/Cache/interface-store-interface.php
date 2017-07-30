@@ -19,7 +19,7 @@ interface Store_Interface {
 	 *
 	 * @return boolean|integer False on failure, current value otherwise.
 	 */
-	public function decrement( string $key, int $amount = 1 );
+	public function decrement( $key, $amount = 1 );
 
 	/**
 	 * Flush the cache.
@@ -43,7 +43,7 @@ interface Store_Interface {
 	 *
 	 * @return boolean
 	 */
-	public function forever( string $key, $value );
+	public function forever( $key, $value );
 
 	/**
 	 * Remove an entry from the cache.
@@ -52,7 +52,7 @@ interface Store_Interface {
 	 *
 	 * @return boolean
 	 */
-	public function forget( string $key );
+	public function forget( $key );
 
 	/**
 	 * Get an entry from the cache.
@@ -61,7 +61,7 @@ interface Store_Interface {
 	 *
 	 * @return mixed
 	 */
-	public function get( string $key );
+	public function get( $key );
 
 	/**
 	 * Get many entries from the cache.
@@ -87,7 +87,7 @@ interface Store_Interface {
 	 *
 	 * @return boolean|integer False on failure, current value otherwise.
 	 */
-	public function increment( string $key, int $amount = 1 );
+	public function increment( $key, $amount = 1 );
 
 	/**
 	 * Put an entry in the cache.
@@ -98,7 +98,7 @@ interface Store_Interface {
 	 *
 	 * @return boolean
 	 */
-	public function put( string $key, $value, int $seconds );
+	public function put( $key, $value, $seconds );
 
 	/**
 	 * Put many entries into the cache.
@@ -108,5 +108,5 @@ interface Store_Interface {
 	 * @param  array   $values  List of keys to get from the cache.
 	 * @param  integer $seconds Time to cache expiration in seconds.
 	 */
-	public function put_many( array $values, int $seconds );
+	public function put_many( array $values, $seconds );
 }

@@ -28,7 +28,7 @@ class Transient_Store extends Abstract_Store {
 	 * @param wpdb   $db     WordPress database instance.
 	 * @param string $prefix Cache prefix.
 	 */
-	public function __construct( wpdb $db, string $prefix = '' ) {
+	public function __construct( wpdb $db, $prefix = '' ) {
 		$this->db = $db;
 		$this->set_prefix( $prefix );
 	}
@@ -95,7 +95,7 @@ class Transient_Store extends Abstract_Store {
 	 *
 	 * @return boolean
 	 */
-	public function forget( string $key ) {
+	public function forget( $key ) {
 		return delete_transient( $this->hash_key( $key ) );
 	}
 
@@ -106,7 +106,7 @@ class Transient_Store extends Abstract_Store {
 	 *
 	 * @return mixed
 	 */
-	public function get( string $key ) {
+	public function get( $key ) {
 		$value = get_transient( $this->hash_key( $key ) );
 
 		return false === $value ? null : $value;
@@ -123,7 +123,7 @@ class Transient_Store extends Abstract_Store {
 	 *
 	 * @return boolean
 	 */
-	public function put( string $key, $value, int $seconds ) {
+	public function put( $key, $value, $seconds ) {
 		return set_transient(
 			$this->hash_key( $key ),
 			$value,
@@ -138,7 +138,7 @@ class Transient_Store extends Abstract_Store {
 	 *
 	 * @return string
 	 */
-	protected function hash_key( string $key ) {
+	protected function hash_key( $key ) {
 		return $this->prefix . parent::hash_key( $key );
 	}
 
@@ -147,7 +147,7 @@ class Transient_Store extends Abstract_Store {
 	 *
 	 * @param string $prefix Cache prefix.
 	 */
-	protected function set_prefix( string $prefix ) {
+	protected function set_prefix( $prefix ) {
 		// SHA1 plus "_" take 41 characters which leaves us with 131 for our prefix.
 		if ( 131 < strlen( $prefix ) ) {
 			$prefix = substr( $prefix, 0, 131 );

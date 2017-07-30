@@ -50,7 +50,7 @@ class Repository {
 	 *
 	 * @return boolean
 	 */
-	public function add( string $key, $value, int $seconds ) {
+	public function add( $key, $value, $seconds ) {
 		if ( method_exists( $this->store, 'add' ) ) {
 			return $this->store->add( $key, $value, $seconds );
 		}
@@ -70,7 +70,7 @@ class Repository {
 	 *
 	 * @return mixed
 	 */
-	public function get( string $key, $default = null ) {
+	public function get( $key, $default = null ) {
 		$value = $this->store->get( $key );
 
 		return is_null( $value ) ? $default : $value;
@@ -92,7 +92,7 @@ class Repository {
 	 *
 	 * @return boolean
 	 */
-	public function has( string $key ) {
+	public function has( $key ) {
 		return ! is_null( $this->get( $key ) );
 	}
 
@@ -104,7 +104,7 @@ class Repository {
 	 *
 	 * @return mixed
 	 */
-	public function pull( string $key, $default = null ) {
+	public function pull( $key, $default = null ) {
 		$value = $this->get( $key, $default );
 
 		$this->forget( $key );
@@ -121,7 +121,7 @@ class Repository {
 	 *
 	 * @return mixed
 	 */
-	public function remember( string $key, int $seconds, Closure $callback ) {
+	public function remember( $key, $seconds, Closure $callback ) {
 		$value = $this->get( $key );
 
 		if ( ! is_null( $value ) ) {
@@ -143,7 +143,7 @@ class Repository {
 	 *
 	 * @return mixed
 	 */
-	public function remember_forever( string $key, Closure $callback ) {
+	public function remember_forever( $key, Closure $callback ) {
 		$this->remember( $key, 0, $callback );
 	}
 }

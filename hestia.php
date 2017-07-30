@@ -28,8 +28,8 @@ function _hestia_init() {
 	$checker = WP_Requirements\Plugin_Checker::make( 'Hestia', __FILE__ )
 		// For transient key length.
 		->wp_at_least( '4.4' )
-		// Scalar type hints.
-		->php_at_least( '7.0' );
+		// Function imports.
+		->php_at_least( '5.6' );
 
 	if ( ! $checker->requirements_met() ) {
 		$checker->deactivate_and_notify();

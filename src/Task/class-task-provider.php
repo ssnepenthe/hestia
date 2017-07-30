@@ -48,7 +48,7 @@ class Task_Provider implements ServiceProviderInterface {
 	 *
 	 * @return boolean
 	 */
-	protected function is_cron() : bool {
+	protected function is_cron() {
 		return defined( 'DOING_CRON' ) && DOING_CRON;
 	}
 }

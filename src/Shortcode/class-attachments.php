@@ -56,11 +56,7 @@ class Attachments {
 	 *
 	 * @return string
 	 */
-	public function shortcode_handler(
-		$atts,
-		$_ = null,
-		string $tag = ''
-	) : string {
+	public function shortcode_handler( $atts, $_ = null, $tag = '' ) {
 		$atts = parse_atts( $atts, $tag );
 		$key = generate_cache_key( $atts, $tag );
 		$lifetime = get_cache_lifetime( $tag );
@@ -84,7 +80,7 @@ class Attachments {
 	 *
 	 * @return array
 	 */
-	protected function build_data_array( array $atts ) : array {
+	protected function build_data_array( array $atts ) {
 		// Atts assumed to have already been validated.
 		$args = [
 			'ignore_sticky_posts'    => true,

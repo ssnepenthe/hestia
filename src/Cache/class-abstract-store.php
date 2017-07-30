@@ -26,7 +26,7 @@ abstract class Abstract_Store implements Store_Interface {
 	 *
 	 * @return boolean|integer False on failure, current value otherwise.
 	 */
-	public function decrement( string $key, int $amount = 1 ) {
+	public function decrement( $key, $amount = 1 ) {
 		return $this->increment( $key, $amount * -1 );
 	}
 
@@ -38,7 +38,7 @@ abstract class Abstract_Store implements Store_Interface {
 	 *
 	 * @return boolean
 	 */
-	public function forever( string $key, $value ) {
+	public function forever( $key, $value ) {
 		return $this->put( $key, $value, 0 );
 	}
 
@@ -76,7 +76,7 @@ abstract class Abstract_Store implements Store_Interface {
 	 *
 	 * @return boolean|integer False on failure, current value otherwise.
 	 */
-	public function increment( string $key, int $amount = 1 ) {
+	public function increment( $key, $amount = 1 ) {
 		// My preference would be to pre-set value to 0 if it doesn't already exist
 		// in cache and return false if current value is non-numeric but it is
 		// written this way instead to match WP object cache implmentation.
@@ -105,7 +105,7 @@ abstract class Abstract_Store implements Store_Interface {
 	 * @param  array   $values  List of keys to get from the cache.
 	 * @param  integer $seconds Time to cache expiration in seconds.
 	 */
-	public function put_many( array $values, int $seconds ) {
+	public function put_many( array $values, $seconds ) {
 		array_walk( $values, function( $value, $key ) use ( $seconds ) {
 			$this->put( $key, $value, $seconds );
 		} );
@@ -118,7 +118,7 @@ abstract class Abstract_Store implements Store_Interface {
 	 *
 	 * @return string
 	 */
-	protected function hash_key( string $key ) {
+	protected function hash_key( $key ) {
 		return hash( 'sha1', $key );
 	}
 
@@ -127,7 +127,7 @@ abstract class Abstract_Store implements Store_Interface {
 	 *
 	 * @param string $prefix Cache prefix.
 	 */
-	protected function set_prefix( string $prefix ) {
+	protected function set_prefix( $prefix ) {
 		$this->prefix = $prefix;
 	}
 }
