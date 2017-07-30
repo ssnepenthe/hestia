@@ -15,7 +15,7 @@ namespace SSNepenthe\Hestia;
  *
  * @return string
  */
-function generate_cache_key( array $atts, string $tag = '' ) : string {
+function generate_cache_key( array $atts, $tag = '' ) {
 	$key = $tag . get_the_ID() . implode( '', $atts );
 
 	// False would otherwise be an empty string.
@@ -33,7 +33,7 @@ function generate_cache_key( array $atts, string $tag = '' ) : string {
  *
  * @return int
  */
-function get_cache_lifetime( string $tag ) : int {
+function get_cache_lifetime( $tag ) {
 	return absint( apply_filters( "hestia_{$tag}_cache_lifetime", 600 ) );
 }
 
@@ -45,7 +45,7 @@ function get_cache_lifetime( string $tag ) : int {
  *
  * @return array
  */
-function parse_atts( $atts, string $tag = '' ) : array {
+function parse_atts( $atts, $tag = '' ) {
 	$atts = shortcode_atts( [
 		'link'       => 'page',
 		'max'        => 20,
