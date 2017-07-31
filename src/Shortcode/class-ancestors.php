@@ -7,9 +7,9 @@
 
 namespace SSNepenthe\Hestia\Shortcode;
 
-use SSNepenthe\Hestia\Cache\Repository;
 use SSNepenthe\Hestia\View\Plates_Manager;
 use function SSNepenthe\Hestia\parse_atts;
+use SSNepenthe\Hestia\Cache\Cache_Interface;
 use function SSNepenthe\Hestia\generate_cache_key;
 use function SSNepenthe\Hestia\get_cache_lifetime;
 
@@ -22,11 +22,11 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class Ancestors {
 	/**
-	 * Cache repository.
+	 * Cache instance.
 	 *
-	 * @var Repository
+	 * @var Cache_Interface
 	 */
-	protected $repository;
+	protected $cache;
 
 	/**
 	 * Template instance.
@@ -38,11 +38,11 @@ class Ancestors {
 	/**
 	 * Class constructor.
 	 *
-	 * @param Repository     $repository Cache repository.
-	 * @param Plates_Manager $template   Templatee instance.
+	 * @param Cache_Interface $cache    Cache instance.
+	 * @param Plates_Manager  $template Templatee instance.
 	 */
-	public function __construct( Repository $repository, Plates_Manager $template ) {
-		$this->repository = $repository;
+	public function __construct( Cache_Interface $cache, Plates_Manager $template ) {
+		$this->cache = $cache;
 		$this->template = $template;
 	}
 
@@ -64,7 +64,7 @@ class Ancestors {
 		$key = generate_cache_key( $atts, $tag );
 		$lifetime = get_cache_lifetime( $tag );
 
-		return $this->repository->remember(
+		return $this->cache->remember(
 			$key,
 			$lifetime,
 			function() use ( $atts ) {

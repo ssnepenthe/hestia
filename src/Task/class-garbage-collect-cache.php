@@ -7,7 +7,7 @@
 
 namespace SSNepenthe\Hestia\Task;
 
-use Hestia\Cache\Repository;
+use SSNepenthe\Hestia\Cache\Cache_Interface;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	die;
@@ -18,25 +18,27 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class Garbage_Collect_Cache {
 	/**
-	 * Cache repository.
+	 * Cache instance.
 	 *
-	 * @var Repository
+	 * @var Cache_Interface
 	 */
-	protected $repository;
+	protected $cache;
 
 	/**
 	 * Class constructor.
 	 *
-	 * @param Repository $repository Cache repository.
+	 * @param Cache_Interface $cache Cache instance.
 	 */
-	public function __construct( Repository $repository ) {
-		$this->repository = $repository;
+	public function __construct( Cache_Interface $cache ) {
+		$this->cache = $cache;
 	}
 
 	/**
 	 * Runs the garbage collection task.
+	 *
+	 * @return void
 	 */
 	public function run_task() {
-		$this->repository->flush_expired();
+		$this->cache->flush_expired();
 	}
 }

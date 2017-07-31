@@ -23,7 +23,7 @@ class Cache_Provider implements ServiceProviderInterface {
 	 */
 	public function register( Container $container ) {
 		$container['cache'] = function( Container $c ) {
-			return new Repository( new Transient_Store( $c['wpdb'], $c['prefix'] ) );
+			return new Transient_Cache( $c['wpdb'], $c['prefix'] );
 		};
 	}
 }
