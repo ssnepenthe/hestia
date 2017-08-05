@@ -11,6 +11,10 @@
         "ssnepenthe/metis": "^0.6",
         "ssnepenthe/wp-requirements": "^0.1"
     },
+    "require-dev": {
+        "psy/psysh": "^0.8",
+        "symfony/var-dumper": "^3.0"
+    },
     "autoload": {
         "classmap": ["src/"],
         "files": ["inc/functions.php"]
