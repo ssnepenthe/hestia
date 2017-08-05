@@ -61,7 +61,6 @@ function _hestia_instance() {
 		$instance->register( new SSNepenthe\Hestia\Cache\Cache_Provider() );
 		$instance->register( new SSNepenthe\Hestia\View\Plates_Provider() );
 		$instance->register( new SSNepenthe\Hestia\Shortcode\Shortcode_Provider() );
-		$instance->register( new SSNepenthe\Hestia\Task\Task_Provider() );
 	}
 
 	return $instance;

@@ -14,13 +14,6 @@ use Closure;
  */
 interface Cache_Interface {
 	/**
-	 * Flush expired cache entries.
-	 *
-	 * @return boolean
-	 */
-	public function flush_expired();
-
-	/**
 	 * Save the result of a closure call to the cache.
 	 *
 	 * @param  string  $key      The cache key.

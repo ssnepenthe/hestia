@@ -69,44 +69,6 @@ class Transient_Cache implements Cache_Interface {
 	}
 
 	/**
-	 * Flush expired cache entries.
-	 *
-	 * @return boolean
-	 */
-	public function flush_expired() {
-		if ( wp_using_ext_object_cache() ) {
-			return false;
-		}
-
-		$now = time();
-		$prefix = $this->prefix ? "{$this->prefix}:" : '';
-
-		$transient_prefix = "_transient_{$prefix}";
-		$timeout_prefix = "_transient_timeout_{$prefix}";
-		$length = strlen( $transient_prefix ) + 1;
-
-		$sql = "DELETE a, b FROM {$this->db->options} a, {$this->db->options} b
-			WHERE a.option_name LIKE %s
-			AND a.option_name NOT LIKE %s
-			AND b.option_name = CONCAT( %s, SUBSTRING( a.option_name, %d ) )
-			AND b.option_value < %d";
-
-		$count = $this->db->query( $this->db->prepare(
-			$sql,
-			$this->db->esc_like( $transient_prefix ) . '%',
-			$this->db->esc_like( $timeout_prefix ) . '%',
-			$timeout_prefix,
-			$length,
-			$now
-		) );
-
-		// Clear in-memory cache.
-		wp_cache_flush();
-
-		return false === $count ? false : true;
-	}
-
-	/**
 	 * Get an entry from the cache.
 	 *
 	 * @param  string $key Cache key.

@@ -26,42 +26,6 @@ class Transient_Store_Test extends WP_UnitTestCase {
 	}
 
 	/** @test */
-	function it_can_flush_expired_entries_without_prefix() {
-		set_transient( 'test-key-1', 'test-value-1', 0 );
-		set_transient( 'test-key-2', 'test-value-2', 1 );
-
-		// Allow second transient to expire.
-		sleep( 2 );
-
-		// Affects one row so it returns true.
-		$this->assertTrue( $this->cache->flush_expired() );
-
-		$this->assertEquals( 'test-value-1', get_transient( 'test-key-1' ) );
-		$this->assertFalse( get_transient( 'test-key-2' ) );
-
-		// No affected rows but still returns true (only returns false on error).
-		$this->assertTrue( $this->cache->flush_expired() );
-	}
-
-	/** @test */
-	function it_can_flush_expired_entries_with_prefix() {
-		set_transient( 'pfx:test-key-1', 'test-value-1', 0 );
-		set_transient( 'pfx:test-key-2', 'test-value-2', 1 );
-
-		// Allow second transient to expire.
-		sleep( 2 );
-
-		// Affects one row so it returns true.
-		$this->assertTrue( $this->cache->flush_expired() );
-
-		$this->assertEquals( 'test-value-1', get_transient( 'pfx:test-key-1' ) );
-		$this->assertFalse( get_transient( 'pfx:test-key-2' ) );
-
-		// No affected rows but still returns true (only returns false on error).
-		$this->assertTrue( $this->cache->flush_expired() );
-	}
-
-	/** @test */
 	function it_can_get_an_entry() {
 		// It returns null when an entry is not set.
 		$this->assertNull( $this->cache->get( 'test' ) );
