@@ -21,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * The class defines the children shortcode.
  */
-class Children {
+class Children implements Shortcode_Interface {
 	/**
 	 * Cache instance.
 	 *
@@ -56,7 +56,7 @@ class Children {
 	 *
 	 * @return string
 	 */
-	public function shortcode_handler( $atts, $_ = null, $tag = '' ) {
+	public function render( $atts, $_ = null, $tag = '' ) {
 		if ( ! is_post_type_hierarchical( get_post_type() ) ) {
 			return '';
 		}

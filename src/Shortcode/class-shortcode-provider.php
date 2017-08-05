@@ -39,7 +39,7 @@ class Shortcode_Provider implements ServiceProviderInterface {
 			foreach ( $this->shortcodes as $shortcode ) {
 				add_shortcode(
 					$shortcode,
-					[ $container[ "shortcode.{$shortcode}" ], 'shortcode_handler' ]
+					[ $container[ "shortcode.{$shortcode}" ], 'render' ]
 				);
 			}
 		} );

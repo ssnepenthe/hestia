@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * This class defines the ancestors shortcode.
  */
-class Ancestors {
+class Ancestors implements Shortcode_Interface {
 	/**
 	 * Cache instance.
 	 *
@@ -55,7 +55,7 @@ class Ancestors {
 	 *
 	 * @return string
 	 */
-	public function shortcode_handler( $atts, $_ = null, $tag = '' ) {
+	public function render( $atts, $_ = null, $tag = '' ) {
 		if ( ! is_post_type_hierarchical( get_post_type() ) ) {
 			return '';
 		}

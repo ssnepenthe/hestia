@@ -21,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * This class defines the siblings shortcode.
  */
-class Siblings {
+class Siblings implements Shortcode_Interface {
 	/**
 	 * Cache instance.
 	 *
@@ -56,7 +56,7 @@ class Siblings {
 	 *
 	 * @return string
 	 */
-	public function shortcode_handler( $atts, $_ = null, $tag = '' ) {
+	public function render( $atts, $_ = null, $tag = '' ) {
 		$atts = parse_atts( $atts, $tag );
 		$key = generate_cache_key( $atts, $tag );
 		$lifetime = get_cache_lifetime( $tag );
