@@ -7,12 +7,9 @@
 
 namespace SSNepenthe\Hestia\Shortcode;
 
-use WP_Query;
+use SSNepenthe\Hestia\Posts_Repository;
 use SSNepenthe\Hestia\View\Plates_Manager;
 use function SSNepenthe\Hestia\parse_atts;
-use SSNepenthe\Hestia\Cache\Cache_Interface;
-use function SSNepenthe\Hestia\generate_cache_key;
-use function SSNepenthe\Hestia\get_cache_lifetime;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	die;
@@ -22,12 +19,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * This class defines the siblings shortcode.
  */
 class Siblings implements Shortcode {
+	const TEMPLATE_NAME = 'hestia-siblings';
+
 	/**
-	 * Cache instance.
+	 * Posts respository instance.
 	 *
-	 * @var Cache_Interface
+	 * @var Posts_Repository
 	 */
-	protected $cache;
+	protected $repository;
 
 	/**
 	 * Template instance.
@@ -39,11 +38,11 @@ class Siblings implements Shortcode {
 	/**
 	 * Class constructor.
 	 *
-	 * @param Cache_Interface $cache    Cache instance.
-	 * @param Plates_Manager  $template Template instance.
+	 * @param Posts_Repository $repository Posts repository instance.
+	 * @param Plates_Manager   $template   Template instance.
 	 */
-	public function __construct( Cache_Interface $cache, Plates_Manager $template ) {
-		$this->cache = $cache;
+	public function __construct( Posts_Repository $repository, Plates_Manager $template ) {
+		$this->repository = $repository;
 		$this->template = $template;
 	}
 
@@ -58,77 +57,19 @@ class Siblings implements Shortcode {
 	 */
 	public function render( $atts, $_ = null, $tag = '' ) {
 		$atts = parse_atts( $atts, $tag );
-		$key = generate_cache_key( $atts, $tag );
-		$lifetime = get_cache_lifetime( $tag );
 
-		return $this->cache->remember(
-			$key,
-			$lifetime,
-			function() use ( $atts ) {
-				return $this->template->render(
-					'hestia-siblings',
-					$this->generate_data_array( $atts )
-				);
-			}
+		$meta = (bool) apply_filters( 'hestia_siblings_preload_meta', $atts['thumbnails'] );
+
+		$siblings = $this->repository->get_siblings(
+			get_the_ID(),
+			$atts['max'],
+			$atts['order'],
+			$meta
 		);
-	}
 
-	/**
-	 * Generates the data array for the template.
-	 *
-	 * @param  array $atts Shortcode attributes.
-	 *
-	 * @return array
-	 */
-	protected function generate_data_array( array $atts ) {
-		// Atts assumed to have already been validated.
-		$post_id = get_the_ID();
-		$args = [
-			'ignore_sticky_posts'    => true,
-			'no_found_rows'          => true,
-			'order'                  => $atts['order'],
-			'post_parent'            => wp_get_post_parent_id( $post_id ),
-			'post_type'              => get_post_type(),
-			// Load an extra post b/c list may include current post.
-			'posts_per_page'         => $atts['max'] + 1,
-			'update_post_term_cache' => false,
-		];
-
-		if ( ! $atts['thumbnails'] ) {
-			$args['update_post_meta_cache'] = false;
-		}
-
-		$query = new WP_Query( $args );
-		$siblings = [];
-
-		if ( $query->have_posts() ) {
-			while ( $query->have_posts() ) {
-				$query->the_post();
-
-				$id = get_the_ID();
-
-				if ( $post_id === $id ) {
-					// Rather than use 'post__not_in' arg.
-					continue;
-				}
-
-				$permalink = get_permalink();
-				$thumbnail = $atts['thumbnails'] ? get_the_post_thumbnail() : '';
-				$title = get_the_title();
-
-				$siblings[] = compact( 'id', 'permalink', 'thumbnail', 'title' );
-
-				if ( $atts['max'] <= count( $siblings ) ) {
-					// We queried for one more post than desired to be able to filter
-					// out the current post - if siblings count has hit our desired
-					// max we need to break out early.
-					break;
-				}
-			}
-
-			wp_reset_postdata();
-		}
-
-		return compact( 'siblings' );
+		return $this->template->render( self::TEMPLATE_NAME, [
+			'siblings' => $siblings,
+			'thumbnails' => $atts['thumbnails'],
+		] );
 	}
 }

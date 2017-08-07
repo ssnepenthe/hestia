@@ -45,4 +45,16 @@ interface Posts_Repository {
 	 * @return \WP_Post[]
 	 */
 	public function get_children( $post_id, $qty, $order, $meta );
+
+	/**
+	 * Get all siblings of a given post.
+	 *
+	 * @param  integer $post_id Post ID.
+	 * @param  integer $qty     Number of posts to retrieve.
+	 * @param  string  $order   Post order - one of "ASC" or "DESC".
+	 * @param  boolean $meta    Whether post meta should be preloaded into the cache.
+	 *
+	 * @return \WP_Post[]
+	 */
+	public function get_siblings( $post_id, $qty, $order, $meta );
 }

@@ -20,7 +20,6 @@ class Shortcode_Provider implements ServiceProviderInterface {
 	 * @var array
 	 */
 	protected $shortcodes = [
-		'siblings',
 		'sitemap',
 	];
 
@@ -36,6 +35,7 @@ class Shortcode_Provider implements ServiceProviderInterface {
 			add_shortcode( 'ancestors', [ $container['shortcode.ancestors'], 'render' ] );
 			add_shortcode( 'attachments', [ $container['shortcode.attachments'], 'render' ] );
 			add_shortcode( 'children', [ $container['shortcode.children'], 'render' ] );
+			add_shortcode( 'siblings', [ $container['shortcode.siblings'], 'render' ] );
 
 			foreach ( $this->shortcodes as $shortcode ) {
 				add_shortcode(
@@ -62,6 +62,9 @@ class Shortcode_Provider implements ServiceProviderInterface {
 		};
 		$container['shortcode.children'] = function( Container $c ) {
 			return new Children( new \SSNepenthe\Hestia\Posts(), $c['plates'] );
+		};
+		$container['shortcode.siblings'] = function( Container $c ) {
+			return new Siblings( new \SSNepenthe\Hestia\Posts(), $c['plates'] );
 		};
 
 		foreach ( $this->shortcodes as $shortcode ) {

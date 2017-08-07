@@ -6,13 +6,13 @@
  */
 
 foreach ( $siblings as $sibling ) : ?>
-	<div class="<?php echo $sibling['thumbnail'] ? 'has-post-thumbnail ' : ''; ?>hestia-sibling hestia-wrap post-<?php echo esc_attr( $sibling['id'] ); ?>">
-		<a href="<?php echo esc_url( $sibling['permalink'] ); ?>">
-			<?php
-				// Spacing is necessary for WPCS.
-				echo $sibling['thumbnail']; // WPCS: XSS OK.
-			?>
-			<?php echo esc_html( $sibling['title'] ); ?>
+	<div class="<?php echo ( $thumbnails && has_post_thumbnail( $sibling ) ) ? 'hestia-has-thumbnail ' : ''; ?>hestia-post-<?php echo esc_attr( $sibling->ID ); ?> hestia-sibling hestia-wrap">
+		<a href="<?php echo esc_url( get_the_permalink( $sibling ) ); ?>">
+			<?php if ( $thumbnails && has_post_thumbnail( $sibling ) ) : ?>
+				<?php echo get_the_post_thumbnail( $sibling ); ?>
+			<?php endif; ?>
+
+			<?php echo esc_html( get_the_title( $sibling ) ); ?>
 		</a>
 	</div>
 <?php endforeach; ?>

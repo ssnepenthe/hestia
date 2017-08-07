@@ -123,6 +123,42 @@ class Posts implements Posts_Repository {
 	}
 
 	/**
+	 * Get all siblings of a given post.
+	 *
+	 * @param  integer $post_id Post ID.
+	 * @param  integer $qty     Number of posts to retrieve.
+	 * @param  string  $order   Post order - one of "ASC" or "DESC".
+	 * @param  boolean $meta    Whether post meta should be preloaded into the cache.
+	 *
+	 * @return \WP_Post[]
+	 */
+	public function get_siblings( $post_id, $qty, $order, $meta ) {
+		$post_type = get_post_type( $post_id );
+
+		$args = [
+			'ignore_sticky_posts'    => true,
+			'no_found_rows'          => true,
+			'order'                  => $order,
+			'post_parent'            => wp_get_post_parent_id( $post_id ),
+			'post_type'              => $post_type,
+			// Load an extra post b/c list may include current post.
+			'posts_per_page'         => $qty + 1,
+			'update_post_term_cache' => false,
+		];
+
+		if ( ! $meta ) {
+			$args['update_post_meta_cache'] = false;
+		}
+
+		$siblings = $this->query( $args );
+
+		// Will need to revisit eventually if we decide to add pagination.
+		return array_filter( $siblings, function( $post ) use ( $post_id ) {
+			return $post_id !== $post->ID;
+		} );
+	}
+
+	/**
 	 * Get the array of found posts from a WP_Query instance.
 	 *
 	 * @param  array $args WP_Query args.
