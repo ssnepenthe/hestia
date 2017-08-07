@@ -6,13 +6,13 @@
  */
 
 foreach ( $children as $child ) : ?>
-	<div class="<?php echo $child['thumbnail'] ? 'has-post-thumbnail ' : ''; ?>hestia-child hestia-wrap post-<?php echo esc_attr( $child['id'] ); ?>">
-		<a href="<?php echo esc_url( $child['permalink'] ); ?>">
-			<?php
-				// Spacing is necessary for WPCS.
-				echo $child['thumbnail']; // WPCS: XSS OK.
-			?>
-			<?php echo esc_html( $child['title'] ); ?>
+	<div class="hestia-child<?php echo ( $thumbnails && has_post_thumbnail( $child ) ) ? ' hestia-has-thumbnail' : ''; ?> hestia-post-<?php echo esc_attr( $child->ID ); ?> hestia-wrap">
+		<a href="<?php echo esc_url( get_the_permalink( $child ) ); ?>">
+			<?php if ( $thumbnails && has_post_thumbnail( $child ) ) : ?>
+				<?php echo get_the_post_thumbnail( $child ); ?>
+			<?php endif; ?>
+
+			<?php echo esc_html( get_the_title( $child ) ); ?>
 		</a>
 	</div>
 <?php endforeach; ?>

@@ -37,50 +37,42 @@ class Children_Test extends Hestia_Shortcode_Test_Case {
 
 	/** @test */
 	function basic_output() {
-		add_filter( 'hestia_children_cache_lifetime', '__return_zero' );
+		// Attempts to simplify comparison by minimizing the impact of whitespace.
 
 		$GLOBALS['post'] = $this->hestia_posts['first'];
 
-		$rendered = sprintf(
-			'<div class="hestia-child hestia-wrap post-%s">
-		<a href="%s">
-						%s		</a>
-	</div>
-	<div class="hestia-child hestia-wrap post-%s">
-		<a href="%s">
-						%s		</a>
-	</div>',
-			$this->hestia_posts['second']->ID,
-			get_permalink( $this->hestia_posts['second']->ID ),
-			$this->hestia_posts['second']->post_title,
-			$this->hestia_posts['third']->ID,
-			get_permalink( $this->hestia_posts['third']->ID ),
-			$this->hestia_posts['third']->post_title
+		$expected = [
+			sprintf( '<div class="hestia-child hestia-post-%s hestia-wrap">', $this->hestia_posts['second']->ID ),
+			sprintf( '<a href="%s">', get_permalink( $this->hestia_posts['second']->ID ) ),
+			sprintf( '%s		</a>', $this->hestia_posts['second']->post_title ),
+			'</div>',
+			sprintf( '<div class="hestia-child hestia-post-%s hestia-wrap">', $this->hestia_posts['third']->ID ),
+			sprintf( '<a href="%s">', get_permalink( $this->hestia_posts['third']->ID ) ),
+			sprintf( '%s		</a>', $this->hestia_posts['third']->post_title ),
+			'</div>',
+		];
+
+		// Re-indexed for easier comparison.
+		$actual = array_values(
+			// Render, explode on newline, trim each line and then remove empties.
+			array_filter( array_map( 'trim', explode( PHP_EOL, do_shortcode( '[children]' ) ) ) )
 		);
 
-		$this->assertEquals( $rendered, trim( do_shortcode( '[children]' ) ) );
-
-		remove_filter( 'hestia_children_cache_lifetime', '__return_zero' );
+		$this->assertEquals( $expected, $actual );
 	}
 
 	/** @test */
 	function override_max() {
-		add_filter( 'hestia_children_cache_lifetime', '__return_zero' );
-
 		$GLOBALS['post'] = $this->hestia_posts['first'];
 
 		$this->assertShortcodeContent(
 			$this->hestia_posts['second']->post_title,
 			do_shortcode( '[children max="1"]' )
 		);
-
-		remove_filter( 'hestia_children_cache_lifetime', '__return_zero' );
 	}
 
 	/** @test */
 	function descending_order() {
-		add_filter( 'hestia_children_cache_lifetime', '__return_zero' );
-
 		$GLOBALS['post'] = $this->hestia_posts['first'];
 
 		$this->assertShortcodeContent(
@@ -91,8 +83,6 @@ class Children_Test extends Hestia_Shortcode_Test_Case {
 			),
 			do_shortcode( '[children order="DESC"]' )
 		);
-
-		remove_filter( 'hestia_children_cache_lifetime', '__return_zero' );
 	}
 
 	/** @test */
@@ -101,8 +91,6 @@ class Children_Test extends Hestia_Shortcode_Test_Case {
 			$this->hestia_posts['second'],
 			$this->hestia_attachments['first']
 		);
-
-		add_filter( 'hestia_children_cache_lifetime', '__return_zero' );
 
 		$GLOBALS['post'] = $this->hestia_posts['first'];
 		$shortcode = do_shortcode( '[children thumbnails="true"]' );
@@ -119,8 +107,6 @@ class Children_Test extends Hestia_Shortcode_Test_Case {
 			),
 			$shortcode
 		);
-
-		remove_filter( 'hestia_children_cache_lifetime', '__return_zero' );
 	}
 
 	/** @test */
@@ -129,8 +115,6 @@ class Children_Test extends Hestia_Shortcode_Test_Case {
 			$this->hestia_posts['third'],
 			$this->hestia_attachments['first']
 		);
-
-		add_filter( 'hestia_children_cache_lifetime', '__return_zero' );
 
 		$GLOBALS['post'] = $this->hestia_posts['first'];
 		$shortcode = do_shortcode(
@@ -145,18 +129,12 @@ class Children_Test extends Hestia_Shortcode_Test_Case {
 			$this->hestia_posts['third']->post_title,
 			$shortcode
 		);
-
-		remove_filter( 'hestia_children_cache_lifetime', '__return_zero' );
 	}
 
 	/** @test */
 	function it_fails_gracefully() {
-		add_filter( 'hestia_children_cache_lifetime', '__return_zero' );
-
 		$GLOBALS['post'] = $this->hestia_posts['second'];
 
 		$this->assertShortcodeContent( '', do_shortcode( '[children]' ) );
-
-		remove_filter( 'hestia_children_cache_lifetime', '__return_zero' );
 	}
 }

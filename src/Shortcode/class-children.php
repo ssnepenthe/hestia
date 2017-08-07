@@ -7,12 +7,9 @@
 
 namespace SSNepenthe\Hestia\Shortcode;
 
-use WP_Query;
+use SSNepenthe\Hestia\Posts_Repository;
 use SSNepenthe\Hestia\View\Plates_Manager;
 use function SSNepenthe\Hestia\parse_atts;
-use SSNepenthe\Hestia\Cache\Cache_Interface;
-use function SSNepenthe\Hestia\generate_cache_key;
-use function SSNepenthe\Hestia\get_cache_lifetime;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	die;
@@ -22,12 +19,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * The class defines the children shortcode.
  */
 class Children implements Shortcode {
+	const TEMPLATE_NAME = 'hestia-children';
+
 	/**
-	 * Cache instance.
+	 * Posts repository instance.
 	 *
-	 * @var Cache_Interface
+	 * @var Posts_Repository
 	 */
-	protected $cache;
+	protected $repository;
 
 	/**
 	 * Template instance.
@@ -39,11 +38,11 @@ class Children implements Shortcode {
 	/**
 	 * Class constructor.
 	 *
-	 * @param Cache_Interface $cache    Cache instance.
-	 * @param Plates_Manager  $template Template instance.
+	 * @param Posts_Repository $repository Posts repository instance.
+	 * @param Plates_Manager   $template   Template instance.
 	 */
-	public function __construct( Cache_Interface $cache, Plates_Manager $template ) {
-		$this->cache = $cache;
+	public function __construct( Posts_Repository $repository, Plates_Manager $template ) {
+		$this->repository = $repository;
 		$this->template = $template;
 	}
 
@@ -57,67 +56,20 @@ class Children implements Shortcode {
 	 * @return string
 	 */
 	public function render( $atts, $_ = null, $tag = '' ) {
-		if ( ! is_post_type_hierarchical( get_post_type() ) ) {
-			return '';
-		}
-
 		$atts = parse_atts( $atts, $tag );
-		$key = generate_cache_key( $atts, $tag );
-		$lifetime = get_cache_lifetime( $tag );
 
-		return $this->cache->remember(
-			$key,
-			$lifetime,
-			function() use ( $atts ) {
-				return $this->template->render(
-					'hestia-children',
-					$this->generate_data_array( $atts )
-				);
-			}
+		$meta = (bool) apply_filters( 'hestia_children_preload_meta', $atts['thumbnails'] );
+
+		$children = $this->repository->get_children(
+			get_the_ID(),
+			$atts['max'],
+			$atts['order'],
+			$meta
 		);
-	}
 
-	/**
-	 * Generates the data array for the template.
-	 *
-	 * @param  array $atts Shortcode attributes.
-	 *
-	 * @return array
-	 */
-	protected function generate_data_array( array $atts ) {
-		// Atts assumed to have already been validated.
-		$args = [
-			'ignore_sticky_posts'    => true,
-			'no_found_rows'          => true,
-			'order'                  => $atts['order'],
-			'post_parent'            => get_the_ID(),
-			'post_type'              => get_post_type(),
-			'posts_per_page'         => $atts['max'],
-			'update_post_term_cache' => false,
-		];
-
-		if ( ! $atts['thumbnails'] ) {
-			$args['update_post_meta_cache'] = false;
-		}
-
-		$query = new WP_Query( $args );
-		$children = [];
-
-		if ( $query->have_posts() ) {
-			while ( $query->have_posts() ) {
-				$query->the_post();
-
-				$id = get_the_ID();
-				$permalink = get_permalink();
-				$thumbnail = $atts['thumbnails'] ? get_the_post_thumbnail() : '';
-				$title = get_the_title();
-
-				$children[] = compact( 'id', 'permalink', 'thumbnail', 'title' );
-			}
-
-			wp_reset_postdata();
-		}
-
-		return compact( 'children' );
+		return $this->template->render( self::TEMPLATE_NAME, [
+			'children' => $children,
+			'thumbnails' => $atts['thumbnails'],
+		] );
 	}
 }
