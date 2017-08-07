@@ -7,12 +7,9 @@
 
 namespace SSNepenthe\Hestia\Shortcode;
 
-use WP_Query;
+use SSNepenthe\Hestia\Posts_Repository;
 use SSNepenthe\Hestia\View\Plates_Manager;
 use function SSNepenthe\Hestia\parse_atts;
-use SSNepenthe\Hestia\Cache\Cache_Interface;
-use function SSNepenthe\Hestia\generate_cache_key;
-use function SSNepenthe\Hestia\get_cache_lifetime;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	die;
@@ -22,12 +19,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * This class defines the attachments shortcode.
  */
 class Attachments implements Shortcode {
+	const TEMPLATE_NAME = 'hestia-attachments';
+
 	/**
-	 * Cache instance.
+	 * Posts repository instance.
 	 *
-	 * @var Cache_Interface
+	 * @var Posts_Repository
 	 */
-	protected $cache;
+	protected $repository;
 
 	/**
 	 * Template instance.
@@ -39,11 +38,11 @@ class Attachments implements Shortcode {
 	/**
 	 * Class constructor.
 	 *
-	 * @param Cache_Interface $cache    Cache instance.
-	 * @param Plates_Manager  $template Templatee instance.
+	 * @param Posts_Repository $repository Posts repository instance.
+	 * @param Plates_Manager   $template   Template instance.
 	 */
-	public function __construct( Cache_Interface $cache, Plates_Manager $template ) {
-		$this->cache = $cache;
+	public function __construct( Posts_Repository $repository, Plates_Manager $template ) {
+		$this->repository = $repository;
 		$this->template = $template;
 	}
 
@@ -58,65 +57,23 @@ class Attachments implements Shortcode {
 	 */
 	public function render( $atts, $_ = null, $tag = '' ) {
 		$atts = parse_atts( $atts, $tag );
-		$key = generate_cache_key( $atts, $tag );
-		$lifetime = get_cache_lifetime( $tag );
 
-		return $this->cache->remember(
-			$key,
-			$lifetime,
-			function() use ( $atts ) {
-				return $this->template->render(
-					'hestia-attachments',
-					$this->build_data_array( $atts )
-				);
-			}
+		$meta = (bool) apply_filters(
+			'hestia_attachments_preload_meta',
+			$atts['thumbnails'] || 'PAGE' === $atts['link']
 		);
-	}
 
-	/**
-	 * Generates the data array for the template.
-	 *
-	 * @param  array $atts Shortcode attributes.
-	 *
-	 * @return array
-	 */
-	protected function build_data_array( array $atts ) {
-		// Atts assumed to have already been validated.
-		$args = [
-			'ignore_sticky_posts'    => true,
-			'no_found_rows'          => true,
-			'order'                  => $atts['order'],
-			'post_parent'            => get_the_ID(),
-			'post_status'            => 'inherit',
-			'post_type'              => 'attachment',
-			'posts_per_page'         => $atts['max'],
-			'update_post_term_cache' => false,
-		];
+		$attachments = $this->repository->get_attachments(
+			get_the_ID(),
+			$atts['max'],
+			$atts['order'],
+			$meta
+		);
 
-		if ( 'PAGE' === $atts['link'] ) {
-			// wp_get_attachment_url() looks in post meta.
-			$args['update_post_meta_cache'] = false;
-		}
-
-		$query = new WP_Query( $args );
-		$attachments = [];
-
-		if ( $query->have_posts() ) {
-			while ( $query->have_posts() ) {
-				$query->the_post();
-
-				$id = get_the_ID();
-				$permalink = 'PAGE' === $atts['link']
-					? get_permalink()
-					: wp_get_attachment_url();
-				$title = get_the_title();
-
-				$attachments[] = compact( 'id', 'permalink', 'title' );
-			}
-
-			wp_reset_postdata();
-		}
-
-		return compact( 'attachments' );
+		return $this->template->render( self::TEMPLATE_NAME, [
+			'attachments' => $attachments,
+			'link_to' => $atts['link'],
+			'thumbnails' => $atts['thumbnails'],
+		] );
 	}
 }

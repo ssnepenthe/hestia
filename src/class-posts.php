@@ -58,4 +58,44 @@ class Posts implements Posts_Repository {
 		// The get_post() function might (shouldn't) return null so let's filter before returning.
 		return array_filter( $ancestors );
 	}
+
+	/**
+	 * Get attachments that were uploaded to a given post.
+	 *
+	 * @param  integer $post_id Post ID.
+	 * @param  integer $qty     Number of posts to retrieve.
+	 * @param  string  $order   Post order - one of "ASC" or "DESC".
+	 * @param  boolean $meta    Whether post meta should be preloaded into the cache.
+	 *
+	 * @return \WP_Post[]
+	 */
+	public function get_attachments( $post_id, $qty, $order, $meta ) {
+		$args = [
+			'ignore_sticky_posts' => true,
+			'no_found_rows' => true,
+			'order' => $order,
+			'post_parent' => $post_id,
+			'post_status' => 'inherit',
+			'post_type' => 'attachment',
+			'posts_per_page' => $qty,
+			'update_post_term_cache' => false,
+		];
+
+		if ( ! $meta ) {
+			$args['update_post_meta_cache'] = false;
+		}
+
+		return $this->query( $args );
+	}
+
+	/**
+	 * Get the array of found posts from a WP_Query instance.
+	 *
+	 * @param  array $args WP_Query args.
+	 *
+	 * @return \WP_Post[]
+	 */
+	protected function query( $args ) {
+		return ( new \WP_Query( $args ) )->posts;
+	}
 }

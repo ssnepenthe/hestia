@@ -35,36 +35,32 @@ class Attachments_Test extends Hestia_Shortcode_Test_Case {
 
 	/** @test */
 	function basic_output() {
-		add_filter( 'hestia_attachments_cache_lifetime', '__return_zero' );
+		// Attempts to simplify comparison by minimizing the impact of whitespace.
 
 		$GLOBALS['post'] = $this->hestia_posts['first'];
 
-		$rendered = sprintf(
-			'<div class="hestia-attachment hestia-wrap post-%s">
-		<a href="%s">
-			%s		</a>
-	</div>
-	<div class="hestia-attachment hestia-wrap post-%s">
-		<a href="%s">
-			%s		</a>
-	</div>',
-			$this->hestia_attachments['first'],
-			get_permalink( $this->hestia_attachments['first'] ),
-			get_the_title( $this->hestia_attachments['first'] ),
-			$this->hestia_attachments['second'],
-			get_permalink( $this->hestia_attachments['second'] ),
-			get_the_title( $this->hestia_attachments['second'] )
+		$expected = [
+			sprintf( '<div class="hestia-attachment hestia-post-%s hestia-wrap">', $this->hestia_attachments['first'] ),
+			sprintf( '<a href="%s">', get_permalink( $this->hestia_attachments['first'] ) ),
+			sprintf( '%s		</a>', get_the_title( $this->hestia_attachments['first'] ) ),
+			'</div>',
+			sprintf( '<div class="hestia-attachment hestia-post-%s hestia-wrap">', $this->hestia_attachments['second'] ),
+			sprintf( '<a href="%s">', get_permalink( $this->hestia_attachments['second'] ) ),
+			sprintf( '%s		</a>', get_the_title( $this->hestia_attachments['second'] ) ),
+			'</div>',
+		];
+
+		// Re-indexed for easier comparison.
+		$actual = array_values(
+			// Render, explode on newline, trim each line and then remove empties.
+			array_filter( array_map( 'trim', explode( PHP_EOL, do_shortcode( '[attachments]' ) ) ) )
 		);
 
-		$this->assertEquals( $rendered, trim( do_shortcode( '[attachments]' ) ) );
-
-		remove_filter( 'hestia_attachments_cache_lifetime', '__return_zero' );
+		$this->assertEquals( $expected, $actual );
 	}
 
 	/** @test */
 	function link_to_file() {
-		add_filter( 'hestia_attachments_cache_lifetime', '__return_zero' );
-
 		$GLOBALS['post'] = $this->hestia_posts['first'];
 
 		$shortcode = do_shortcode( '[attachments link="FILE"]' );
@@ -77,28 +73,20 @@ class Attachments_Test extends Hestia_Shortcode_Test_Case {
 			wp_get_attachment_url( $this->hestia_attachments['second'] ),
 			$shortcode
 		);
-
-		remove_filter( 'hestia_attachments_cache_lifetime', '__return_zero' );
 	}
 
 	/** @test */
 	function override_max_attachments() {
-		add_filter( 'hestia_attachments_cache_lifetime', '__return_zero' );
-
 		$GLOBALS['post'] = $this->hestia_posts['first'];
 
 		$this->assertShortcodeContent(
 			get_the_title( $this->hestia_attachments['first'] ),
 			do_shortcode( '[attachments max="1"]' )
 		);
-
-		remove_filter( 'hestia_attachments_cache_lifetime', '__return_zero' );
 	}
 
 	/** @test */
 	function descending_order() {
-		add_filter( 'hestia_attachments_cache_lifetime', '__return_zero' );
-
 		$GLOBALS['post'] = $this->hestia_posts['first'];
 
 		$this->assertShortcodeContent(
@@ -109,14 +97,10 @@ class Attachments_Test extends Hestia_Shortcode_Test_Case {
 			),
 			do_shortcode( '[attachments order="DESC"]' )
 		);
-
-		remove_filter( 'hestia_attachments_cache_lifetime', '__return_zero' );
 	}
 
 	/** @test */
 	function link_to_file_with_custom_max_in_descending_order() {
-		add_filter( 'hestia_attachments_cache_lifetime', '__return_zero' );
-
 		$GLOBALS['post'] = $this->hestia_posts['first'];
 
 		$shortcode = do_shortcode(
@@ -131,8 +115,6 @@ class Attachments_Test extends Hestia_Shortcode_Test_Case {
 			get_the_title( $this->hestia_attachments['second'] ),
 			$shortcode
 		);
-
-		remove_filter( 'hestia_attachments_cache_lifetime', '__return_zero' );
 	}
 
 	/** @test */
@@ -142,12 +124,8 @@ class Attachments_Test extends Hestia_Shortcode_Test_Case {
 			'post_type' => 'page',
 		] );
 
-		add_filter( 'hestia_attachments_cache_lifetime', '__return_zero' );
-
 		$GLOBALS['post'] = $post;
 
 		$this->assertShortcodeContent( '', do_shortcode( '[attachments]' ) );
-
-		remove_filter( 'hestia_attachments_cache_lifetime', '__return_zero' );
 	}
 }
