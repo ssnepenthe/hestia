@@ -20,7 +20,6 @@ class Shortcode_Provider implements ServiceProviderInterface {
 	 * @var array
 	 */
 	protected $shortcodes = [
-		'ancestors',
 		'attachments',
 		'children',
 		'siblings',
@@ -36,6 +35,8 @@ class Shortcode_Provider implements ServiceProviderInterface {
 	 */
 	public function boot( Container $container ) {
 		add_action( 'init', function() use ( $container ) {
+			add_shortcode( 'ancestors', [ $container['shortcode.ancestors'], 'render' ] );
+
 			foreach ( $this->shortcodes as $shortcode ) {
 				add_shortcode(
 					$shortcode,
@@ -53,6 +54,10 @@ class Shortcode_Provider implements ServiceProviderInterface {
 	 * @return void
 	 */
 	public function register( Container $container ) {
+		$container['shortcode.ancestors'] = function( Container $c ) {
+			return new Ancestors( new \SSNepenthe\Hestia\Posts(), $c['plates'] );
+		};
+
 		foreach ( $this->shortcodes as $shortcode ) {
 			$container[ "shortcode.{$shortcode}" ] = function( Container $c ) use ( $shortcode ) {
 				$class = __NAMESPACE__ . '\\' . ucfirst( $shortcode );

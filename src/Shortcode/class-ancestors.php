@@ -7,11 +7,9 @@
 
 namespace SSNepenthe\Hestia\Shortcode;
 
+use SSNepenthe\Hestia\Posts_Repository;
 use SSNepenthe\Hestia\View\Plates_Manager;
 use function SSNepenthe\Hestia\parse_atts;
-use SSNepenthe\Hestia\Cache\Cache_Interface;
-use function SSNepenthe\Hestia\generate_cache_key;
-use function SSNepenthe\Hestia\get_cache_lifetime;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	die;
@@ -21,12 +19,14 @@ if ( ! defined( 'ABSPATH' ) ) {
  * This class defines the ancestors shortcode.
  */
 class Ancestors implements Shortcode {
+	const TEMPLATE_NAME = 'hestia-ancestors';
+
 	/**
-	 * Cache instance.
+	 * Posts repository instance.
 	 *
-	 * @var Cache_Interface
+	 * @var Posts_Repository
 	 */
-	protected $cache;
+	protected $repository;
 
 	/**
 	 * Template instance.
@@ -38,11 +38,11 @@ class Ancestors implements Shortcode {
 	/**
 	 * Class constructor.
 	 *
-	 * @param Cache_Interface $cache    Cache instance.
-	 * @param Plates_Manager  $template Templatee instance.
+	 * @param Posts_Repository $repository Posts repository instance.
+	 * @param Plates_Manager   $template   Template instance.
 	 */
-	public function __construct( Cache_Interface $cache, Plates_Manager $template ) {
-		$this->cache = $cache;
+	public function __construct( Posts_Repository $repository, Plates_Manager $template ) {
+		$this->repository = $repository;
 		$this->template = $template;
 	}
 
@@ -56,56 +56,15 @@ class Ancestors implements Shortcode {
 	 * @return string
 	 */
 	public function render( $atts, $_ = null, $tag = '' ) {
-		if ( ! is_post_type_hierarchical( get_post_type() ) ) {
-			return '';
-		}
-
 		$atts = parse_atts( $atts, $tag );
-		$key = generate_cache_key( $atts, $tag );
-		$lifetime = get_cache_lifetime( $tag );
 
-		return $this->cache->remember(
-			$key,
-			$lifetime,
-			function() use ( $atts ) {
-				return $this->template->render(
-					'hestia-ancestors',
-					$this->build_data_array( $atts )
-				);
-			}
-		);
-	}
-
-	/**
-	 * Generates the data array for the template.
-	 *
-	 * @param  array $atts Shortcode attributes.
-	 *
-	 * @return array
-	 */
-	protected function build_data_array( array $atts ) {
-		// Atts assumed to have already been validated.
-		$ancestor_ids = get_post_ancestors( get_the_ID() );
-
-		if ( 'ASC' === $atts['order'] ) {
-			$ancestor_ids = array_reverse( $ancestor_ids );
-		}
-
-		$ancestors = [];
-
-		foreach ( $ancestor_ids as $id ) {
-			$permalink = get_permalink( $id );
-			$thumbnail = $atts['thumbnails'] ? get_the_post_thumbnail( $id ) : '';
-			$title = get_the_title( $id );
-
-			$ancestors[] = compact(
-				'id',
-				'permalink',
-				'thumbnail',
-				'title'
-			);
-		}
-
-		return compact( 'ancestors' );
+		return $this->template->render( self::TEMPLATE_NAME, [
+			'ancestors' => $this->repository->get_ancestors(
+				get_the_ID(),
+				$atts['order'],
+				apply_filters( 'hestia_ancestors_preload_meta', $atts['thumbnails'] )
+			),
+			'thumbnails' => $atts['thumbnails'],
+		] );
 	}
 }
