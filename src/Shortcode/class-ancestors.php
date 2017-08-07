@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * This class defines the ancestors shortcode.
  */
-class Ancestors implements Shortcode_Interface {
+class Ancestors implements Shortcode {
 	/**
 	 * Cache instance.
 	 *

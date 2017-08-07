@@ -21,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * This class defines the attachments shortcode.
  */
-class Attachments implements Shortcode_Interface {
+class Attachments implements Shortcode {
 	/**
 	 * Cache instance.
 	 *

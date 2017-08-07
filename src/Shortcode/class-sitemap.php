@@ -21,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * This class defines the sitemap shortcode.
  */
-class Sitemap implements Shortcode_Interface {
+class Sitemap implements Shortcode {
 	/**
 	 * Cache instance.
 	 *

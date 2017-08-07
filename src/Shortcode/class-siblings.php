@@ -21,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * This class defines the siblings shortcode.
  */
-class Siblings implements Shortcode_Interface {
+class Siblings implements Shortcode {
 	/**
 	 * Cache instance.
 	 *
