@@ -53,7 +53,7 @@ class Plates_Manager {
 	 *
 	 * @return Engine
 	 *
-	 * @throws \InvalidArgumentException When template does not exist in any registered directory.
+	 * @throws \LogicException When template does not exist in any registered directory.
 	 */
 	public function make( $name ) {
 		foreach ( $this->instances as $instance ) {
