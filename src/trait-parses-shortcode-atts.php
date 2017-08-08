@@ -1,8 +1,24 @@
 <?php
+/**
+ * Parses_Shortcode_Atts trait.
+ *
+ * @package hestia
+ */
 
 namespace Hestia;
 
+/**
+ * Defines the "parses shortcode atts" trait.
+ */
 trait Parses_Shortcode_Atts {
+	/**
+	 * Apply defaults to and validate shortcode attributes.
+	 *
+	 * @param  mixed  $atts Shortcode attributes as extracted from the content.
+	 * @param  string $tag  The shortcode tag.
+	 *
+	 * @return array
+	 */
 	public function parse_atts( $atts, $tag ) {
 		$atts = shortcode_atts( [
 			'link' => 'PAGE',

@@ -64,7 +64,7 @@ class Plates_Manager {
 
 		throw new \LogicException(
 			"The template [{$name}] could not be found in any registered location"
-        );
+		);
 	}
 
 	/**
