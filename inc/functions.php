@@ -8,36 +8,6 @@
 namespace SSNepenthe\Hestia;
 
 /**
- * Generate a cache key for use in saving shortcode output.
- *
- * @param  array  $atts Shortcode attributes.
- * @param  string $tag  The shortcode tag.
- *
- * @return string
- */
-function generate_cache_key( array $atts, $tag = '' ) {
-	$key = $tag . get_the_ID() . implode( '', $atts );
-
-	// False would otherwise be an empty string.
-	if ( isset( $atts['thumbnails'] ) && ! $atts['thumbnails'] ) {
-		$key .= '0';
-	}
-
-	return $key;
-}
-
-/**
- * Get the filtered cache lifetime based on shortcode tag.
- *
- * @param  string $tag The shortcode tag.
- *
- * @return int
- */
-function get_cache_lifetime( $tag ) {
-	return absint( apply_filters( "hestia_{$tag}_cache_lifetime", 600 ) );
-}
-
-/**
  * Apply defaults and validate an array of shortcode attributes.
  *
  * @param  mixed  $atts Shortcode attributes.
