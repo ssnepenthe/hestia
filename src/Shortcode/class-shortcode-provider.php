@@ -15,15 +15,6 @@ use Pimple\ServiceProviderInterface;
  */
 class Shortcode_Provider implements ServiceProviderInterface {
 	/**
-	 * List of shortcodes registered by this provider.
-	 *
-	 * @var array
-	 */
-	protected $shortcodes = [
-		'sitemap',
-	];
-
-	/**
 	 * Provider-specific boot logic.
 	 *
 	 * @param  Container $container Container instance.
@@ -36,13 +27,7 @@ class Shortcode_Provider implements ServiceProviderInterface {
 			add_shortcode( 'attachments', [ $container['shortcode.attachments'], 'render' ] );
 			add_shortcode( 'children', [ $container['shortcode.children'], 'render' ] );
 			add_shortcode( 'siblings', [ $container['shortcode.siblings'], 'render' ] );
-
-			foreach ( $this->shortcodes as $shortcode ) {
-				add_shortcode(
-					$shortcode,
-					[ $container[ "shortcode.{$shortcode}" ], 'render' ]
-				);
-			}
+			add_shortcode( 'sitemap', [ $container['shortcode.sitemap'], 'render' ] );
 		} );
 	}
 
@@ -66,13 +51,8 @@ class Shortcode_Provider implements ServiceProviderInterface {
 		$container['shortcode.siblings'] = function( Container $c ) {
 			return new Siblings( new \SSNepenthe\Hestia\Posts(), $c['plates'] );
 		};
-
-		foreach ( $this->shortcodes as $shortcode ) {
-			$container[ "shortcode.{$shortcode}" ] = function( Container $c ) use ( $shortcode ) {
-				$class = __NAMESPACE__ . '\\' . ucfirst( $shortcode );
-
-				return new $class( $c['cache'], $c['plates'] );
-			};
-		}
+		$container['shortcode.sitemap'] = function( Container $c ) {
+			return new Sitemap( new \SSNepenthe\Hestia\Posts(), $c['plates'] );
+		};
 	}
 }

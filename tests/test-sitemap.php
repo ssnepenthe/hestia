@@ -29,68 +29,54 @@ class Sitemap_Test extends Hestia_Shortcode_Test_Case {
 
 	/** @test */
 	function basic_output() {
-		add_filter( 'hestia_sitemap_cache_lifetime', '__return_zero' );
+		$expected = [
+			'<div class="hestia-sitemap hestia-post-type-post hestia-post-type-wrapper">',
+			'<h2>',
+			'Recent Posts		</h2>',
+			'<ul>',
+			sprintf( '<li class="hestia-post-%s hestia-wrapper">', $this->hestia_posts['first']->ID ),
+			sprintf( '<a href="%s">', get_permalink( $this->hestia_posts['first']->ID ) ),
+			sprintf( '%s					</a>', $this->hestia_posts['first']->post_title ),
+			'</li>',
+			sprintf( '<li class="hestia-post-%s hestia-wrapper">', $this->hestia_posts['second']->ID ),
+			sprintf( '<a href="%s">', get_permalink( $this->hestia_posts['second']->ID ) ),
+			sprintf( '%s					</a>', $this->hestia_posts['second']->post_title ),
+			'</li>',
+			sprintf( '<li class="hestia-post-%s hestia-wrapper">', $this->hestia_posts['third']->ID ),
+			sprintf( '<a href="%s">', get_permalink( $this->hestia_posts['third']->ID ) ),
+			sprintf( '%s					</a>', $this->hestia_posts['third']->post_title ),
+			'</li>',
+			'</ul>',
+			'</div>',
+			'<div class="hestia-sitemap hestia-post-type-page hestia-post-type-wrapper">',
+			'<h2>',
+			'Recent Pages		</h2>',
+			'<ul>',
+			sprintf( '<li class="hestia-post-%s hestia-wrapper">', $this->hestia_pages['first']->ID ),
+			sprintf( '<a href="%s">', get_permalink( $this->hestia_pages['first']->ID ) ),
+			sprintf( '%s					</a>', $this->hestia_pages['first']->post_title ),
+			'</li>',
+			sprintf( '<li class="hestia-post-%s hestia-wrapper">', $this->hestia_pages['second']->ID ),
+			sprintf( '<a href="%s">', get_permalink( $this->hestia_pages['second']->ID ) ),
+			sprintf( '%s					</a>', $this->hestia_pages['second']->post_title ),
+			'</li>',
+			sprintf( '<li class="hestia-post-%s hestia-wrapper">', $this->hestia_pages['third']->ID ),
+			sprintf( '<a href="%s">', get_permalink( $this->hestia_pages['third']->ID ) ),
+			sprintf( '%s					</a>', $this->hestia_pages['third']->post_title ),
+			'</li>',
+			'</ul>',
+			'</div>',
+		];
 
-		$rendered = sprintf(
-			'<div class="hestia-sitemap hestia-wrap post-type-post">
-		<h2>Recent Posts</h2>
-
-		<ul>
-							%s
-							%s
-							%s
-					</ul>
-	</div>
-	<div class="hestia-sitemap hestia-wrap post-type-page">
-		<h2>Recent Pages</h2>
-
-		<ul>
-							%s
-							%s
-							%s
-					</ul>
-	</div>',
-			sprintf(
-				$this->list_item(),
-				get_permalink( $this->hestia_posts['first']->ID ),
-				$this->hestia_posts['first']->post_title
-			),
-			sprintf(
-				$this->list_item(),
-				get_permalink( $this->hestia_posts['second']->ID ),
-				$this->hestia_posts['second']->post_title
-			),
-			sprintf(
-				$this->list_item(),
-				get_permalink( $this->hestia_posts['third']->ID ),
-				$this->hestia_posts['third']->post_title
-			),
-			sprintf(
-				$this->list_item(),
-				get_permalink( $this->hestia_pages['first']->ID ),
-				$this->hestia_pages['first']->post_title
-			),
-			sprintf(
-				$this->list_item(),
-				get_permalink( $this->hestia_pages['second']->ID ),
-				$this->hestia_pages['second']->post_title
-			),
-			sprintf(
-				$this->list_item(),
-				get_permalink( $this->hestia_pages['third']->ID ),
-				$this->hestia_pages['third']->post_title
-			)
+		$actual = array_values(
+			array_filter( array_map( 'trim', explode( PHP_EOL, do_shortcode( '[sitemap]' ) ) ) )
 		);
 
-		$this->assertEquals( $rendered, trim( do_shortcode( '[sitemap]' ) ) );
-
-		remove_filter( 'hestia_sitemap_cache_lifetime', '__return_zero' );
+		$this->assertEquals( $expected, $actual );
 	}
 
 	/** @test */
 	function override_max() {
-		add_filter( 'hestia_sitemap_cache_lifetime', '__return_zero' );
-
 		$this->assertShortcodeContent(
 			sprintf(
 				'Recent Posts %s %s Recent Pages %s %s',
@@ -101,14 +87,10 @@ class Sitemap_Test extends Hestia_Shortcode_Test_Case {
 			),
 			do_shortcode( '[sitemap max="2"]' )
 		);
-
-		remove_filter( 'hestia_sitemap_cache_lifetime', '__return_zero' );
 	}
 
 	/** @test */
 	function descending_order() {
-		add_filter( 'hestia_sitemap_cache_lifetime', '__return_zero' );
-
 		$this->assertShortcodeContent(
 			sprintf(
 				'Recent Posts %s %s %s Recent Pages %s %s %s',
@@ -121,14 +103,10 @@ class Sitemap_Test extends Hestia_Shortcode_Test_Case {
 			),
 			do_shortcode( '[sitemap order="DESC"]' )
 		);
-
-		remove_filter( 'hestia_sitemap_cache_lifetime', '__return_zero' );
 	}
 
 	/** @test */
 	function custom_max_in_descending_order() {
-		add_filter( 'hestia_sitemap_cache_lifetime', '__return_zero' );
-
 		$this->assertShortcodeContent(
 			sprintf(
 				'Recent Posts %s Recent Pages %s',
@@ -137,8 +115,6 @@ class Sitemap_Test extends Hestia_Shortcode_Test_Case {
 			),
 			do_shortcode( '[sitemap max="1" order="DESC"]' )
 		);
-
-		remove_filter( 'hestia_sitemap_cache_lifetime', '__return_zero' );
 	}
 
 	/** @test */
@@ -169,12 +145,5 @@ class Sitemap_Test extends Hestia_Shortcode_Test_Case {
 		);
 
 		unregister_post_type( 'testing' );
-	}
-
-	protected function list_item() {
-		return '<li>
-					<a href="%s">
-						%s					</a>
-				</li>';
 	}
 }

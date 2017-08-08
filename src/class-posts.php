@@ -123,6 +123,33 @@ class Posts implements Posts_Repository {
 	}
 
 	/**
+	 * Get all posts by post type.
+	 *
+	 * @param  string  $post_type Post type.
+	 * @param  integer $qty       Number of posts to retrieve.
+	 * @param  string  $order     Post order - one of "ASC" or "DESC".
+	 * @param  boolean $meta      Whether post meta should be preloaded into the cache.
+	 *
+	 * @return \WP_Post[]
+	 */
+	public function get_posts_by_type( $post_type, $qty, $order, $meta ) {
+		$args = [
+			'ignore_sticky_posts' => true,
+			'no_found_rows' => true,
+			'order' => $order,
+			'post_type' => $post_type,
+			'posts_per_page' => $qty,
+			'update_post_term_cache' => false,
+		];
+
+		if ( ! $meta ) {
+			$args['update_post_meta_cache'] = false;
+		}
+
+		return $this->query( $args );
+	}
+
+	/**
 	 * Get all siblings of a given post.
 	 *
 	 * @param  integer $post_id Post ID.
