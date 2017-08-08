@@ -59,7 +59,7 @@ function _hestia_instance() {
 
 		$instance->register( new Metis\WordPress_Provider() );
 		$instance->register( new Hestia\Plates_Provider() );
-		$instance->register( new Hestia\Shortcode_Provider() );
+		$instance->register( new Hestia\Plugin_Provider() );
 	}
 
 	return $instance;

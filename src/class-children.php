@@ -19,6 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * The class defines the children shortcode.
  */
 class Children implements Shortcode {
+	const TAG = 'children';
 	const TEMPLATE_NAME = 'hestia-children';
 
 	/**

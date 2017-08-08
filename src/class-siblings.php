@@ -19,6 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * This class defines the siblings shortcode.
  */
 class Siblings implements Shortcode {
+	const TAG = 'siblings';
 	const TEMPLATE_NAME = 'hestia-siblings';
 
 	/**

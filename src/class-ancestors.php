@@ -19,6 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * This class defines the ancestors shortcode.
  */
 class Ancestors implements Shortcode {
+	const TAG = 'ancestors';
 	const TEMPLATE_NAME = 'hestia-ancestors';
 
 	/**

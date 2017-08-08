@@ -19,6 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * This class defines the sitemap shortcode.
  */
 class Sitemap implements Shortcode {
+	const TAG = 'sitemap';
 	const TEMPLATE_NAME = 'hestia-sitemap';
 
 	/**

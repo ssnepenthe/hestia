@@ -19,6 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * This class defines the attachments shortcode.
  */
 class Attachments implements Shortcode {
+	const TAG = 'attachments';
 	const TEMPLATE_NAME = 'hestia-attachments';
 
 	/**
