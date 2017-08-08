@@ -9,7 +9,6 @@ namespace Hestia;
 
 use Hestia\Plates_Manager;
 use Hestia\Posts_Repository;
-use function Hestia\parse_atts;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	die;
@@ -19,6 +18,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  * The class defines the children shortcode.
  */
 class Children implements Shortcode {
+	use Parses_Shortcode_Atts;
+
 	const TAG = 'children';
 	const TEMPLATE_NAME = 'hestia-children';
 
@@ -57,7 +58,7 @@ class Children implements Shortcode {
 	 * @return string
 	 */
 	public function render( $atts, $_ = null, $tag = '' ) {
-		$atts = parse_atts( $atts, $tag );
+		$atts = $this->parse_atts( $atts, $tag );
 
 		$meta = (bool) apply_filters( 'hestia_children_preload_meta', $atts['thumbnails'] );
 

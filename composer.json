@@ -16,7 +16,6 @@
         "symfony/var-dumper": "^3.0"
     },
     "autoload": {
-        "classmap": ["src/"],
-        "files": ["inc/functions.php"]
+        "classmap": ["src/"]
     }
 }

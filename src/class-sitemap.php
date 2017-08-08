@@ -9,7 +9,6 @@ namespace Hestia;
 
 use Hestia\Plates_Manager;
 use Hestia\Posts_Repository;
-use function Hestia\parse_atts;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	die;
@@ -19,6 +18,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  * This class defines the sitemap shortcode.
  */
 class Sitemap implements Shortcode {
+	use Parses_Shortcode_Atts;
+
 	const TAG = 'sitemap';
 	const TEMPLATE_NAME = 'hestia-sitemap';
 
@@ -57,7 +58,7 @@ class Sitemap implements Shortcode {
 	 * @return string
 	 */
 	public function render( $atts, $_ = null, $tag = '' ) {
-		$atts = parse_atts( $atts, $tag );
+		$atts = $this->parse_atts( $atts, $tag );
 
 		$meta = (bool) apply_filters( 'hestia_sitemap_preload_meta', $atts['thumbnails'] );
 		// Not using "publicy_queryable" because it would exclude "page" post type.

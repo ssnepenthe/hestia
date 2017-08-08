@@ -9,7 +9,6 @@ namespace Hestia;
 
 use Hestia\Plates_Manager;
 use Hestia\Posts_Repository;
-use function Hestia\parse_atts;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	die;
@@ -19,6 +18,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  * This class defines the siblings shortcode.
  */
 class Siblings implements Shortcode {
+	use Parses_Shortcode_Atts;
+
 	const TAG = 'siblings';
 	const TEMPLATE_NAME = 'hestia-siblings';
 
@@ -57,7 +58,7 @@ class Siblings implements Shortcode {
 	 * @return string
 	 */
 	public function render( $atts, $_ = null, $tag = '' ) {
-		$atts = parse_atts( $atts, $tag );
+		$atts = $this->parse_atts( $atts, $tag );
 
 		$meta = (bool) apply_filters( 'hestia_siblings_preload_meta', $atts['thumbnails'] );
 
