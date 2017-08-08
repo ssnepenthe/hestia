@@ -42,11 +42,11 @@ class Children_Test extends Hestia_Shortcode_Test_Case {
 		$GLOBALS['post'] = $this->hestia_posts['first'];
 
 		$expected = [
-			sprintf( '<div class="hestia-child hestia-post-%s hestia-wrap">', $this->hestia_posts['second']->ID ),
+			sprintf( '<div class="hestia-child hestia-post-%s hestia-wrapper">', $this->hestia_posts['second']->ID ),
 			sprintf( '<a href="%s">', get_permalink( $this->hestia_posts['second']->ID ) ),
 			sprintf( '%s		</a>', $this->hestia_posts['second']->post_title ),
 			'</div>',
-			sprintf( '<div class="hestia-child hestia-post-%s hestia-wrap">', $this->hestia_posts['third']->ID ),
+			sprintf( '<div class="hestia-child hestia-post-%s hestia-wrapper">', $this->hestia_posts['third']->ID ),
 			sprintf( '<a href="%s">', get_permalink( $this->hestia_posts['third']->ID ) ),
 			sprintf( '%s		</a>', $this->hestia_posts['third']->post_title ),
 			'</div>',

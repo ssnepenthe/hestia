@@ -40,11 +40,11 @@ class Attachments_Test extends Hestia_Shortcode_Test_Case {
 		$GLOBALS['post'] = $this->hestia_posts['first'];
 
 		$expected = [
-			sprintf( '<div class="hestia-attachment hestia-post-%s hestia-wrap">', $this->hestia_attachments['first'] ),
+			sprintf( '<div class="hestia-attachment hestia-post-%s hestia-wrapper">', $this->hestia_attachments['first'] ),
 			sprintf( '<a href="%s">', get_permalink( $this->hestia_attachments['first'] ) ),
 			sprintf( '%s		</a>', get_the_title( $this->hestia_attachments['first'] ) ),
 			'</div>',
-			sprintf( '<div class="hestia-attachment hestia-post-%s hestia-wrap">', $this->hestia_attachments['second'] ),
+			sprintf( '<div class="hestia-attachment hestia-post-%s hestia-wrapper">', $this->hestia_attachments['second'] ),
 			sprintf( '<a href="%s">', get_permalink( $this->hestia_attachments['second'] ) ),
 			sprintf( '%s		</a>', get_the_title( $this->hestia_attachments['second'] ) ),
 			'</div>',
