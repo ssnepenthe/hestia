@@ -25,9 +25,13 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Handles plugin initialization.
  */
 function _hestia_init() {
+	static $initialized = false;
+
+	if ( $initialized ) {
+		return;
+	}
+
 	$checker = WP_Requirements\Plugin_Checker::make( 'Hestia', __FILE__ )
-		// For transient key length.
-		->wp_at_least( '4.4' )
 		// Function imports.
 		->php_at_least( '5.6' );
 
@@ -37,7 +41,10 @@ function _hestia_init() {
 		return;
 	}
 
+	error_log( 'yolo' );
 	add_action( 'plugins_loaded', [ _hestia_instance(), 'boot' ] );
+
+	$initialized = true;
 }
 
 /**
@@ -48,19 +55,16 @@ function _hestia_init() {
 function _hestia_instance() {
 	static $instance = null;
 
-	if ( is_null( $instance ) ) {
-		$instance = new Metis\Container( [
-			'dir' => __DIR__,
-			'file' => __FILE__,
-			'name' => 'Hestia',
-			'prefix' => 'hestia',
-			'version' => '0.3.0',
-		] );
-
-		$instance->register( new Metis\WordPress_Provider() );
-		$instance->register( new Hestia\Plates_Provider() );
-		$instance->register( new Hestia\Plugin_Provider() );
+	if ( ! is_null( $instance ) ) {
+		return $instance;
 	}
+
+	$instance = new Metis\Container( [
+		'dir' => __DIR__,
+	] );
+
+	$instance->register( new Hestia\Plates_Provider() );
+	$instance->register( new Hestia\Plugin_Provider() );
 
 	return $instance;
 }
