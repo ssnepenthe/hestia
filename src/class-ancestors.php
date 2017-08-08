@@ -58,12 +58,12 @@ class Ancestors implements Shortcode {
 	public function render( $atts, $_ = null, $tag = '' ) {
 		$atts = parse_atts( $atts, $tag );
 
+		$meta = (bool) apply_filters( 'hestia_ancestors_preload_meta', $atts['thumbnails'] );
+
+		$ancestors = $this->repository->get_ancestors( get_the_ID(), $atts['order'], $meta );
+
 		return $this->template->render( self::TEMPLATE_NAME, [
-			'ancestors' => $this->repository->get_ancestors(
-				get_the_ID(),
-				$atts['order'],
-				apply_filters( 'hestia_ancestors_preload_meta', $atts['thumbnails'] )
-			),
+			'ancestors' => $ancestors,
 			'thumbnails' => $atts['thumbnails'],
 		] );
 	}
