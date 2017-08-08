@@ -9,6 +9,10 @@ namespace Hestia;
 
 use League\Plates\Engine;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	die;
+}
+
 /**
  * Defines the plates manager class.
  */

@@ -7,6 +7,10 @@
 
 namespace Hestia;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	die;
+}
+
 /**
  * Defines the shortcode interface.
  */
