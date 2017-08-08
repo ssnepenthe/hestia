@@ -62,7 +62,9 @@ class Plates_Manager {
 			}
 		}
 
-		throw new \InvalidArgumentException( '@todo Logic exception?' );
+		throw new \LogicException(
+			"The template [{$name}] could not be found in any registered location"
+        );
 	}
 
 	/**
