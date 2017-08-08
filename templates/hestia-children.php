@@ -6,7 +6,7 @@
  */
 
 foreach ( $children as $child ) : ?>
-	<div class="hestia-child<?php echo ( $thumbnails && has_post_thumbnail( $child ) ) ? ' hestia-has-thumbnail' : ''; ?> hestia-post-<?php echo esc_attr( $child->ID ); ?> hestia-wrap">
+	<div class="hestia-child<?php echo ( $thumbnails && has_post_thumbnail( $child ) ) ? ' hestia-has-thumbnail' : ''; ?> hestia-post-<?php echo esc_attr( $child->ID ); ?> hestia-wrapper">
 		<a href="<?php echo esc_url( get_the_permalink( $child ) ); ?>">
 			<?php if ( $thumbnails && has_post_thumbnail( $child ) ) : ?>
 				<?php echo get_the_post_thumbnail( $child ); ?>

@@ -8,7 +8,7 @@
  */
 
 foreach ( $attachments as $attachment ) : ?>
-	<div class="hestia-attachment<?php echo ( $thumbnails && wp_get_attachment_thumb_url( $attachment->ID ) ) ? ' hestia-has-thumbnail' : ''; ?> hestia-post-<?php echo esc_attr( $attachment->ID ); ?> hestia-wrap">
+	<div class="hestia-attachment<?php echo ( $thumbnails && wp_get_attachment_thumb_url( $attachment->ID ) ) ? ' hestia-has-thumbnail' : ''; ?> hestia-post-<?php echo esc_attr( $attachment->ID ); ?> hestia-wrapper">
 		<?php if ( 'PAGE' === $link_to ) : ?>
 			<a href="<?php echo esc_url( get_permalink( $attachment ) ); ?>">
 		<?php else : ?>

@@ -6,7 +6,7 @@
  */
 
 foreach ( $ancestors as $ancestor ) : ?>
-	<div class="<?php echo ( $thumbnails && has_post_thumbnail( $ancestor ) ) ? 'has-post-thumbnail ' : ''; ?>hestia-ancestor hestia-wrap post-<?php echo esc_attr( $ancestor->ID ); ?>">
+	<div class="hestia-ancestor<?php echo ( $thumbnails && has_post_thumbnail( $ancestor ) ) ? ' hestia-has-thumbnail' : ''; ?> hestia-post-<?php echo esc_attr( $ancestor->ID ); ?> hestia-wrapper">
 		<a href="<?php echo esc_url( get_the_permalink( $ancestor ) ); ?>">
 			<?php if ( $thumbnails && has_post_thumbnail( $ancestor ) ) : ?>
 				<?php echo get_the_post_thumbnail( $ancestor ); ?>
