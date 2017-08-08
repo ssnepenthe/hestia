@@ -21,6 +21,10 @@ class Posts implements Posts_Repository {
 	 * @return \WP_Post[]
 	 */
 	public function get_ancestors( $post_id, $order, $meta ) {
+		$post_id = (int) $post_id;
+		$order = 'DESC' === $order ? 'DESC' : 'ASC';
+		$meta = (bool) $meta;
+
 		$post = get_post( $post_id );
 
 		if ( ! $post || ! is_post_type_hierarchical( $post->post_type ) ) {
@@ -70,6 +74,11 @@ class Posts implements Posts_Repository {
 	 * @return \WP_Post[]
 	 */
 	public function get_attachments( $post_id, $qty, $order, $meta ) {
+		$post_id = (int) $post_id;
+		$qty = (int) $qty;
+		$order = 'DESC' === $order ? 'DESC' : 'ASC';
+		$meta = (bool) $meta;
+
 		$args = [
 			'ignore_sticky_posts' => true,
 			'no_found_rows' => true,
@@ -99,6 +108,11 @@ class Posts implements Posts_Repository {
 	 * @return \WP_Post[]
 	 */
 	public function get_children( $post_id, $qty, $order, $meta ) {
+		$post_id = (int) $post_id;
+		$qty = (int) $qty;
+		$order = 'DESC' === $order ? 'DESC' : 'ASC';
+		$meta = (bool) $meta;
+
 		$post_type = get_post_type( $post_id );
 
 		if ( ! $post_type || ! is_post_type_hierarchical( $post_type ) ) {
@@ -133,6 +147,11 @@ class Posts implements Posts_Repository {
 	 * @return \WP_Post[]
 	 */
 	public function get_posts_by_type( $post_type, $qty, $order, $meta ) {
+		$post_type = (string) $post_type;
+		$qty = (int) $qty;
+		$order = 'DESC' === $order ? 'DESC' : 'ASC';
+		$meta = (bool) $meta;
+
 		$args = [
 			'ignore_sticky_posts' => true,
 			'no_found_rows' => true,
@@ -160,6 +179,11 @@ class Posts implements Posts_Repository {
 	 * @return \WP_Post[]
 	 */
 	public function get_siblings( $post_id, $qty, $order, $meta ) {
+		$post_id = (int) $post_id;
+		$qty = (int) $qty;
+		$order = 'DESC' === $order ? 'DESC' : 'ASC';
+		$meta = (bool) $meta;
+
 		$post_type = get_post_type( $post_id );
 
 		$args = [
