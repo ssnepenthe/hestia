@@ -41,7 +41,6 @@ function _hestia_init() {
 		return;
 	}
 
-	error_log( 'yolo' );
 	add_action( 'plugins_loaded', [ _hestia_instance(), 'boot' ] );
 
 	$initialized = true;
