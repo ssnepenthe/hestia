@@ -5,7 +5,7 @@
  * @package hestia
  */
 
-namespace SSNepenthe\Hestia;
+namespace Hestia;
 
 /**
  * Defines the posts repository interface.

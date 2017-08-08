@@ -5,7 +5,7 @@
  * @package hestia
  */
 
-namespace SSNepenthe\Hestia\Shortcode;
+namespace Hestia;
 
 /**
  * Defines the shortcode interface.

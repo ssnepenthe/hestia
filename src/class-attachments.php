@@ -1,25 +1,25 @@
 <?php
 /**
- * The children shortcode.
+ * The attachments shortcode.
  *
  * @package hestia
  */
 
-namespace SSNepenthe\Hestia\Shortcode;
+namespace Hestia;
 
-use SSNepenthe\Hestia\Posts_Repository;
-use SSNepenthe\Hestia\View\Plates_Manager;
-use function SSNepenthe\Hestia\parse_atts;
+use Hestia\Plates_Manager;
+use Hestia\Posts_Repository;
+use function Hestia\parse_atts;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	die;
 }
 
 /**
- * The class defines the children shortcode.
+ * This class defines the attachments shortcode.
  */
-class Children implements Shortcode {
-	const TEMPLATE_NAME = 'hestia-children';
+class Attachments implements Shortcode {
+	const TEMPLATE_NAME = 'hestia-attachments';
 
 	/**
 	 * Posts repository instance.
@@ -58,9 +58,12 @@ class Children implements Shortcode {
 	public function render( $atts, $_ = null, $tag = '' ) {
 		$atts = parse_atts( $atts, $tag );
 
-		$meta = (bool) apply_filters( 'hestia_children_preload_meta', $atts['thumbnails'] );
+		$meta = (bool) apply_filters(
+			'hestia_attachments_preload_meta',
+			$atts['thumbnails'] || 'PAGE' === $atts['link']
+		);
 
-		$children = $this->repository->get_children(
+		$attachments = $this->repository->get_attachments(
 			get_the_ID(),
 			$atts['max'],
 			$atts['order'],
@@ -68,7 +71,8 @@ class Children implements Shortcode {
 		);
 
 		return $this->template->render( self::TEMPLATE_NAME, [
-			'children' => $children,
+			'attachments' => $attachments,
+			'link_to' => $atts['link'],
 			'thumbnails' => $atts['thumbnails'],
 		] );
 	}

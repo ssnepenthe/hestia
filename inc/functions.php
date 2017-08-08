@@ -5,7 +5,7 @@
  * @package hestia
  */
 
-namespace SSNepenthe\Hestia;
+namespace Hestia;
 
 /**
  * Apply defaults and validate an array of shortcode attributes.

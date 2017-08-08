@@ -5,7 +5,7 @@
  * @package hestia
  */
 
-namespace SSNepenthe\Hestia\Shortcode;
+namespace Hestia;
 
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
@@ -40,19 +40,19 @@ class Shortcode_Provider implements ServiceProviderInterface {
 	 */
 	public function register( Container $container ) {
 		$container['shortcode.ancestors'] = function( Container $c ) {
-			return new Ancestors( new \SSNepenthe\Hestia\Posts(), $c['plates'] );
+			return new Ancestors( new Posts(), $c['plates'] );
 		};
 		$container['shortcode.attachments'] = function( Container $c ) {
-			return new Attachments( new \SSNepenthe\Hestia\Posts(), $c['plates'] );
+			return new Attachments( new Posts(), $c['plates'] );
 		};
 		$container['shortcode.children'] = function( Container $c ) {
-			return new Children( new \SSNepenthe\Hestia\Posts(), $c['plates'] );
+			return new Children( new Posts(), $c['plates'] );
 		};
 		$container['shortcode.siblings'] = function( Container $c ) {
-			return new Siblings( new \SSNepenthe\Hestia\Posts(), $c['plates'] );
+			return new Siblings( new Posts(), $c['plates'] );
 		};
 		$container['shortcode.sitemap'] = function( Container $c ) {
-			return new Sitemap( new \SSNepenthe\Hestia\Posts(), $c['plates'] );
+			return new Sitemap( new Posts(), $c['plates'] );
 		};
 	}
 }

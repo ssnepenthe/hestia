@@ -5,7 +5,7 @@
  * @package hestia
  */
 
-namespace SSNepenthe\Hestia\View;
+namespace Hestia;
 
 use League\Plates\Engine;
 
@@ -35,6 +35,8 @@ class Plates_Manager {
 	 * Add a directory to look in for templates.
 	 *
 	 * @param string $dir Template directory.
+	 *
+	 * @return void
 	 */
 	public function add_dir( $dir ) {
 		$this->instances[] = new Engine( $dir );

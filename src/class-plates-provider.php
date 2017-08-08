@@ -5,7 +5,7 @@
  * @package hestia
  */
 
-namespace SSNepenthe\Hestia\View;
+namespace Hestia;
 
 use Pimple\Container;
 use League\Plates\Engine;
@@ -27,11 +27,13 @@ class Plates_Provider implements ServiceProviderInterface {
 			$manager = new Plates_Manager();
 
 			// That's a lot of engines...
-			if ( is_dir( get_stylesheet_directory() . '/templates' ) ) {
-				$manager->add_dir( get_stylesheet_directory() . '/templates' );
-			}
+			if ( is_child_theme() ) {
+				if ( is_dir( get_stylesheet_directory() . '/templates' ) ) {
+					$manager->add_dir( get_stylesheet_directory() . '/templates' );
+				}
 
-			$manager->add_dir( get_stylesheet_directory() );
+				$manager->add_dir( get_stylesheet_directory() );
+			}
 
 			if ( is_dir( get_template_directory() . '/templates' ) ) {
 				$manager->add_dir( get_template_directory() . '/templates' );

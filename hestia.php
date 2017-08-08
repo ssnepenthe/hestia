@@ -58,8 +58,8 @@ function _hestia_instance() {
 		] );
 
 		$instance->register( new Metis\WordPress_Provider() );
-		$instance->register( new SSNepenthe\Hestia\View\Plates_Provider() );
-		$instance->register( new SSNepenthe\Hestia\Shortcode\Shortcode_Provider() );
+		$instance->register( new Hestia\Plates_Provider() );
+		$instance->register( new Hestia\Shortcode_Provider() );
 	}
 
 	return $instance;

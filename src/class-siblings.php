@@ -5,11 +5,11 @@
  * @package hestia
  */
 
-namespace SSNepenthe\Hestia\Shortcode;
+namespace Hestia;
 
-use SSNepenthe\Hestia\Posts_Repository;
-use SSNepenthe\Hestia\View\Plates_Manager;
-use function SSNepenthe\Hestia\parse_atts;
+use Hestia\Plates_Manager;
+use Hestia\Posts_Repository;
+use function Hestia\parse_atts;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	die;

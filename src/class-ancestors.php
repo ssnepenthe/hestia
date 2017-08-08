@@ -1,25 +1,25 @@
 <?php
 /**
- * The attachments shortcode.
+ * The ancestors shortcode.
  *
  * @package hestia
  */
 
-namespace SSNepenthe\Hestia\Shortcode;
+namespace Hestia;
 
-use SSNepenthe\Hestia\Posts_Repository;
-use SSNepenthe\Hestia\View\Plates_Manager;
-use function SSNepenthe\Hestia\parse_atts;
+use Hestia\Plates_Manager;
+use Hestia\Posts_Repository;
+use function Hestia\parse_atts;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	die;
 }
 
 /**
- * This class defines the attachments shortcode.
+ * This class defines the ancestors shortcode.
  */
-class Attachments implements Shortcode {
-	const TEMPLATE_NAME = 'hestia-attachments';
+class Ancestors implements Shortcode {
+	const TEMPLATE_NAME = 'hestia-ancestors';
 
 	/**
 	 * Posts repository instance.
@@ -58,21 +58,12 @@ class Attachments implements Shortcode {
 	public function render( $atts, $_ = null, $tag = '' ) {
 		$atts = parse_atts( $atts, $tag );
 
-		$meta = (bool) apply_filters(
-			'hestia_attachments_preload_meta',
-			$atts['thumbnails'] || 'PAGE' === $atts['link']
-		);
-
-		$attachments = $this->repository->get_attachments(
-			get_the_ID(),
-			$atts['max'],
-			$atts['order'],
-			$meta
-		);
-
 		return $this->template->render( self::TEMPLATE_NAME, [
-			'attachments' => $attachments,
-			'link_to' => $atts['link'],
+			'ancestors' => $this->repository->get_ancestors(
+				get_the_ID(),
+				$atts['order'],
+				apply_filters( 'hestia_ancestors_preload_meta', $atts['thumbnails'] )
+			),
 			'thumbnails' => $atts['thumbnails'],
 		] );
 	}

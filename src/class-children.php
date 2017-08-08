@@ -1,25 +1,25 @@
 <?php
 /**
- * The sitemap shortcode.
+ * The children shortcode.
  *
  * @package hestia
  */
 
-namespace SSNepenthe\Hestia\Shortcode;
+namespace Hestia;
 
-use SSNepenthe\Hestia\Posts_Repository;
-use SSNepenthe\Hestia\View\Plates_Manager;
-use function SSNepenthe\Hestia\parse_atts;
+use Hestia\Plates_Manager;
+use Hestia\Posts_Repository;
+use function Hestia\parse_atts;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	die;
 }
 
 /**
- * This class defines the sitemap shortcode.
+ * The class defines the children shortcode.
  */
-class Sitemap implements Shortcode {
-	const TEMPLATE_NAME = 'hestia-sitemap';
+class Children implements Shortcode {
+	const TEMPLATE_NAME = 'hestia-children';
 
 	/**
 	 * Posts repository instance.
@@ -58,24 +58,17 @@ class Sitemap implements Shortcode {
 	public function render( $atts, $_ = null, $tag = '' ) {
 		$atts = parse_atts( $atts, $tag );
 
-		$meta = (bool) apply_filters( 'hestia_sitemap_preload_meta', $atts['thumbnails'] );
-		// Not using "publicy_queryable" because it would exclude "page" post type.
-		$post_types = array_diff( get_post_types( [
-			'public' => true,
-		] ), [ 'attachment' ] );
-		$posts = [];
+		$meta = (bool) apply_filters( 'hestia_children_preload_meta', $atts['thumbnails'] );
 
-		foreach ( $post_types as $post_type ) {
-			$posts[ $post_type ] = $this->repository->get_posts_by_type(
-				$post_type,
-				$atts['max'],
-				$atts['order'],
-				$meta
-			);
-		}
+		$children = $this->repository->get_children(
+			get_the_ID(),
+			$atts['max'],
+			$atts['order'],
+			$meta
+		);
 
 		return $this->template->render( self::TEMPLATE_NAME, [
-			'posts' => $posts,
+			'children' => $children,
 			'thumbnails' => $atts['thumbnails'],
 		] );
 	}

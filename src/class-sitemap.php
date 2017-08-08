@@ -1,25 +1,25 @@
 <?php
 /**
- * The ancestors shortcode.
+ * The sitemap shortcode.
  *
  * @package hestia
  */
 
-namespace SSNepenthe\Hestia\Shortcode;
+namespace Hestia;
 
-use SSNepenthe\Hestia\Posts_Repository;
-use SSNepenthe\Hestia\View\Plates_Manager;
-use function SSNepenthe\Hestia\parse_atts;
+use Hestia\Plates_Manager;
+use Hestia\Posts_Repository;
+use function Hestia\parse_atts;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	die;
 }
 
 /**
- * This class defines the ancestors shortcode.
+ * This class defines the sitemap shortcode.
  */
-class Ancestors implements Shortcode {
-	const TEMPLATE_NAME = 'hestia-ancestors';
+class Sitemap implements Shortcode {
+	const TEMPLATE_NAME = 'hestia-sitemap';
 
 	/**
 	 * Posts repository instance.
@@ -58,12 +58,24 @@ class Ancestors implements Shortcode {
 	public function render( $atts, $_ = null, $tag = '' ) {
 		$atts = parse_atts( $atts, $tag );
 
-		return $this->template->render( self::TEMPLATE_NAME, [
-			'ancestors' => $this->repository->get_ancestors(
-				get_the_ID(),
+		$meta = (bool) apply_filters( 'hestia_sitemap_preload_meta', $atts['thumbnails'] );
+		// Not using "publicy_queryable" because it would exclude "page" post type.
+		$post_types = array_diff( get_post_types( [
+			'public' => true,
+		] ), [ 'attachment' ] );
+		$posts = [];
+
+		foreach ( $post_types as $post_type ) {
+			$posts[ $post_type ] = $this->repository->get_posts_by_type(
+				$post_type,
+				$atts['max'],
 				$atts['order'],
-				apply_filters( 'hestia_ancestors_preload_meta', $atts['thumbnails'] )
-			),
+				$meta
+			);
+		}
+
+		return $this->template->render( self::TEMPLATE_NAME, [
+			'posts' => $posts,
 			'thumbnails' => $atts['thumbnails'],
 		] );
 	}
