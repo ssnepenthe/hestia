@@ -7,9 +7,6 @@
 
 namespace Hestia;
 
-use Hestia\Plates_Manager;
-use Hestia\Posts_Repository;
-
 if ( ! defined( 'ABSPATH' ) ) {
 	die;
 }
