@@ -190,6 +190,10 @@ class Posts implements Posts_Repository {
 
 		$post_type = get_post_type( $post_id );
 
+		if ( ! $post_type ) {
+			return [];
+		}
+
 		$args = [
 			'ignore_sticky_posts'    => true,
 			'no_found_rows'          => true,
