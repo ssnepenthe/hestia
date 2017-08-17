@@ -15,9 +15,11 @@ class Children_Test extends Hestia_Shortcode_Test_Case {
 			'post_parent' => $this->hestia_posts['first']->ID,
 			'post_type' => 'page',
 		] );
-
 		$this->hestia_posts['third'] = $this->factory()->post->create_and_get( [
 			'post_parent' => $this->hestia_posts['first']->ID,
+			'post_type' => 'page',
+		] );
+		$this->hestia_posts['fourth'] = $this->factory()->post->create_and_get( [
 			'post_type' => 'page',
 		] );
 
@@ -128,6 +130,33 @@ class Children_Test extends Hestia_Shortcode_Test_Case {
 		$this->assertShortcodeContent(
 			$this->hestia_posts['third']->post_title,
 			$shortcode
+		);
+	}
+
+	/** @test */
+	function with_custom_id() {
+		// Without post global.
+		$this->assertShortcodeContent( '', do_shortcode( '[children]' ) );
+		$this->assertShortcodeContent(
+			sprintf(
+				'%s %s',
+				$this->hestia_posts['second']->post_title,
+				$this->hestia_posts['third']->post_title
+			),
+			do_shortcode( "[children id=\"{$this->hestia_posts['first']->ID}\"]" )
+		);
+
+		// With post global.
+		$GLOBALS['post'] = $this->hestia_posts['fourth'];
+
+		$this->assertShortcodeContent( '', do_shortcode( '[children]' ) );
+		$this->assertShortcodeContent(
+			sprintf(
+				'%s %s',
+				$this->hestia_posts['second']->post_title,
+				$this->hestia_posts['third']->post_title
+			),
+			do_shortcode( "[children id=\"{$this->hestia_posts['first']->ID}\"]" )
 		);
 	}
 

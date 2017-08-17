@@ -57,13 +57,17 @@ class Attachments implements Shortcode {
 	public function render( $atts, $_ = null, $tag = '' ) {
 		$atts = $this->parse_atts( $atts, $tag );
 
+		if ( false === $atts['id'] ) {
+			return '';
+		}
+
 		$meta = (bool) apply_filters(
 			'hestia_attachments_preload_meta',
 			$atts['thumbnails'] || 'PAGE' === $atts['link']
 		);
 
 		$attachments = $this->repository->get_attachments(
-			get_the_ID(),
+			$atts['id'],
 			$atts['max'],
 			$atts['order'],
 			$meta

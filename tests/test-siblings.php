@@ -129,6 +129,40 @@ class Siblings_Test extends Hestia_Shortcode_Test_Case {
 	}
 
 	/** @test */
+	function with_custom_id() {
+		// Without post global.
+		$this->assertShortcodeContent( '', do_shortcode( '[siblings]' ) );
+		$this->assertShortcodeContent(
+			sprintf(
+				'%s %s',
+				$this->hestia_posts['second']->post_title,
+				$this->hestia_posts['third']->post_title
+			),
+			do_shortcode( "[siblings id=\"{$this->hestia_posts['first']->ID}\"]" )
+		);
+
+		// With post global.
+		$GLOBALS['post'] = $this->hestia_posts['first'];
+
+		$this->assertShortcodeContent(
+			sprintf(
+				'%s %s',
+				$this->hestia_posts['second']->post_title,
+				$this->hestia_posts['third']->post_title
+			),
+			do_shortcode( '[siblings]' )
+		);
+		$this->assertShortcodeContent(
+			sprintf(
+				'%s %s',
+				$this->hestia_posts['first']->post_title,
+				$this->hestia_posts['third']->post_title
+			),
+			do_shortcode( "[siblings id=\"{$this->hestia_posts['second']->ID}\"]" )
+		);
+	}
+
+	/** @test */
 	function it_fails_gracefully() {
 		$post = $this->factory()->post->create_and_get( [
 			'post_type' => 'page',

@@ -21,12 +21,14 @@ trait Parses_Shortcode_Atts {
 	 */
 	public function parse_atts( $atts, $tag ) {
 		$atts = shortcode_atts( [
+			'id' => get_the_ID(),
 			'link' => 'PAGE',
 			'max' => 20,
 			'order' => 'ASC',
 			'thumbnails' => false,
 		], $atts, $tag );
 
+		$atts['id'] = false === $atts['id'] ? false : intval( $atts['id'] );
 		$atts['link'] = 'FILE' === strtoupper( $atts['link'] ) ? 'FILE' : 'PAGE';
 		$atts['max'] = min( 100, max( 1, intval( $atts['max'] ) ) );
 		$atts['order'] = 'DESC' === strtoupper( $atts['order'] ) ? 'DESC' : 'ASC';

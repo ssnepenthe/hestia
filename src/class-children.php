@@ -57,10 +57,14 @@ class Children implements Shortcode {
 	public function render( $atts, $_ = null, $tag = '' ) {
 		$atts = $this->parse_atts( $atts, $tag );
 
+		if ( false === $atts['id'] ) {
+			return '';
+		}
+
 		$meta = (bool) apply_filters( 'hestia_children_preload_meta', $atts['thumbnails'] );
 
 		$children = $this->repository->get_children(
-			get_the_ID(),
+			$atts['id'],
 			$atts['max'],
 			$atts['order'],
 			$meta

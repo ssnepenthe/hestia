@@ -10,6 +10,9 @@ class Attachments_Test extends Hestia_Shortcode_Test_Case {
 		$this->hestia_posts['first'] = $this->factory()->post->create_and_get( [
 			'post_type' => 'page',
 		] );
+		$this->hestia_posts['second'] = $this->factory()->post->create_and_get( [
+			'post_type' => 'page',
+		] );
 
 		$this->hestia_attachments['first'] = $this->factory()->attachment->create_object( [
 			'file' => 'first.jpg',
@@ -23,6 +26,12 @@ class Attachments_Test extends Hestia_Shortcode_Test_Case {
 			'post_mime_type' => 'image/jpeg',
 			'post_parent' => $this->hestia_posts['first']->ID,
 			'post_title' => 'Second Attachment',
+		] );
+		$this->hestia_attachments['third'] = $this->factory()->attachment->create_object( [
+			'file' => 'third.jpg',
+			'post_mime_type' => 'image/jpeg',
+			'post_parent' => $this->hestia_posts['second']->ID,
+			'post_title' => 'Third Attachment',
 		] );
 	}
 
@@ -114,6 +123,36 @@ class Attachments_Test extends Hestia_Shortcode_Test_Case {
 		$this->assertShortcodeContent(
 			get_the_title( $this->hestia_attachments['second'] ),
 			$shortcode
+		);
+	}
+
+	/** @test */
+	function with_custom_id() {
+		// Without post global.
+		$this->assertShortcodeContent( '', do_shortcode( '[attachments]' ) );
+		$this->assertShortcodeContent(
+			sprintf(
+				'%s %s',
+				get_the_title( $this->hestia_attachments['first'] ),
+				get_the_title( $this->hestia_attachments['second'] )
+			),
+			do_shortcode( "[attachments id=\"{$this->hestia_posts['first']->ID}\"]" )
+		);
+
+		// With post global.
+		$GLOBALS['post'] = $this->hestia_posts['second'];
+
+		$this->assertShortcodeContent(
+			get_the_title( $this->hestia_attachments['third'] ),
+			do_shortcode( '[attachments]' )
+		);
+		$this->assertShortcodeContent(
+			sprintf(
+				'%s %s',
+				get_the_title( $this->hestia_attachments['first'] ),
+				get_the_title( $this->hestia_attachments['second'] )
+			),
+			do_shortcode( "[attachments id=\"{$this->hestia_posts['first']->ID}\"]" )
 		);
 	}
 

@@ -124,6 +124,36 @@ class Ancestors_Test extends Hestia_Shortcode_Test_Case {
 	}
 
 	/** @test */
+	function with_custom_id() {
+		// Without post global.
+		$this->assertShortcodeContent( '', do_shortcode( '[ancestors]' ) );
+		$this->assertShortcodeContent(
+			sprintf(
+				'%s %s',
+				$this->hestia_posts['first']->post_title,
+				$this->hestia_posts['second']->post_title
+			),
+			do_shortcode( "[ancestors id=\"{$this->hestia_posts['third']->ID}\"]" )
+		);
+
+		// With post global.
+		$GLOBALS['post'] = $this->hestia_posts['second'];
+
+		$this->assertShortcodeContent(
+			$this->hestia_posts['first']->post_title,
+			do_shortcode( '[ancestors]' )
+		);
+		$this->assertShortcodeContent(
+			sprintf(
+				'%s %s',
+				$this->hestia_posts['first']->post_title,
+				$this->hestia_posts['second']->post_title
+			),
+			do_shortcode( "[ancestors id=\"{$this->hestia_posts['third']->ID}\"]" )
+		);
+	}
+
+	/** @test */
 	function it_fails_gracefully() {
 		$GLOBALS['post'] = $this->hestia_posts['first'];
 
