@@ -30,7 +30,7 @@ Lists all media that has been directly attached to the current post.
 
 Accepts the following attributes:
 
-* `id`: ID of the post for which you would like to display ancestors. Defaults to the return value of `get_the_ID()`.
+* `id`: ID of the post for which you would like to display attachments. Defaults to the return value of `get_the_ID()`.
 * `link`: one of `PAGE` or `FILE`. Sets whether to link to the attachment page or the actual attachment file. Defaults to `PAGE`.
 * `max`: integer between 1 and 100. Sets the maximum number of attachments to display. Defaults to `20`.
 * `order`: one of `ASC` or `DESC`. Sets the sort order of found posts. Defaults to `ASC`.
@@ -43,7 +43,7 @@ Lists all child posts of the current post.
 
 Accepts the following attributes:
 
-* `id`: ID of the post for which you would like to display ancestors. Defaults to the return value of `get_the_ID()`.
+* `id`: ID of the post for which you would like to display children. Defaults to the return value of `get_the_ID()`.
 * `max`: integer between 1 and 100. Sets the maximum number of children to display. Defaults to `20`.
 * `order`: one of `ASC` or `DESC`. Sets the sort order of found posts. Defaults to `ASC`.
 * `thumbnails`: `true` or `false`. Whether or not to include featured images in post list. Defaults to `false`.
@@ -55,7 +55,7 @@ Lists sibling posts of the current post.
 
 Accepts the following attributes:
 
-* `id`: ID of the post for which you would like to display ancestors. Defaults to the return value of `get_the_ID()`.
+* `id`: ID of the post for which you would like to display siblings. Defaults to the return value of `get_the_ID()`.
 * `max`: integer between 1 and 100. Sets the maximum number of siblings to display. Defaults to `20`.
 * `order`: one of `ASC` or `DESC`. Sets the sort order of found posts. Defaults to `ASC`.
 * `thumbnails`: `true` or `false`. Whether or not to include featured images in post list. Defaults to `false`.
