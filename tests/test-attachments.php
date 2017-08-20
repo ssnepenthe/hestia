@@ -16,7 +16,7 @@ class Attachments_Test extends Hestia_Shortcode_Test_Case {
 
 		$this->hestia_attachments['first'] = $this->factory()->attachment->create_object( [
 			'file' => 'first.jpg',
-			'post_date' => date( 'Y-m-d H:i:s', time() - 60 ),
+			'post_date' => \date( 'Y-m-d H:i:s', \time() - 60 ),
 			'post_mime_type' => 'image/jpeg',
 			'post_parent' => $this->hestia_posts['first']->ID,
 			'post_title' => 'First Attachment',
@@ -49,20 +49,20 @@ class Attachments_Test extends Hestia_Shortcode_Test_Case {
 		$GLOBALS['post'] = $this->hestia_posts['first'];
 
 		$expected = [
-			sprintf( '<div class="hestia-attachment hestia-post-%s hestia-wrapper">', $this->hestia_attachments['first'] ),
-			sprintf( '<a href="%s">', get_permalink( $this->hestia_attachments['first'] ) ),
-			sprintf( '%s		</a>', get_the_title( $this->hestia_attachments['first'] ) ),
+			\sprintf( '<div class="hestia-attachment hestia-post-%s hestia-wrapper">', $this->hestia_attachments['first'] ),
+			\sprintf( '<a href="%s">', get_permalink( $this->hestia_attachments['first'] ) ),
+			\sprintf( '%s		</a>', get_the_title( $this->hestia_attachments['first'] ) ),
 			'</div>',
-			sprintf( '<div class="hestia-attachment hestia-post-%s hestia-wrapper">', $this->hestia_attachments['second'] ),
-			sprintf( '<a href="%s">', get_permalink( $this->hestia_attachments['second'] ) ),
-			sprintf( '%s		</a>', get_the_title( $this->hestia_attachments['second'] ) ),
+			\sprintf( '<div class="hestia-attachment hestia-post-%s hestia-wrapper">', $this->hestia_attachments['second'] ),
+			\sprintf( '<a href="%s">', get_permalink( $this->hestia_attachments['second'] ) ),
+			\sprintf( '%s		</a>', get_the_title( $this->hestia_attachments['second'] ) ),
 			'</div>',
 		];
 
 		// Re-indexed for easier comparison.
-		$actual = array_values(
+		$actual = \array_values(
 			// Render, explode on newline, trim each line and then remove empties.
-			array_filter( array_map( 'trim', explode( PHP_EOL, do_shortcode( '[attachments]' ) ) ) )
+			\array_filter( \array_map( 'trim', \explode( PHP_EOL, do_shortcode( '[attachments]' ) ) ) )
 		);
 
 		$this->assertEquals( $expected, $actual );
@@ -99,7 +99,7 @@ class Attachments_Test extends Hestia_Shortcode_Test_Case {
 		$GLOBALS['post'] = $this->hestia_posts['first'];
 
 		$this->assertShortcodeContent(
-			sprintf(
+			\sprintf(
 				'%s %s',
 				get_the_title( $this->hestia_attachments['second'] ),
 				get_the_title( $this->hestia_attachments['first'] )
@@ -131,7 +131,7 @@ class Attachments_Test extends Hestia_Shortcode_Test_Case {
 		// Without post global.
 		$this->assertShortcodeContent( '', do_shortcode( '[attachments]' ) );
 		$this->assertShortcodeContent(
-			sprintf(
+			\sprintf(
 				'%s %s',
 				get_the_title( $this->hestia_attachments['first'] ),
 				get_the_title( $this->hestia_attachments['second'] )
@@ -147,7 +147,7 @@ class Attachments_Test extends Hestia_Shortcode_Test_Case {
 			do_shortcode( '[attachments]' )
 		);
 		$this->assertShortcodeContent(
-			sprintf(
+			\sprintf(
 				'%s %s',
 				get_the_title( $this->hestia_attachments['first'] ),
 				get_the_title( $this->hestia_attachments['second'] )

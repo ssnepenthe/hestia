@@ -7,7 +7,7 @@
 
 namespace Hestia;
 
-if ( ! defined( 'ABSPATH' ) ) {
+if ( ! \defined( 'ABSPATH' ) ) {
 	die;
 }
 
@@ -18,9 +18,9 @@ interface Posts_Repository {
 	/**
 	 * Get all ancestors of a given post.
 	 *
-	 * @param  integer $post_id Post ID.
-	 * @param  string  $order   One of "ASC" or "DESC".
-	 * @param  boolean $meta    Whether post meta should be preloaded into the cache.
+	 * @param integer $post_id Post ID.
+	 * @param string  $order   One of "ASC" or "DESC".
+	 * @param boolean $meta    Whether post meta should be preloaded into the cache.
 	 *
 	 * @return \WP_Post[]
 	 */
@@ -29,10 +29,10 @@ interface Posts_Repository {
 	/**
 	 * Get attachments that were uploaded to a given post.
 	 *
-	 * @param  integer $post_id Post ID.
-	 * @param  integer $qty     Number of posts to retrieve.
-	 * @param  string  $order   Post order - one of "ASC" or "DESC".
-	 * @param  boolean $meta    Whether post meta should be preloaded into the cache.
+	 * @param integer $post_id Post ID.
+	 * @param integer $qty     Number of posts to retrieve.
+	 * @param string  $order   Post order - one of "ASC" or "DESC".
+	 * @param boolean $meta    Whether post meta should be preloaded into the cache.
 	 *
 	 * @return \WP_Post[]
 	 */
@@ -41,10 +41,10 @@ interface Posts_Repository {
 	/**
 	 * Get all child posts of a given post.
 	 *
-	 * @param  integer $post_id Post ID.
-	 * @param  integer $qty     Number of posts to retrieve.
-	 * @param  string  $order   Post order - one of "ASC" or "DESC".
-	 * @param  boolean $meta    Whether post meta should be preloaded into the cache.
+	 * @param integer $post_id Post ID.
+	 * @param integer $qty     Number of posts to retrieve.
+	 * @param string  $order   Post order - one of "ASC" or "DESC".
+	 * @param boolean $meta    Whether post meta should be preloaded into the cache.
 	 *
 	 * @return \WP_Post[]
 	 */
@@ -53,10 +53,10 @@ interface Posts_Repository {
 	/**
 	 * Get all posts by post type.
 	 *
-	 * @param  string  $post_type Post type.
-	 * @param  integer $qty       Number of posts to retrieve.
-	 * @param  string  $order     Post order - one of "ASC" or "DESC".
-	 * @param  boolean $meta      Whether post meta should be preloaded into the cache.
+	 * @param string  $post_type Post type.
+	 * @param integer $qty       Number of posts to retrieve.
+	 * @param string  $order     Post order - one of "ASC" or "DESC".
+	 * @param boolean $meta      Whether post meta should be preloaded into the cache.
 	 *
 	 * @return \WP_Post[]
 	 */
@@ -65,10 +65,10 @@ interface Posts_Repository {
 	/**
 	 * Get all siblings of a given post.
 	 *
-	 * @param  integer $post_id Post ID.
-	 * @param  integer $qty     Number of posts to retrieve.
-	 * @param  string  $order   Post order - one of "ASC" or "DESC".
-	 * @param  boolean $meta    Whether post meta should be preloaded into the cache.
+	 * @param integer $post_id Post ID.
+	 * @param integer $qty     Number of posts to retrieve.
+	 * @param string  $order   Post order - one of "ASC" or "DESC".
+	 * @param boolean $meta    Whether post meta should be preloaded into the cache.
 	 *
 	 * @return \WP_Post[]
 	 */

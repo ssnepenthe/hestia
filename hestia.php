@@ -17,7 +17,7 @@
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
+if ( ! \defined( 'ABSPATH' ) ) {
 	die;
 }
 
@@ -54,7 +54,7 @@ function _hestia_init() {
 function _hestia_instance() {
 	static $instance = null;
 
-	if ( ! is_null( $instance ) ) {
+	if ( null !== $instance ) {
 		return $instance;
 	}
 
@@ -71,10 +71,10 @@ function _hestia_instance() {
 /**
  * Include a file if it exists via "require_once".
  *
- * @param  string $file Path to file for inclusion.
+ * @param string $file Path to file for inclusion.
  */
 function _hestia_require_if_exists( $file ) {
-	if ( file_exists( $file ) ) {
+	if ( \file_exists( $file ) ) {
 		require_once $file;
 	}
 }

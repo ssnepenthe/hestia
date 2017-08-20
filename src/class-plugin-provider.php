@@ -10,7 +10,7 @@ namespace Hestia;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
-if ( ! defined( 'ABSPATH' ) ) {
+if ( ! \defined( 'ABSPATH' ) ) {
 	die;
 }
 
@@ -29,7 +29,7 @@ class Plugin_Provider implements ServiceProviderInterface {
 	/**
 	 * Provider-specific boot logic.
 	 *
-	 * @param  Container $container Container instance.
+	 * @param Container $container Container instance.
 	 *
 	 * @return void
 	 */
@@ -47,7 +47,7 @@ class Plugin_Provider implements ServiceProviderInterface {
 	/**
 	 * Provider-specific registration logic.
 	 *
-	 * @param  Container $container Container instance.
+	 * @param Container $container Container instance.
 	 *
 	 * @return void
 	 */

@@ -9,7 +9,7 @@ namespace Hestia;
 
 use League\Plates\Engine;
 
-if ( ! defined( 'ABSPATH' ) ) {
+if ( ! \defined( 'ABSPATH' ) ) {
 	die;
 }
 
@@ -49,7 +49,7 @@ class Plates_Manager {
 	/**
 	 * Returns the first engine instance for which the template exists.
 	 *
-	 * @param  string $name Template name.
+	 * @param string $name Template name.
 	 *
 	 * @return Engine
 	 *
@@ -70,8 +70,8 @@ class Plates_Manager {
 	/**
 	 * Render a template using the first engine instance for which that template exists.
 	 *
-	 * @param  string $name Template name.
-	 * @param  array  $data Template data.
+	 * @param string $name Template name.
+	 * @param array  $data Template data.
 	 *
 	 * @return string
 	 */

@@ -7,7 +7,7 @@
 
 namespace Hestia;
 
-if ( ! defined( 'ABSPATH' ) ) {
+if ( ! \defined( 'ABSPATH' ) ) {
 	die;
 }
 
@@ -18,9 +18,9 @@ interface Shortcode {
 	/**
 	 * Render the shortcode output.
 	 *
-	 * @param  mixed  $atts    Shortcode attrbiutes.
-	 * @param  mixed  $content Shortcode content.
-	 * @param  string $tag     Shortcode tag.
+	 * @param mixed  $atts    Shortcode attrbiutes.
+	 * @param mixed  $content Shortcode content.
+	 * @param string $tag     Shortcode tag.
 	 *
 	 * @return string
 	 */

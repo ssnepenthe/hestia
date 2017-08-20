@@ -7,7 +7,7 @@
 
 namespace Hestia;
 
-if ( ! defined( 'ABSPATH' ) ) {
+if ( ! \defined( 'ABSPATH' ) ) {
 	die;
 }
 
@@ -48,9 +48,9 @@ class Attachments implements Shortcode {
 	/**
 	 * Delegates to the template instance to render the shortcode output.
 	 *
-	 * @param  mixed  $atts Shortcode attributes.
-	 * @param  mixed  $_    The shortcode content.
-	 * @param  string $tag  The shortcode tag.
+	 * @param mixed  $atts Shortcode attributes.
+	 * @param mixed  $_    The shortcode content.
+	 * @param string $tag  The shortcode tag.
 	 *
 	 * @return string
 	 */

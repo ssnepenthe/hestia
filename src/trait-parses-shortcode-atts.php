@@ -14,8 +14,8 @@ trait Parses_Shortcode_Atts {
 	/**
 	 * Apply defaults to and validate shortcode attributes.
 	 *
-	 * @param  mixed  $atts Shortcode attributes as extracted from the content.
-	 * @param  string $tag  The shortcode tag.
+	 * @param mixed  $atts Shortcode attributes as extracted from the content.
+	 * @param string $tag  The shortcode tag.
 	 *
 	 * @return array
 	 */
@@ -28,11 +28,11 @@ trait Parses_Shortcode_Atts {
 			'thumbnails' => false,
 		], $atts, $tag );
 
-		$atts['id'] = false === $atts['id'] ? false : intval( $atts['id'] );
-		$atts['link'] = 'FILE' === strtoupper( $atts['link'] ) ? 'FILE' : 'PAGE';
-		$atts['max'] = min( 100, max( 1, intval( $atts['max'] ) ) );
-		$atts['order'] = 'DESC' === strtoupper( $atts['order'] ) ? 'DESC' : 'ASC';
-		$atts['thumbnails'] = filter_var( $atts['thumbnails'], FILTER_VALIDATE_BOOLEAN );
+		$atts['id'] = false === $atts['id'] ? false : (int) ( $atts['id'] );
+		$atts['link'] = 'FILE' === \mb_strtoupper( $atts['link'] ) ? 'FILE' : 'PAGE';
+		$atts['max'] = \min( 100, \max( 1, (int) ( $atts['max'] ) ) );
+		$atts['order'] = 'DESC' === \mb_strtoupper( $atts['order'] ) ? 'DESC' : 'ASC';
+		$atts['thumbnails'] = \filter_var( $atts['thumbnails'], FILTER_VALIDATE_BOOLEAN );
 
 		return $atts;
 	}

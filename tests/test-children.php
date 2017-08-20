@@ -11,7 +11,7 @@ class Children_Test extends Hestia_Shortcode_Test_Case {
 			'post_type' => 'page',
 		] );
 		$this->hestia_posts['second'] = $this->factory()->post->create_and_get( [
-			'post_date' => date( 'Y-m-d H:i:s', time() - 60 ),
+			'post_date' => \date( 'Y-m-d H:i:s', \time() - 60 ),
 			'post_parent' => $this->hestia_posts['first']->ID,
 			'post_type' => 'page',
 		] );
@@ -44,20 +44,20 @@ class Children_Test extends Hestia_Shortcode_Test_Case {
 		$GLOBALS['post'] = $this->hestia_posts['first'];
 
 		$expected = [
-			sprintf( '<div class="hestia-child hestia-post-%s hestia-wrapper">', $this->hestia_posts['second']->ID ),
-			sprintf( '<a href="%s">', get_permalink( $this->hestia_posts['second']->ID ) ),
-			sprintf( '%s		</a>', $this->hestia_posts['second']->post_title ),
+			\sprintf( '<div class="hestia-child hestia-post-%s hestia-wrapper">', $this->hestia_posts['second']->ID ),
+			\sprintf( '<a href="%s">', get_permalink( $this->hestia_posts['second']->ID ) ),
+			\sprintf( '%s		</a>', $this->hestia_posts['second']->post_title ),
 			'</div>',
-			sprintf( '<div class="hestia-child hestia-post-%s hestia-wrapper">', $this->hestia_posts['third']->ID ),
-			sprintf( '<a href="%s">', get_permalink( $this->hestia_posts['third']->ID ) ),
-			sprintf( '%s		</a>', $this->hestia_posts['third']->post_title ),
+			\sprintf( '<div class="hestia-child hestia-post-%s hestia-wrapper">', $this->hestia_posts['third']->ID ),
+			\sprintf( '<a href="%s">', get_permalink( $this->hestia_posts['third']->ID ) ),
+			\sprintf( '%s		</a>', $this->hestia_posts['third']->post_title ),
 			'</div>',
 		];
 
 		// Re-indexed for easier comparison.
-		$actual = array_values(
+		$actual = \array_values(
 			// Render, explode on newline, trim each line and then remove empties.
-			array_filter( array_map( 'trim', explode( PHP_EOL, do_shortcode( '[children]' ) ) ) )
+			\array_filter( \array_map( 'trim', \explode( PHP_EOL, do_shortcode( '[children]' ) ) ) )
 		);
 
 		$this->assertEquals( $expected, $actual );
@@ -78,7 +78,7 @@ class Children_Test extends Hestia_Shortcode_Test_Case {
 		$GLOBALS['post'] = $this->hestia_posts['first'];
 
 		$this->assertShortcodeContent(
-			sprintf(
+			\sprintf(
 				'%s %s',
 				$this->hestia_posts['third']->post_title,
 				$this->hestia_posts['second']->post_title
@@ -102,7 +102,7 @@ class Children_Test extends Hestia_Shortcode_Test_Case {
 			$shortcode
 		);
 		$this->assertShortcodeContent(
-			sprintf(
+			\sprintf(
 				'%s %s',
 				$this->hestia_posts['second']->post_title,
 				$this->hestia_posts['third']->post_title
@@ -138,7 +138,7 @@ class Children_Test extends Hestia_Shortcode_Test_Case {
 		// Without post global.
 		$this->assertShortcodeContent( '', do_shortcode( '[children]' ) );
 		$this->assertShortcodeContent(
-			sprintf(
+			\sprintf(
 				'%s %s',
 				$this->hestia_posts['second']->post_title,
 				$this->hestia_posts['third']->post_title
@@ -151,7 +151,7 @@ class Children_Test extends Hestia_Shortcode_Test_Case {
 
 		$this->assertShortcodeContent( '', do_shortcode( '[children]' ) );
 		$this->assertShortcodeContent(
-			sprintf(
+			\sprintf(
 				'%s %s',
 				$this->hestia_posts['second']->post_title,
 				$this->hestia_posts['third']->post_title

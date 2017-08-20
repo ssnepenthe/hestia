@@ -7,16 +7,16 @@ class Sitemap_Test extends Hestia_Shortcode_Test_Case {
 	function setUp() {
 		parent::setUp();
 
-		$this->hestia_pages = array_combine(
+		$this->hestia_pages = \array_combine(
 			[ 'first', 'second', 'third' ],
-			array_map( 'get_post', $this->factory()->post->create_many( 3, [
+			\array_map( 'get_post', $this->factory()->post->create_many( 3, [
 				'post_type' => 'page',
 			] ) )
 		);
 
-		$this->hestia_posts = array_combine(
+		$this->hestia_posts = \array_combine(
 			[ 'first', 'second', 'third' ],
-			array_map( 'get_post', $this->factory()->post->create_many( 3 ) )
+			\array_map( 'get_post', $this->factory()->post->create_many( 3 ) )
 		);
 	}
 
@@ -34,17 +34,17 @@ class Sitemap_Test extends Hestia_Shortcode_Test_Case {
 			'<h2>',
 			'Recent Posts		</h2>',
 			'<ul>',
-			sprintf( '<li class="hestia-post-%s hestia-wrapper">', $this->hestia_posts['first']->ID ),
-			sprintf( '<a href="%s">', get_permalink( $this->hestia_posts['first']->ID ) ),
-			sprintf( '%s					</a>', $this->hestia_posts['first']->post_title ),
+			\sprintf( '<li class="hestia-post-%s hestia-wrapper">', $this->hestia_posts['first']->ID ),
+			\sprintf( '<a href="%s">', get_permalink( $this->hestia_posts['first']->ID ) ),
+			\sprintf( '%s					</a>', $this->hestia_posts['first']->post_title ),
 			'</li>',
-			sprintf( '<li class="hestia-post-%s hestia-wrapper">', $this->hestia_posts['second']->ID ),
-			sprintf( '<a href="%s">', get_permalink( $this->hestia_posts['second']->ID ) ),
-			sprintf( '%s					</a>', $this->hestia_posts['second']->post_title ),
+			\sprintf( '<li class="hestia-post-%s hestia-wrapper">', $this->hestia_posts['second']->ID ),
+			\sprintf( '<a href="%s">', get_permalink( $this->hestia_posts['second']->ID ) ),
+			\sprintf( '%s					</a>', $this->hestia_posts['second']->post_title ),
 			'</li>',
-			sprintf( '<li class="hestia-post-%s hestia-wrapper">', $this->hestia_posts['third']->ID ),
-			sprintf( '<a href="%s">', get_permalink( $this->hestia_posts['third']->ID ) ),
-			sprintf( '%s					</a>', $this->hestia_posts['third']->post_title ),
+			\sprintf( '<li class="hestia-post-%s hestia-wrapper">', $this->hestia_posts['third']->ID ),
+			\sprintf( '<a href="%s">', get_permalink( $this->hestia_posts['third']->ID ) ),
+			\sprintf( '%s					</a>', $this->hestia_posts['third']->post_title ),
 			'</li>',
 			'</ul>',
 			'</div>',
@@ -52,24 +52,24 @@ class Sitemap_Test extends Hestia_Shortcode_Test_Case {
 			'<h2>',
 			'Recent Pages		</h2>',
 			'<ul>',
-			sprintf( '<li class="hestia-post-%s hestia-wrapper">', $this->hestia_pages['first']->ID ),
-			sprintf( '<a href="%s">', get_permalink( $this->hestia_pages['first']->ID ) ),
-			sprintf( '%s					</a>', $this->hestia_pages['first']->post_title ),
+			\sprintf( '<li class="hestia-post-%s hestia-wrapper">', $this->hestia_pages['first']->ID ),
+			\sprintf( '<a href="%s">', get_permalink( $this->hestia_pages['first']->ID ) ),
+			\sprintf( '%s					</a>', $this->hestia_pages['first']->post_title ),
 			'</li>',
-			sprintf( '<li class="hestia-post-%s hestia-wrapper">', $this->hestia_pages['second']->ID ),
-			sprintf( '<a href="%s">', get_permalink( $this->hestia_pages['second']->ID ) ),
-			sprintf( '%s					</a>', $this->hestia_pages['second']->post_title ),
+			\sprintf( '<li class="hestia-post-%s hestia-wrapper">', $this->hestia_pages['second']->ID ),
+			\sprintf( '<a href="%s">', get_permalink( $this->hestia_pages['second']->ID ) ),
+			\sprintf( '%s					</a>', $this->hestia_pages['second']->post_title ),
 			'</li>',
-			sprintf( '<li class="hestia-post-%s hestia-wrapper">', $this->hestia_pages['third']->ID ),
-			sprintf( '<a href="%s">', get_permalink( $this->hestia_pages['third']->ID ) ),
-			sprintf( '%s					</a>', $this->hestia_pages['third']->post_title ),
+			\sprintf( '<li class="hestia-post-%s hestia-wrapper">', $this->hestia_pages['third']->ID ),
+			\sprintf( '<a href="%s">', get_permalink( $this->hestia_pages['third']->ID ) ),
+			\sprintf( '%s					</a>', $this->hestia_pages['third']->post_title ),
 			'</li>',
 			'</ul>',
 			'</div>',
 		];
 
-		$actual = array_values(
-			array_filter( array_map( 'trim', explode( PHP_EOL, do_shortcode( '[sitemap]' ) ) ) )
+		$actual = \array_values(
+			\array_filter( \array_map( 'trim', \explode( PHP_EOL, do_shortcode( '[sitemap]' ) ) ) )
 		);
 
 		$this->assertEquals( $expected, $actual );
@@ -78,7 +78,7 @@ class Sitemap_Test extends Hestia_Shortcode_Test_Case {
 	/** @test */
 	function override_max() {
 		$this->assertShortcodeContent(
-			sprintf(
+			\sprintf(
 				'Recent Posts %s %s Recent Pages %s %s',
 				$this->hestia_posts['first']->post_title,
 				$this->hestia_posts['second']->post_title,
@@ -92,7 +92,7 @@ class Sitemap_Test extends Hestia_Shortcode_Test_Case {
 	/** @test */
 	function descending_order() {
 		$this->assertShortcodeContent(
-			sprintf(
+			\sprintf(
 				'Recent Posts %s %s %s Recent Pages %s %s %s',
 				$this->hestia_posts['third']->post_title,
 				$this->hestia_posts['second']->post_title,
@@ -108,7 +108,7 @@ class Sitemap_Test extends Hestia_Shortcode_Test_Case {
 	/** @test */
 	function custom_max_in_descending_order() {
 		$this->assertShortcodeContent(
-			sprintf(
+			\sprintf(
 				'Recent Posts %s Recent Pages %s',
 				$this->hestia_posts['third']->post_title,
 				$this->hestia_pages['third']->post_title
@@ -131,7 +131,7 @@ class Sitemap_Test extends Hestia_Shortcode_Test_Case {
 		] );
 
 		$this->assertShortcodeContent(
-			sprintf(
+			\sprintf(
 				'Recent Posts %s %s %s Recent Pages %s %s %s Recent Just Testing %s',
 				$this->hestia_posts['first']->post_title,
 				$this->hestia_posts['second']->post_title,

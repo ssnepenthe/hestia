@@ -7,7 +7,7 @@
 
 namespace Hestia;
 
-if ( ! defined( 'ABSPATH' ) ) {
+if ( ! \defined( 'ABSPATH' ) ) {
 	die;
 }
 
@@ -48,9 +48,9 @@ class Sitemap implements Shortcode {
 	/**
 	 * Delegates to the template instance to render the shortcode output.
 	 *
-	 * @param  mixed  $atts Shortcode attributes.
-	 * @param  mixed  $_    The shortcode content.
-	 * @param  string $tag  The shortcode tag.
+	 * @param mixed  $atts Shortcode attributes.
+	 * @param mixed  $_    The shortcode content.
+	 * @param string $tag  The shortcode tag.
 	 *
 	 * @return string
 	 */
@@ -59,7 +59,7 @@ class Sitemap implements Shortcode {
 
 		$meta = (bool) apply_filters( 'hestia_sitemap_preload_meta', $atts['thumbnails'] );
 		// Not using "publicy_queryable" because it would exclude "page" post type.
-		$post_types = array_diff( get_post_types( [
+		$post_types = \array_diff( get_post_types( [
 			'public' => true,
 		] ), [ 'attachment' ] );
 		$posts = [];

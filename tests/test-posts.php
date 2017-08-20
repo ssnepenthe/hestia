@@ -13,66 +13,66 @@ class Posts_Test extends WP_UnitTestCase {
 		$this->hestia_repository = new Posts();
 
 		$this->hestia_posts['one-a'] = $this->factory()->post->create( [
-			'post_date' => date( 'Y-m-d H:i:s', time() - 20 ),
+			'post_date' => \date( 'Y-m-d H:i:s', \time() - 20 ),
 			'post_status' => 'publish',
 			'post_type' => 'page',
 		] );
 		$this->hestia_posts['one-b'] = $this->factory()->post->create( [
-			'post_date' => date( 'Y-m-d H:i:s', time() - 19 ),
+			'post_date' => \date( 'Y-m-d H:i:s', \time() - 19 ),
 			'post_status' => 'publish',
 			'post_type' => 'page',
 		] );
 		$this->hestia_posts['one-c'] = $this->factory()->post->create( [
-			'post_date' => date( 'Y-m-d H:i:s', time() - 18 ),
+			'post_date' => \date( 'Y-m-d H:i:s', \time() - 18 ),
 			'post_status' => 'publish',
 			'post_type' => 'page',
 		] );
 
 		$this->hestia_posts['two-a'] = $this->factory()->post->create( [
-			'post_date' => date( 'Y-m-d H:i:s', time() - 17 ),
+			'post_date' => \date( 'Y-m-d H:i:s', \time() - 17 ),
 			'post_parent' => $this->hestia_posts['one-a'],
 			'post_status' => 'publish',
 			'post_type' => 'page',
 		] );
 		$this->hestia_posts['two-b'] = $this->factory()->post->create( [
-			'post_date' => date( 'Y-m-d H:i:s', time() - 16 ),
+			'post_date' => \date( 'Y-m-d H:i:s', \time() - 16 ),
 			'post_parent' => $this->hestia_posts['one-a'],
 			'post_status' => 'publish',
 			'post_type' => 'page',
 		] );
 		$this->hestia_posts['two-c'] = $this->factory()->post->create( [
-			'post_date' => date( 'Y-m-d H:i:s', time() - 15 ),
+			'post_date' => \date( 'Y-m-d H:i:s', \time() - 15 ),
 			'post_parent' => $this->hestia_posts['one-a'],
 			'post_status' => 'publish',
 			'post_type' => 'page',
 		] );
 
 		$this->hestia_posts['three-a'] = $this->factory()->post->create( [
-			'post_date' => date( 'Y-m-d H:i:s', time() - 14 ),
+			'post_date' => \date( 'Y-m-d H:i:s', \time() - 14 ),
 			'post_parent' => $this->hestia_posts['two-a'],
 			'post_status' => 'publish',
 			'post_type' => 'page',
 		] );
 		$this->hestia_posts['three-b'] = $this->factory()->post->create( [
-			'post_date' => date( 'Y-m-d H:i:s', time() - 13 ),
+			'post_date' => \date( 'Y-m-d H:i:s', \time() - 13 ),
 			'post_parent' => $this->hestia_posts['two-a'],
 			'post_status' => 'publish',
 			'post_type' => 'page',
 		] );
 		$this->hestia_posts['three-c'] = $this->factory()->post->create( [
-			'post_date' => date( 'Y-m-d H:i:s', time() - 12 ),
+			'post_date' => \date( 'Y-m-d H:i:s', \time() - 12 ),
 			'post_parent' => $this->hestia_posts['two-a'],
 			'post_status' => 'publish',
 			'post_type' => 'page',
 		] );
 
 		$this->hestia_posts['not-page'] = $this->factory()->post->create( [
-			'post_date' => date( 'Y-m-d H:i:s', time() - 11 ),
+			'post_date' => \date( 'Y-m-d H:i:s', \time() - 11 ),
 		] );
 
 		$this->hestia_attachments['first'] = $this->factory()->attachment->create( [
 			'file' => 'first.jpg',
-			'post_date' => date( 'Y-m-d H:i:s', time() - 60 ),
+			'post_date' => \date( 'Y-m-d H:i:s', \time() - 60 ),
 			'post_mime_type' => 'image/jpeg',
 			'post_parent' => $this->hestia_posts['one-a'],
 			'post_title' => 'First Attachment',
@@ -267,7 +267,7 @@ class Posts_Test extends WP_UnitTestCase {
 		unset( $posts['not-page'] );
 
 		$this->assertEquals(
-			array_values( $posts ),
+			\array_values( $posts ),
 			wp_list_pluck(
 				$this->hestia_repository->get_posts_by_type( 'page', 100, 'ASC', false ),
 				'ID'
@@ -306,7 +306,7 @@ class Posts_Test extends WP_UnitTestCase {
 				$this->hestia_posts['one-b'],
 				$this->hestia_posts['one-c'],
 			],
-			array_values( wp_list_pluck(
+			\array_values( wp_list_pluck(
 				$this->hestia_repository->get_siblings(
 					$this->hestia_posts['one-a'],
 					100,
@@ -332,7 +332,7 @@ class Posts_Test extends WP_UnitTestCase {
 
 		$this->assertEquals(
 			[ $this->hestia_posts['three-b'] ],
-			array_values( wp_list_pluck(
+			\array_values( wp_list_pluck(
 				$this->hestia_repository->get_siblings(
 					$this->hestia_posts['three-c'],
 					1,

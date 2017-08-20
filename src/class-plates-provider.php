@@ -8,10 +8,9 @@
 namespace Hestia;
 
 use Pimple\Container;
-use League\Plates\Engine;
 use Pimple\ServiceProviderInterface;
 
-if ( ! defined( 'ABSPATH' ) ) {
+if ( ! \defined( 'ABSPATH' ) ) {
 	die;
 }
 
@@ -22,7 +21,7 @@ class Plates_Provider implements ServiceProviderInterface {
 	/**
 	 * Provider-specific registration logic.
 	 *
-	 * @param  Container $container Container instance.
+	 * @param Container $container Container instance.
 	 *
 	 * @return void
 	 */
@@ -32,14 +31,14 @@ class Plates_Provider implements ServiceProviderInterface {
 
 			// That's a lot of engines...
 			if ( is_child_theme() ) {
-				if ( is_dir( get_stylesheet_directory() . '/templates' ) ) {
+				if ( \is_dir( get_stylesheet_directory() . '/templates' ) ) {
 					$manager->add_dir( get_stylesheet_directory() . '/templates' );
 				}
 
 				$manager->add_dir( get_stylesheet_directory() );
 			}
 
-			if ( is_dir( get_template_directory() . '/templates' ) ) {
+			if ( \is_dir( get_template_directory() . '/templates' ) ) {
 				$manager->add_dir( get_template_directory() . '/templates' );
 			}
 

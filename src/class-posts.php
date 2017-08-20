@@ -7,7 +7,7 @@
 
 namespace Hestia;
 
-if ( ! defined( 'ABSPATH' ) ) {
+if ( ! \defined( 'ABSPATH' ) ) {
 	die;
 }
 
@@ -18,9 +18,9 @@ class Posts implements Posts_Repository {
 	/**
 	 * Get all ancestors of a post.
 	 *
-	 * @param  integer $post_id The post ID.
-	 * @param  string  $order   One of "ASC" or "DESC".
-	 * @param  boolean $meta    Whether post meta should be preloaded into cache.
+	 * @param integer $post_id The post ID.
+	 * @param string  $order   One of "ASC" or "DESC".
+	 * @param boolean $meta    Whether post meta should be preloaded into cache.
 	 *
 	 * @return \WP_Post[]
 	 */
@@ -42,7 +42,7 @@ class Posts implements Posts_Repository {
 		}
 
 		if ( 'ASC' === $order ) {
-			$ancestor_ids = array_reverse( $ancestor_ids );
+			$ancestor_ids = \array_reverse( $ancestor_ids );
 		}
 
 		$needs_update = [];
@@ -61,19 +61,19 @@ class Posts implements Posts_Repository {
 			update_meta_cache( 'post', $needs_update );
 		}
 
-		$ancestors = array_map( 'get_post', $ancestor_ids );
+		$ancestors = \array_map( 'get_post', $ancestor_ids );
 
 		// The get_post() function might (shouldn't) return null so let's filter before returning.
-		return array_filter( $ancestors );
+		return \array_filter( $ancestors );
 	}
 
 	/**
 	 * Get attachments that were uploaded to a given post.
 	 *
-	 * @param  integer $post_id Post ID.
-	 * @param  integer $qty     Number of posts to retrieve.
-	 * @param  string  $order   Post order - one of "ASC" or "DESC".
-	 * @param  boolean $meta    Whether post meta should be preloaded into the cache.
+	 * @param integer $post_id Post ID.
+	 * @param integer $qty     Number of posts to retrieve.
+	 * @param string  $order   Post order - one of "ASC" or "DESC".
+	 * @param boolean $meta    Whether post meta should be preloaded into the cache.
 	 *
 	 * @return \WP_Post[]
 	 */
@@ -104,10 +104,10 @@ class Posts implements Posts_Repository {
 	/**
 	 * Get all child posts of a given post.
 	 *
-	 * @param  integer $post_id Post ID.
-	 * @param  integer $qty     Number of posts to retrieve.
-	 * @param  string  $order   Post order - one of "ASC" or "DESC".
-	 * @param  boolean $meta    Whether post meta should be preloaded into the cache.
+	 * @param integer $post_id Post ID.
+	 * @param integer $qty     Number of posts to retrieve.
+	 * @param string  $order   Post order - one of "ASC" or "DESC".
+	 * @param boolean $meta    Whether post meta should be preloaded into the cache.
 	 *
 	 * @return \WP_Post[]
 	 */
@@ -143,10 +143,10 @@ class Posts implements Posts_Repository {
 	/**
 	 * Get all posts by post type.
 	 *
-	 * @param  string  $post_type Post type.
-	 * @param  integer $qty       Number of posts to retrieve.
-	 * @param  string  $order     Post order - one of "ASC" or "DESC".
-	 * @param  boolean $meta      Whether post meta should be preloaded into the cache.
+	 * @param string  $post_type Post type.
+	 * @param integer $qty       Number of posts to retrieve.
+	 * @param string  $order     Post order - one of "ASC" or "DESC".
+	 * @param boolean $meta      Whether post meta should be preloaded into the cache.
 	 *
 	 * @return \WP_Post[]
 	 */
@@ -175,10 +175,10 @@ class Posts implements Posts_Repository {
 	/**
 	 * Get all siblings of a given post.
 	 *
-	 * @param  integer $post_id Post ID.
-	 * @param  integer $qty     Number of posts to retrieve.
-	 * @param  string  $order   Post order - one of "ASC" or "DESC".
-	 * @param  boolean $meta    Whether post meta should be preloaded into the cache.
+	 * @param integer $post_id Post ID.
+	 * @param integer $qty     Number of posts to retrieve.
+	 * @param string  $order   Post order - one of "ASC" or "DESC".
+	 * @param boolean $meta    Whether post meta should be preloaded into the cache.
 	 *
 	 * @return \WP_Post[]
 	 */
@@ -195,13 +195,13 @@ class Posts implements Posts_Repository {
 		}
 
 		$args = [
-			'ignore_sticky_posts'    => true,
-			'no_found_rows'          => true,
-			'order'                  => $order,
-			'post_parent'            => wp_get_post_parent_id( $post_id ),
-			'post_type'              => $post_type,
+			'ignore_sticky_posts' => true,
+			'no_found_rows' => true,
+			'order' => $order,
+			'post_parent' => wp_get_post_parent_id( $post_id ),
+			'post_type' => $post_type,
 			// Load an extra post b/c list may include current post.
-			'posts_per_page'         => $qty + 1,
+			'posts_per_page' => $qty + 1,
 			'update_post_term_cache' => false,
 		];
 
@@ -212,7 +212,7 @@ class Posts implements Posts_Repository {
 		$siblings = $this->query( $args );
 
 		// Will need to revisit eventually if we decide to add pagination.
-		return array_filter( $siblings, function( $post ) use ( $post_id ) {
+		return \array_filter( $siblings, function( $post ) use ( $post_id ) {
 			return $post_id !== $post->ID;
 		} );
 	}
@@ -220,7 +220,7 @@ class Posts implements Posts_Repository {
 	/**
 	 * Get the array of found posts from a WP_Query instance.
 	 *
-	 * @param  array $args WP_Query args.
+	 * @param array $args WP_Query args.
 	 *
 	 * @return \WP_Post[]
 	 */
