@@ -2,7 +2,7 @@
 This WordPress plugin introduces a number of shortcodes for listing related posts based on post hierarchy.
 
 ## Requirements
-PHP 5.6 or greater and Composer.
+PHP 5.4 or greater and Composer.
 
 ## Installation
 Install using Composer:
