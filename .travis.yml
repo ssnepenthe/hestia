@@ -56,4 +56,3 @@ script:
     if [[ "$WP_TRAVISCI" == "phpcs" ]] ; then
       phpcs
     fi
-  - phpunit
