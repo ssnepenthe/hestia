@@ -14,7 +14,7 @@ branches:
 matrix:
   allow_failures:
     - php: nightly
-    - env: WP_VERSION=trunk WP_MULTISITE=0
+    - env: WP_VERSION=trunk
   fast_finish: true
   include:
     - php: 5.6
