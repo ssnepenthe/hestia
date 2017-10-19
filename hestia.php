@@ -62,7 +62,6 @@ function _hestia_instance() {
 		'dir' => __DIR__,
 	] );
 
-	$instance->register( new Hestia\Plates_Provider() );
 	$instance->register( new Hestia\Plugin_Provider() );
 
 	return $instance;

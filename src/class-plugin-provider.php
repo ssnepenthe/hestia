@@ -52,6 +52,29 @@ class Plugin_Provider implements ServiceProviderInterface {
 	 * @return void
 	 */
 	public function register( Container $container ) {
+		$container['plates'] = function( Container $c ) {
+			$manager = new Plates_Manager();
+
+			// That's a lot of engines...
+			if ( is_child_theme() ) {
+				if ( \is_dir( get_stylesheet_directory() . '/templates' ) ) {
+					$manager->add_dir( get_stylesheet_directory() . '/templates' );
+				}
+
+				$manager->add_dir( get_stylesheet_directory() );
+			}
+
+			if ( \is_dir( get_template_directory() . '/templates' ) ) {
+				$manager->add_dir( get_template_directory() . '/templates' );
+			}
+
+			$manager->add_dir( get_template_directory() );
+
+			$manager->add_dir( $c['dir'] . '/templates' );
+
+			return $manager;
+		};
+
 		$container['posts'] = function( Container $c ) {
 			return new Posts();
 		};
